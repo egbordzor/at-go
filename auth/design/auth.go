@@ -48,3 +48,52 @@ var _ = Service("auth", func() {
 		})
 	})
 })
+
+// Authenticating using your API Key and Username
+var APIKeyHeader = Type("APIKeyHeader", func() {
+	Attribute("apiKey", String, "Africa’s Talking application apiKey.")
+	Attribute("Content-Type", String, func() {
+		Description("The requests content type.")
+		Enum("application/x-www-form-urlencoded", "application/json")
+	})
+	Attribute("Accept", String, func() {
+		Description("The requests response type.")
+		Enum("application/json", "application/xml")
+		Default("application/xml")
+	})
+	Required("apiKey", "Content-Type")
+})
+
+// Authenticating with an Auth Token
+var AuthTokenHeader = Type("AuthTokenHeader", func() {
+	Attribute("authToken", String, "Generated Auth Token.")
+	Attribute("Content-Type", String, func() {
+		Description("The requests content type.")
+		Enum("application/x-www-form-urlencoded", "application/xml")
+	})
+	Attribute("Accept", String, func() {
+		Description("The requests response type.")
+		Enum("application/json", "application/xml")
+		Default("application/xml")
+	})
+
+})
+
+var TokenPayload = Type("TokenPayload", func() {
+	Attribute("username", String, "AT Username")
+	Attribute("apiKey", String, "API Key ")
+
+	Required("username", "username")
+})
+
+var TokenResponse = ResultType("TokenResponse", func() {
+	Attribute("token", String, "Generated Auth Token.")
+	Attribute("lifetimeInSeconds", Int, "Token Lifetime")
+
+	Required("token", "lifetimeInSeconds")
+
+	View("default", func() {
+		Attribute("token")
+		Attribute("lifetimeInSeconds")
+	})
+})

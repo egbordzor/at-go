@@ -7,12 +7,12 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var _ = Service("user", func() {
-	Title("User Service")
-	Description("Initiates an application data request")
+var USSD = ResultType("USSD", func() {
+	Description("Echo plain text response back to AT gateway")
+	TypeName("USSD")
+	ContentType("text/plain")
 
-	Method("get", func() {
-
+	Attribute("response", String, func() {
+		Description("Plain text response back to AT gateway")
 	})
-
 })
