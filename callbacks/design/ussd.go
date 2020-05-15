@@ -8,7 +8,7 @@ import (
 )
 
 var _ = Service("ussd", func() {
-	Title("USSD Callback")
+	Title("USSD Callback Service")
 	Description("USSD notifications sent from Africa'sTalking gateway")
 
 	// USSD Callback

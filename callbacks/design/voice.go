@@ -7,9 +7,13 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
+// Service describes a Voice Callback Service that handles
+// Voice notifications sent from Africa'sTalking gateway.
 var _ = Service("voice", func() {
-	Title("Voice Callback")
-	Description("Voice notifications sent from Africa'sTalking gateway")
+	Title("Voice Callback Service")
+
+	// Method describes handling of outbound
+	// calls via the handle service method (endpoint).
 	Method("handle", func() {
 		Description("Makes an outbound calls through the Africa'sTalking Voice API")
 		Payload(VoiceNotificationPayload)
@@ -38,18 +42,22 @@ var _ = Service("voice", func() {
 
 // VoiceNotification are voice notification contents sent to our callback URL.
 var VoiceNotificationPayload = Type("VoiceNotificationPayload", func() {
-	// The API will set a value of 0 in the final request to your application.
-	// That request will contain details about the call’s duration and cost.
+	// The API will set a value of 0 in the
+	// final request to your application.
+	// That request will contain details
+	// about the call’s duration and cost.
 	Attribute("isActive", String, func() {
 		Description("Lets us know whether the call is in session state")
 		Default("0")
 	})
-	// This variable will stay the same throughout the call
+	// This variable will stay the same
+	// throughout the call
 	Attribute("sessionId", String, func() {
 		Description("A unique identifier generated during each call session")
 	})
-	// Inbound calls are initiated by a phone user.
-	// Outbound calls are initiated by our application.
+	// Inbound calls are initiated by a
+	// phone user. Outbound calls are
+	// initiated by our application.
 	Attribute("direction", String, func() {
 		Description("Whether this is an inbound or outbound call")
 	})
@@ -67,14 +75,17 @@ var VoiceNotificationPayload = Type("VoiceNotificationPayload", func() {
 	Attribute("callStartTime", String, func() {
 		Description("The time the call began.")
 	})
-	// Only present in a notification  following a GetDigits response.
+	// Only present in a notification  following a
+	// GetDigits response.
 	Attribute("dtmfDigits", String, func() {
 		Description("The digits that a user enters in response to a getDigits request")
 	})
-	// The URL of the recording made for this call (using either the Record element,
-	// or the record attribute of the Dial element).
-	// Only present in the notification following a partial recording,
-	// or in the final notification if it is a terminal recording.
+	// The URL of the recording made for this call
+	// (using either the Record element, or the
+	// record attribute of the Dial element). Only
+	// present in the notification following a
+	// partial recording, or in the final notification
+	// if it is a terminal recording.
 	Attribute("recordingUrl", String, func() {
 		Description("The URL of the recording made for this call")
 	})
@@ -91,7 +102,9 @@ var VoiceNotificationPayload = Type("VoiceNotificationPayload", func() {
 		Description("The total cost of the call.")
 	})
 	// Only present in the final notification.
-	Attribute("callSessionState", String, "The final status of the call.")
+	Attribute("callSessionState", String, func() {
+		Description("The final status of the call.")
+	})
 	// Only present in the final notification.
 	Attribute("dialDestinationNumber", String, func() {
 		Description("The number which a call was forwarded to if the Dial action was used.")
@@ -107,60 +120,94 @@ var VoiceNotificationPayload = Type("VoiceNotificationPayload", func() {
 	Attribute("hangupCause", String, func() {
 		Description("The reason a call could have ended")
 		Enum(
-			// This cause indicates that the call is being cleared because one of the users
-			// involved in the call has requested that the call be cleared.
-			// This also means the call was successfully answered and successfully ended.
+			// This cause indicates that the call is
+			// being cleared because one of the users
+			// involved in the call has requested that
+			// the call be cleared. This also means
+			// the call was successfully answered and
+			// successfully ended.
 			"NORMAL_CLEARING",
 
-			// This cause indicates the called party does not wish to accept this call.
+			// This cause indicates the called party
+			// does not wish to accept this call.
 			"CALL_REJECTED",
 
-			// This cause indicates that the network is not functioning correctly and that the condition is not likely to
-			// last a long period of time. The user may wish to try another call attempt almost immediately.
+			// This cause indicates that the network
+			// is not functioning correctly and that
+			// the condition is not likely to last a
+			// long period of time. The user may wish
+			// to try another call attempt almost
+			// immediately.
 			"NORMAL_TEMPORARY_FAILURE",
 
-			// This cause indicates an expiration of a request, to the called party.
-			// This is often associated with NAT problems.
-			// It affects mostly soft phones with SIP numbers.
+			// This cause indicates an expiration of a
+			// request, to the called party. This is
+			// often associated with NAT problems.
+			// It affects mostly soft phones with
+			// SIP numbers.
 			"RECOVERY_ON_TIMER_EXPIRE",
 
-			// The caller initiated a call and then hang up before the recipient picked up.
-			// This normally happens when using the Dial call action.
+			// The caller initiated a call and then
+			// hang up before the recipient picked up.
+			// This normally happens when using the
+			// Dial call action.
 			"ORIGINATOR_CANCEL",
 
-			// This occurs when a call is initiated to multiple phone numbers.
-			// Once one recipient picks up, the others will have a LOSE_RACE hangup cause.
-			// You can get this when using the Dial call action.
+			// This occurs when a call is initiated
+			// to multiple phone numbers. Once one
+			// recipient picks up, the others will
+			// have a LOSE_RACE hangup cause. You
+			// can get this when using the Dial
+			// call action.
 			"LOSE_RACE",
 
-			// This cause is used to indicate that the called party is unable to accept another call because
-			// the user busy condition has been encountered/engaged on another call.
+			// This cause is used to indicate that
+			// the called party is unable to accept
+			// another call because the user busy
+			// condition has been encountered/engaged
+			// on another call.
 			"USER_BUSY",
 
-			// This cause is used when the called party has been alerted but does not respond with a connect indication
-			//  within a prescribed period of time.
+			// This cause is used when the called party
+			// has been alerted but does not respond
+			// with a connect indication within a
+			// prescribed period of time.
 			"NO_ANSWER",
 
-			// This cause is used when a called party does not respond to a call establishment message with
-			// either an alerting or connect indication within the prescribed period of time allocated.
+			// This cause is used when a called party
+			// does not respond to a call establishment
+			// message with either an alerting or
+			// connect indication within the prescribed
+			// period of time allocated.
 			"NO_USER_RESPONSE",
 
-			// This cause value is used when a mobile station has logged off, radio contact is not obtained with
-			// a mobile station or if a personal telecommunication user is temporarily not addressable at any user-network interface.
+			// This cause value is used when a mobile
+			// station has logged off, radio contact is
+			// not obtained with a mobile station or if
+			// a personal telecommunication user is
+			// temporarily not addressable at any
+			// user-network interface.
 			"SUBSCRIBER_ABSENT",
 
-			// This cause is used to report a service not available.
+			// This cause is used to report a service
+			// not available.
 			"SERVICE_UNAVAILABLE",
 
-			// This means you tried to originate a call to a SIP user who forgot to register/hasn’t registered.
+			// This means you tried to originate a call to
+			// a SIP user who forgot to register/hasn’t
+			// registered.
 			"USER_NOT_REGISTERED",
 
-			// This cause indicates that the called party cannot be reached because, although the called
-			// party number is in a valid format, it is not currently allocated (assigned).
+			// This cause indicates that the called party
+			// cannot be reached because, although the
+			// called party number is in a valid format,
+			// it is not currently allocated (assigned).
 			"UNALLOCATED_NUMBER",
 
-			// This cause happens on very rare occasions when a valid hangup cause can’t be obtained.
-			// We (AfricasTalking) are usually alerted for this and we look into it immediately.
+			// This cause happens on very rare occasions
+			// when a valid hangup cause can’t be obtained.
+			// We (AfricasTalking) are usually alerted for
+			// this and we look into it immediately.
 			"UNSPECIFIED",
 		)
 	})
@@ -218,23 +265,38 @@ var VoiceNotificationResult = ResultType("VoiceNotificationResult", func() {
 // When the transfer has been initiated we will send any of these events to your
 // event notifications URL, you can check from these form fields in the events
 var EventPayload = ResultType("EventPayload", func() {
-	Attribute("callTransferParam", String, "+2347XXXXXXXXX:20, (20 is the duration in seconds)")
+	Attribute("callTransferParam", String, func() {
+		Description("+2347XXXXXXXXX:20, (20 is the duration in seconds)")
+	})
 	Attribute("status", String, func() {
 		Enum("Success")
 	})
 	Attribute("callSessionState", String, func() {
-		Enum("Active", "Transferred", "TransferCompleted")
+		Enum("Active",
+			"Transferred",
+			"TransferCompleted",
+			)
 	})
 	Attribute("isActive", String, func() {
 		Enum("0", "1")
 		Default("1")
 	})
-	Attribute("callTransferredToNumber", String, "Number call was transferred to")
+	Attribute("callTransferredToNumber", String, func() {
+		Description( "Number call was transferred to")
+	})
 	Attribute("callTransferState", String, func() {
-		Enum(" Active", "Completed", " CallerHangup", "CalleeHangup")
+		Enum(" Active",
+			"Completed",
+			" CallerHangup",
+			"CalleeHangup",
+			)
 	})
 	Attribute("callTransferHangupCause", String, func() {
-		Enum("DestinationNotSupported", "InvalidPhoneNumber", "NoActiveClient", "NotAllowed")
+		Enum("DestinationNotSupported",
+			"InvalidPhoneNumber",
+			"NoActiveClient",
+			"NotAllowed",
+			)
 	})
 })
 
@@ -246,23 +308,38 @@ var EventResult = ResultType("EventResult", func() {
 	Attributes(func() {
 		Extend(EventPayload)
 	})
-	Attribute("callTransferParam", String, "+2347XXXXXXXXX:20, (20 is the duration in seconds)")
+	Attribute("callTransferParam", String, func() {
+		Description("+2347XXXXXXXXX:20, (20 is the duration in seconds)")
+	})
 	Attribute("status", String, func() {
 		Enum("Success")
 	})
 	Attribute("callSessionState", String, func() {
-		Enum("Active", "Transferred", "TransferCompleted")
+		Enum("Active",
+			"Transferred",
+			"TransferCompleted",
+			)
 	})
 	Attribute("isActive", String, func() {
 		Enum("0", "1")
 		Default("1")
 	})
-	Attribute("callTransferredToNumber", String, "Number call was transferred to")
+	Attribute("callTransferredToNumber", String, func() {
+		Description("Number call was transferred to")
+	})
 	Attribute("callTransferState", String, func() {
-		Enum(" Active", "Completed", " CallerHangup", "CalleeHangup")
+		Enum(" Active",
+			"Completed",
+			" CallerHangup",
+			"CalleeHangup",
+			)
 	})
 	Attribute("callTransferHangupCause", String, func() {
-		Enum("DestinationNotSupported", "InvalidPhoneNumber", "NoActiveClient", "NotAllowed")
+		Enum("DestinationNotSupported",
+			"InvalidPhoneNumber",
+			"NoActiveClient",
+			"NotAllowed",
+			)
 	})
 
 	// Call transferred but failed

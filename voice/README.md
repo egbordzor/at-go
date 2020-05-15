@@ -1,6 +1,6 @@
 # Voice
 
-Build dynamic, scalable, fully-featured voice applications that reside entirely in the cloud using our Voice APIs without the need to purchase and maintain expensive voice equipment. This reduces your business costs while increasing the efficiency of how you reach your users.
+Take advantage of fully web based voice infrastructure and deploy fully fledged services without the need for expensive physical equipment. Build dynamic, scalable, fully-featured voice applications that reside entirely in the cloud using our Voice APIs without the need to purchase and maintain expensive voice equipment. This reduces your business costs while increasing the efficiency of how you reach your users.
 
 Some possible use cases
 
@@ -9,6 +9,54 @@ Some possible use cases
 - Call Blasting/Robocalls
 - Conducting Surveys
 - Receiving Feedback
+
+## Product Overview
+
+Programmable Voice allows you to enrich your call experience by adding features that would have otherwise be inaccessible using the normal physical lines. Our fully featured API gives you a wide number of actions that you can use together to build intuitive solutions
+
+- VOIP Capabilities
+  Use our SIP endpoints to make and receive calls on your browser. This lowers infrastructure costs significantly
+
+* Call Queues
+  Dynamically enqueue and dequeue callers to increase your call handling capacity. With this feature, calls can be put in a queue to be handled later or forwarded to another agent
+
+- Call Transfer
+  Send a caller to another phone number or agent when the need arises e.g wrong recipient, need to transfer to a different department etc
+
+* Call Recording
+  Record a call session into an MP3 file that you can retrieve and play later. This will prove useful when conducting surveys or ensuring quality of service in call centres.
+
+- Say and Play
+  Automatically read text information to callers using our free Text to Speech Engine. Using the play action, you can playback an audio file that is located anywhere on the web
+
+- SIP Trunking
+  Direct incoming and outgoing calls to a virtual phone provider or your company's private network. This will lower your call charges and reduce need for more physical infrastructure.
+
+## Use cases
+
+1. Two Factor Authentication
+   A phone number has incredible reach and is growing in importance as a useful tool for verifying user identity. You can enhance security in your applications by calling your users directly with authentication tokens
+
+2. Premium Services
+   You build and monetise services that run on voice using our Premium Rated numbers. Services such as interactive dating or marketing audio content can be enhanced by taking advantage of the personal nature of voice
+
+3. Build a Call Center
+   Enhance our customer support experience by building an Interactive Voice Response(IVR)functionality into your support workflow. Add dynamic queuing, call recording and routing capabilities to differentiate how your business responds to client needs
+
+4. Customer Notifications
+   Keep your customers in the know about issues concerning them. This will in turn improve your customer satisfaction rating and increase customer loyalty.
+
+5. Carrying out Surveys/Data Collection
+   Receive and store responses from a data collection exercise. You can use the IVR (Interactive Voice Response) feature for caller prompts and the record action to store all responses onto a database.
+
+6. IVR
+   Make it easier for your callers to more efficiently get the help they need through voice prompts. Used mostly in customer service to choose language, to speak to an agent,to suggest common solutions for recurring problems etc.
+
+7. Robocalls/Call blasting
+   Reach out to hundreds of people in your contact list with a single call blast and play a pre-recorded message. Works well for marketing/promotional campaigns and Customer notifications.
+
+8. Call Tagging/Identification
+   Make your work of analysing calls easier by tagging them using our ClientRequestID feature. You can tag the phone calls depending on function e.g support call, by action e.g failed calls, by agent or any other way depending on what you want to measure.
 
 ## How the SMS service works
 

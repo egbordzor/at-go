@@ -7,15 +7,25 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
+// Service describes a Queue Calls Service
 var _ = Service("queue", func() {
-	Title("Queue Calls using Africa'sTalking Voice API")
-	Description("Used when you have more calls than you can handle at one time")
+	Title("Queue Calls Service")
+
+	// Method describes a service method (endpoint)
 	Method("add", func() {
+		Description("Used when you have more calls than you can handle at one time")
+
+		// Payload describes the method payload.
 		Payload(QueuedCallsPayload)
+
+		// Result describes the method result.
 		Result(QueuedStatusResult)
-		//Error()
+
+		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
 			Headers(func() {
+
+				// Attribute describes an object field
 				Attribute("apiKey", String, "Africa’s Talking application apiKey.")
 				Attribute("Content-Type", String, func() {
 					Description("The requests content type.")
@@ -30,12 +40,15 @@ var _ = Service("queue", func() {
 				Required("Content-Type", "Accept")
 			})
 
+			// Requests to the service consist of HTTP POST requests.
 			// Live: https://voice.africastalking.com/queueStatus
 			// Sandbox: https://voice.sandbox.africastalking.com/queueStatus
 			POST("/queueStatus")
 
-			// You can check the HTTP Response Code to determine whether the request was successful.
-			// Any response code other than 201 (Created) indicates that the call was not initiated
+			// Responses use a "201 (Created)" HTTP status.
+			// Any response code other than 201 (Created)
+			// indicates that the call was not initiated.
+			// The result is encoded in the response body.
 			Response(StatusCreated)
 		})
 	})

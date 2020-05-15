@@ -7,15 +7,25 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
+// Service describes a Calls Transfer Service
 var _ = Service("transfer", func() {
-	Title("Transfer Calls using Africa'sTalking Voice API")
-	Description("Transfers call to another number")
+	Title("Calls Transfer Service")
+
+	// Method describes a service method (endpoint)
 	Method("add", func() {
+		Description("Transfers call to another number")
+
+		// Payload describes the method payload.
 		Payload(CallTransferPayload)
+
+		// Result describes the method result.
 		Result(CallTransferResult)
-		//Error()
+
+		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
 			Headers(func() {
+
+				// Attribute describes an object field
 				Attribute("Content-Type", String, func() {
 					Description("The requests content type.")
 					Enum("application/x-www-form-urlencoded", "application/json", "application/xml")
@@ -29,6 +39,7 @@ var _ = Service("transfer", func() {
 				Required("Content-Type")
 			})
 
+			// Requests to the service consist of HTTP POST requests.
 			// Live: https://voice.africastalking.com/callTransfer
 			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("/callTransfer")
