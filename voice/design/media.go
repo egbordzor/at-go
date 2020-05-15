@@ -7,15 +7,25 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
+// Service describes a Media Upload Service.
 var _ = Service("media", func() {
-	Title("Upload Media using Africa'sTalking Voice API")
-	Description("Uploads media or audio files to Africa'sTalking servers with the extension .mp3 or .wav")
+	Title("Media Upload Service.")
+
+	// Method describes a service method (endpoint)
 	Method("add", func() {
+		Description("Uploads media or audio files to Africa'sTalking servers with the extension .mp3 or .wav")
+
+		// Payload describes the method payload.
 		Payload(UploadMediaFile)
+
+		// Result describes the method result.
 		Result(String)
-		//Error()
+
+		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
 			Headers(func() {
+
+				// Attribute describes an object field
 				Attribute("apiKey", String, "Africa’s Talking application apiKey.")
 				Attribute("Content-Type", String, func() {
 					Description("The requests content type.")
@@ -30,6 +40,7 @@ var _ = Service("media", func() {
 				Required("Content-Type", "Accept")
 			})
 
+			// Requests to the service consist of HTTP POST requests.
 			// Live: https://voice.africastalking.com/mediaUpload
 			// Sandbox: https://voice.sandbox.africastalking.com/mediaUpload
 			POST("/mediaUpload")

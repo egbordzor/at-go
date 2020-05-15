@@ -7,15 +7,25 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var _ = Service("make", func() {
-	Title("Make Call using Africa'sTalking Voice API")
-	Description("Makes an outbound calls through the Africa'sTalking Voice API")
+// Service describes an Outbound Calls Service
+var _ = Service("outbound", func() {
+	Title("Outbound Calls Service")
+
+	// Method describes a service method (endpoint)
 	Method("add", func() {
+		Description("Makes outbound calls through the Africa'sTalking Voice API")
+
+		// Payload describes the method payload.
 		Payload(MakeCallPayload)
+
+		// Result describes the method result.
 		Result(MakeCallResult)
-		//Error()
+
+		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
 			Headers(func() {
+
+				// Attribute describes an object field
 				Attribute("Content-Type", String, func() {
 					Description("The requests content type.")
 					Enum("application/x-www-form-urlencoded", "application/json", "application/xml")
@@ -29,9 +39,13 @@ var _ = Service("make", func() {
 				Required("Content-Type")
 			})
 
+			// Requests to the service consist of HTTP POST requests.
 			// Live: https://voice.africastalking.com/call
 			// Sandbox: https://voice.sandbox.africastalking.com/call
 			POST("/call")
+
+			// Responses use a "200 OK" HTTP status.
+			// The result is encoded in the response body.
 			Response(StatusOK)
 		})
 	})

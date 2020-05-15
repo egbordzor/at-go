@@ -8,17 +8,15 @@ import (
 )
 
 var _ = Service("swagger", func() {
+	Title("Open API Service")
 	Description("The swagger service serves the API swagger definition.")
 	HTTP(func() {
 		Path("/swagger")
 	})
-	Files("/swagger.json", "gen/http/openapi.json", func() {
+
+	// Serve the file with relative path
+	// ../../gen/http/openapi.json for requests sent to /swagger.json.
+	Files("/swagger.json", "../../gen/http/openapi.json", func() {
 		Description("JSON document containing the API swagger definition")
 	})
-})
-
-var _ = Service("openapi", func() {
-	// Serve the file with relative path ../../gen/http/openapi.json for
-	// requests sent to /swagger.json.
-	Files("/swagger.json", "../../gen/http/openapi.json")
 })
