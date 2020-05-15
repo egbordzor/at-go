@@ -1,2 +1,1 @@
-# at-go
-AfricasTalking Golang SDK
+# atgo: AfricasTalking Golang SDK
