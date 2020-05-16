@@ -2,11 +2,11 @@
 
 All requests must be authenticated. There are currently two ways to do this.
 
-> 1. Authenticating using your API Key and Username
+## 1. Authenticating using your API Key and Username
 
 API keys must be included in the request header, as a field called `apiKey`. The place where the username should be included depends on the type of request you’re making.
 
-## Request Headers
+### Request Headers
 
 |  Parameter   |       Type        | Description                                                    |
 | :----------: | :---------------: | :------------------------------------------------------------- |
@@ -18,11 +18,11 @@ API keys must be included in the request header, as a field called `apiKey`. The
 |              |                   | - Can be application/json or application/xml.                  |
 |              |                   | - Defaults to application/xml                                  |
 
-> 2. Authenticating using an Auth Token
+## 2. Authenticating using an Auth Token
 
 You need to include the Auth Token in the request header as a field called `authToken`. The place where the username should be included depends on the type of request you’re making.
 
-## Request Headers
+### Request Headers
 
 |  Parameter   |        Type        | Description                                                   |
 | :----------: | :----------------: | :------------------------------------------------------------ |
@@ -34,13 +34,13 @@ You need to include the Auth Token in the request header as a field called `auth
 |              |                    | - Can be application/json or application/xml.                 |
 |              |                    | - Defaults to application/xml                                 |
 
-> 3. Username Scenarios
+## 3. Username Scenarios
 
 - For GET requests: The username is passed as a query parameter.
 - For POST requests, where parameters are sent as a url encoded form, the username is included as one of the parameters within the form.
 - For POST requests, that require JSON in the request body, the username should be included in the JSON sent in the body of the request.
 
-> 4. Idempotent Requests
+## 4. Idempotent Requests
 
 Africa’s Talking APIs protect applications against cases where you might end up sending unintended repeat requests. This could be caused by a communication breakdown (mainly network issues) or your application having broken logic.
 
@@ -50,7 +50,7 @@ However, you might run into cases where you actually want to send the same reque
 
 You can add idempotent keys to your requests to ensure that we send a request from your application once. This feature is currently supported for Airtime APIs and Payment Disbursement APIs.
 
-## Request Headers
+### Request Headers
 
 |    Parameter    |       Type        | Description                                       |
 | :-------------: | :---------------: | :------------------------------------------------ |
