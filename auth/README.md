@@ -26,7 +26,6 @@ You need to include the Auth Token in the request header as a field called `auth
 |  Parameter   |        Type        | Description                                                   |
 | :----------: | :----------------: | :------------------------------------------------------------ |
 |  authToken   | String (Required ) | Generated Auth Token.                                         |
-|              |                    |                                                               |
 | Content-Type | String (Required)  | The requests content type.                                    |
 |              |                    | - Can be application/x-www-form-urlencoded or application/xml |
 |    Accept    | String (Optional)  | The requests response type.                                   |
@@ -42,10 +41,6 @@ You need to include the Auth Token in the request header as a field called `auth
 ## 4. Idempotent Requests
 
 Africa’s Talking APIs protect applications against cases where you might end up sending unintended repeat requests. This could be caused by a communication breakdown (mainly network issues) or your application having broken logic.
-
-For example, imagine a scenario where you initiate a POST request to top up phoneNumber1 with KES 100 worth of credits. However, due to network issues, you do not receive a valid response from our APIs, even though the airtime was delivered to phoneNumber1. In this case, you might actually want to retry the POST request but also ensure that we do not send the airtime again.
-
-However, you might run into cases where you actually want to send the same request more than once. In that case, you can set a special header Idempotency-Key to a unique value of your choosing and resend the request. If you send another request with the same Idempotency-Key within a given period of time, we will respond with a failure status notifying you that we have detected a duplicate request.
 
 You can add idempotent keys to your requests to ensure that we send a request from your application once. This feature is currently supported for Airtime APIs and Payment Disbursement APIs.
 
