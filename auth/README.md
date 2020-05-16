@@ -11,7 +11,6 @@ API keys must be included in the request header, as a field called `apiKey`. The
 |  Parameter   |       Type        | Description                                                    |
 | :----------: | :---------------: | :------------------------------------------------------------- |
 |    apiKey    | String (Required) | Africa’s Talking application apiKey.                           |
-|              |                   |                                                                |
 | Content-Type | String (Required) | The requests content type.                                     |
 |              |                   | - Can be application/x-www-form-urlencoded or application/json |
 |    Accept    | String (Optional) | The requests response type.                                    |
