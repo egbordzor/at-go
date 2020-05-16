@@ -8,15 +8,15 @@ API keys must be included in the request header, as a field called `apiKey`. The
 
 ## Request Headers
 
-|  Parameter   |    Type    | Description                                                  |
-| :----------: | :--------: | :----------------------------------------------------------- |
-|    apiKey    |   String   | Africa’s Talking application apiKey.                         |
-|              | (Required) |                                                              |
-| Content-Type |   String   | The requests content type.                                   |
-|              | (Required) | Can be application/x-www-form-urlencoded or application/json |
-|    Accept    |   String   | The requests response type.                                  |
-|              | (Optional) | Can be application/json or application/xml.                  |
-|              |            | Defaults to application/xml                                  |
+|  Parameter   |       Type        | Description                                                    |
+| :----------: | :---------------: | :------------------------------------------------------------- |
+|    apiKey    | String (Required) | Africa’s Talking application apiKey.                           |
+|              |                   |                                                                |
+| Content-Type | String (Required) | The requests content type.                                     |
+|              |                   | - Can be application/x-www-form-urlencoded or application/json |
+|    Accept    | String (Optional) | The requests response type.                                    |
+|              |                   | - Can be application/json or application/xml.                  |
+|              |                   | - Defaults to application/xml                                  |
 
 > 2. Authenticating using an Auth Token
 
@@ -24,15 +24,15 @@ You need to include the Auth Token in the request header as a field called `auth
 
 ## Request Headers
 
-|  Parameter   |    Type     | Description                                                 |
-| :----------: | :---------: | :---------------------------------------------------------- |
-|  authToken   |   String    | Generated Auth Token.                                       |
-|              | (Required ) |                                                             |
-| Content-Type |   String    | The requests content type.                                  |
-|              | (Required)  | Can be application/x-www-form-urlencoded or application/xml |
-|    Accept    |   String    | The requests response type.                                 |
-|              | (Optional)  | Can be application/json or application/xml.                 |
-|              |             | Defaults to application/xml                                 |
+|  Parameter   |        Type        | Description                                                   |
+| :----------: | :----------------: | :------------------------------------------------------------ |
+|  authToken   | String (Required ) | Generated Auth Token.                                         |
+|              |                    |                                                               |
+| Content-Type | String (Required)  | The requests content type.                                    |
+|              |                    | - Can be application/x-www-form-urlencoded or application/xml |
+|    Accept    | String (Optional)  | The requests response type.                                   |
+|              |                    | - Can be application/json or application/xml.                 |
+|              |                    | - Defaults to application/xml                                 |
 
 > 3. Username Scenarios
 
@@ -52,7 +52,7 @@ You can add idempotent keys to your requests to ensure that we send a request fr
 
 ## Request Headers
 
-|    Parameter    |    Type    | Description                                       |
-| :-------------: | :--------: | :------------------------------------------------ |
-| Idempotency-Key |   String   | A unique value of your choosing that identifies   |
-|                 | (Optional) | a request sent Africa’s Talking APIs e.g req-1234 |
+|    Parameter    |       Type        | Description                                       |
+| :-------------: | :---------------: | :------------------------------------------------ |
+| Idempotency-Key | String (Optional) | A unique value of your choosing that identifies   |
+|                 |                   | a request sent Africa’s Talking APIs e.g req-1234 |
