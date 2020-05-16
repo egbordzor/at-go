@@ -8,13 +8,13 @@ import (
 )
 
 // API describes the global properties of the API server.
-var _ = API("messaging", func() {
+var _ = API("sms", func() {
 
 	// API title.
 	Title("Messaging API")
 
-	// Description of API
-	Description("HTTP service for interacting with AT's SMS API")
+	// Description of API.
+	Description("HTTP service for interacting with AT's SMS API.")
 
 	// Version of API
 	Version("1.0")
@@ -22,34 +22,35 @@ var _ = API("messaging", func() {
 	// Terms of use of API
 	TermsOfService("https://github.com/wondenge/atgo/blob/master/LICENSE")
 
-	// Contact info for Author and Maintainer
+	// Contact info for Author and Maintainer.
 	Contact(func() {
 		Name("William Ondenge")
 		Email("ondengew@gmail.com")
 		URL("https://www.ondenge.me")
 	})
 
-	// License for Library usage
+	// License for Library usage.
 	License(func() {
 		Name("Apache License")
 		URL("https://github.com/wondenge/atgo/blob/master/LICENSE")
 	})
 
-	// Library Documentation
+	// Library Documentation.
 	Docs(func() {
 		Description("Library Usage")
 		URL("https://github.com/wondenge/atgo/blob/master/README.md")
 	})
 
 	// Server describes a single process listening for client requests.
-	Server("messaging", func() {
-		Description("messaging hosts the Messaging Service.")
+	Server("smsServer", func() {
+		Description("smsServer hosts the Messaging Service.")
 
 		// List services hosted by this server.
 		Services(
-			"sms",
+			"messaging",
 			"subscription",
 			"swagger",
+			"health",
 		)
 
 		// List the Hosts and their transport URLs.
