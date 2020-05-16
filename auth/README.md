@@ -12,10 +12,8 @@ API keys must be included in the request header, as a field called `apiKey`. The
 | :----------: | :--------: | :----------------------------------------------------------: |
 |    apiKey    |   String   |             Africa’s Talking application apiKey.             |
 |              | (Required) |                                                              |
-|              |            |                                                              |
 | Content-Type |   String   |                  The requests content type.                  |
 |              | (Required) | Can be application/x-www-form-urlencoded or application/json |
-|              |            |                                                              |
 |    Accept    |   String   |                 The requests response type.                  |
 |              |            |         Can be application/json or application/xml.          |
 |              | (Optional) |                 Defaults to application/xml                  |
@@ -30,10 +28,8 @@ You need to include the Auth Token in the request header as a field called `auth
 | :----------: | :---------: | :---------------------------------------------------------: |
 |  authToken   |   String    |                    Generated Auth Token.                    |
 |              | (Required ) |                                                             |
-|              |             |                                                             |
 | Content-Type |   String    |                 The requests content type.                  |
 |              | (Required)  | Can be application/x-www-form-urlencoded or application/xml |
-|              |             |                                                             |
 |    Accept    |   String    |                 The requests response type.                 |
 |              | (Optional)  |         Can be application/json or application/xml.         |
 |              |             |                 Defaults to application/xml                 |
