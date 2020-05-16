@@ -12,12 +12,16 @@ var _ = Service("swagger", func() {
 	HTTP(func() {
 		Path("/swagger")
 	})
+
+	// Defines a endpoint that serves static assets via HTTP.
 	Files("/swagger.json", "gen/http/openapi.json", func() {
 		Description("JSON document containing the API swagger definition")
 	})
 })
 
 var _ = Service("openapi", func() {
+
+	// Defines a endpoint that serves static assets via HTTP.
 	// Serve the file with relative path ../../gen/http/openapi.json for
 	// requests sent to /swagger.json.
 	Files("/swagger.json", "../../gen/http/openapi.json")

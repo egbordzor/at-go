@@ -11,10 +11,10 @@ import (
 var _ = API("auth", func() {
 
 	// API title.
-	Title("Authentication Service")
+	Title("Authentication MicroService")
 
 	// Description of API
-	Description("HTTP service for interacting with Africa's Talking Authentication API")
+	Description("Authenticating with an Auth Token")
 
 	// Version of API
 	Version("1.0")

@@ -8,10 +8,14 @@ import (
 )
 
 var _ = Service("health", func() {
+
+	// HTTP defines the HTTP transport specific
+	// properties of an API, a service or a single method.
 	HTTP(func() {
 		Path("/health")
 	})
 
+	// Defines a single service method
 	Method("show", func() {
 		Description("Health check endpoint.")
 		Result(String)

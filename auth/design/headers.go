@@ -19,6 +19,8 @@ var APIKeyHeader = Type("APIKeyHeader", func() {
 		Enum("application/json", "application/xml")
 		Default("application/xml")
 	})
+
+	// Required adds a "required" validation to the attribute.
 	Required("apiKey", "Content-Type")
 })
 
