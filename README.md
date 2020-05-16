@@ -1,4 +1,4 @@
-# Atgo: AfricasTalking Golang SDK
+# ATGO: AfricasTalking Golang SDK
 
 ## User
 
