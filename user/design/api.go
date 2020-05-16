@@ -8,13 +8,13 @@ import (
 )
 
 // API describes the global properties of the API server.
-var _ = API("callbacks", func() {
+var _ = API("user", func() {
 
 	// API title.
-	Title("Callback API")
+	Title("Application Data Service")
 
-	// Description of API
-	Description("HTTP service for interacting with Callback APIs")
+	// Description of API.
+	Description("Initiate an application data request.")
 
 	// Version of API
 	Version("1.0")
@@ -22,34 +22,31 @@ var _ = API("callbacks", func() {
 	// Terms of use of API
 	TermsOfService("https://github.com/wondenge/atgo/blob/master/LICENSE")
 
-	// Contact info for Author and Maintainer
+	// Contact info for Author and Maintainer.
 	Contact(func() {
 		Name("William Ondenge")
 		Email("ondengew@gmail.com")
 		URL("https://www.ondenge.me")
 	})
 
-	// License for Library usage
+	// License for Library usage.
 	License(func() {
 		Name("Apache License")
 		URL("https://github.com/wondenge/atgo/blob/master/LICENSE")
 	})
 
-	// Library Documentation
+	// Library Documentation.
 	Docs(func() {
 		Description("Library Usage")
 		URL("https://github.com/wondenge/atgo/blob/master/README.md")
 	})
 
 	// Server describes a single process listening for client requests.
-	Server("voice", func() {
-		Description("voice hosts the Voice Service.")
+	Server("userServer", func() {
+		Description("userServer hosts the Application Data Service.")
 
 		// List services hosted by this server.
 		Services(
-			"sms",
-			"voice",
-			"ussd",
 			"swagger",
 			"health",
 		)
@@ -57,12 +54,12 @@ var _ = API("callbacks", func() {
 		// List the Hosts and their transport URLs.
 		Host("development", func() {
 			Description("Development hosts.")
-			URI("https://voice.sandbox.africastalking.com/voice")
+			URI("https://voice.sandbox.africastalking.com")
 		})
 
 		Host("production", func() {
 			Description("Production hosts.")
-			URI("https://voice.africastalking.com/voice")
+			URI("https://api.africastalking.com")
 		})
 	})
 })

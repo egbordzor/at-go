@@ -12,13 +12,19 @@ import (
 var _ = Service("voice", func() {
 	Title("Voice Callback Service")
 
+	HTTP(func() {
+		Path("/voice")
+	})
+
 	// Method describes handling of outbound
 	// calls via the handle service method (endpoint).
 	Method("handle", func() {
-		Description("Makes an outbound calls through the Africa'sTalking Voice API")
-		Payload(VoiceNotificationPayload)
-		Result(VoiceNotificationResult)
-		//Error()
+		Description("Voice Notification delivered to our callback URL")
+		Payload(NotificationContent)
+		Result(String)
+
+		POST("/notifications")
+
 		HTTP(func() {
 			Headers(func() {
 				Attribute("Content-Type", String, func() {
@@ -33,7 +39,43 @@ var _ = Service("voice", func() {
 				})
 				Required("Content-Type")
 			})
-			POST("/voice")
+			Response(StatusOK)
+		})
+	})
+
+	// Method describes a service method (endpoint).
+	Method("events", func() {
+		Description("Event Notifications sent from AT after call transfer initiated.")
+
+		// Payload describes the method payload.
+		Payload(CallTransferEvent)
+
+		// Result describes the method result.
+		Result(String)
+
+		POST("/transferevents")
+
+		// HTTP describes the HTTP transport mapping.
+		HTTP(func() {
+			Headers(func() {
+
+				// Attribute describes an object field
+				Attribute("apiKey", String, "Africa’s Talking application apiKey.")
+				Attribute("Content-Type", String, func() {
+					Description("The requests content type.")
+					Enum("application/x-www-form-urlencoded", "application/json", "application/xml")
+					Default("application/x-www-form-urlencoded")
+				})
+				Attribute("Accept", String, func() {
+					Description("The requests response type.")
+					Enum("application/json", "application/xml")
+					Default("application/json")
+				})
+				Required("Content-Type")
+			})
+
+			// Responses use a "200 OK" HTTP status.
+			// The result is encoded in the response body.
 			Response(StatusOK)
 		})
 	})
@@ -41,7 +83,7 @@ var _ = Service("voice", func() {
 })
 
 // VoiceNotification are voice notification contents sent to our callback URL.
-var VoiceNotificationPayload = Type("VoiceNotificationPayload", func() {
+var NotificationContent = Type("NotificationContent", func() {
 	// The API will set a value of 0 in the
 	// final request to your application.
 	// That request will contain details
@@ -213,116 +255,27 @@ var VoiceNotificationPayload = Type("VoiceNotificationPayload", func() {
 	})
 })
 
-var VoiceNotificationResult = ResultType("VoiceNotificationResult", func() {
-	Description("Voice Notification delivered to our /notifications callback URL")
-	TypeName("VoiceNotification")
-	ContentType("application/xml")
+// When the transfer has been initiated AT sends any of these events
+// to the event notifications URL, you can check from these form
+// fields in the events.
+var CallTransferEvent = Type("CallTransferEvent", func() {
+	Description("Event Notifications sent from AT after call transfer initiated.")
 
-	Attributes(func() {
-		Extend(VoiceNotificationPayload)
-	})
-	View("final", func() {
-		Attribute("isActive")
-		Attribute("sessionId")
-		Attribute("direction")
-		Attribute("destinationNumber")
-		Attribute("callerNumber")
-		Attribute("callerCountryCode")
-		Attribute("callStartTime")
-		Attribute("dtmfDigits")
-		Attribute("recordingUrl")
-		Attribute("durationInSeconds")
-		Attribute("currencyCode")
-		Attribute("amount")
-		Attribute("callSessionState")
-		Attribute("dialDestinationNumber")
-		Attribute("dialDurationInSeconds")
-		Attribute("dialStartTime")
-	})
-	View("recording", func() {
-		Attribute("isActive")
-		Attribute("sessionId")
-		Attribute("direction")
-		Attribute("destinationNumber")
-		Attribute("callerNumber")
-		Attribute("callerCountryCode")
-		Attribute("callStartTime")
-		Attribute("recordingUrl")
-	})
-	View("dtmf", func() {
-		Attribute("isActive")
-		Attribute("sessionId")
-		Attribute("direction")
-		Attribute("destinationNumber")
-		Attribute("callerNumber")
-		Attribute("callerCountryCode")
-		Attribute("callStartTime")
-		Attribute("dtmfDigits")
-	})
-})
-
-// Event Notifications
-// When the transfer has been initiated we will send any of these events to your
-// event notifications URL, you can check from these form fields in the events
-var EventPayload = ResultType("EventPayload", func() {
-	Attribute("callTransferParam", String, func() {
-		Description("+2347XXXXXXXXX:20, (20 is the duration in seconds)")
-	})
-	Attribute("status", String, func() {
-		Enum("Success")
-	})
 	Attribute("callSessionState", String, func() {
 		Enum("Active",
 			"Transferred",
 			"TransferCompleted",
-			)
+		)
 	})
 	Attribute("isActive", String, func() {
 		Enum("0", "1")
 		Default("1")
 	})
-	Attribute("callTransferredToNumber", String, func() {
-		Description( "Number call was transferred to")
-	})
-	Attribute("callTransferState", String, func() {
-		Enum(" Active",
-			"Completed",
-			" CallerHangup",
-			"CalleeHangup",
-			)
-	})
-	Attribute("callTransferHangupCause", String, func() {
-		Enum("DestinationNotSupported",
-			"InvalidPhoneNumber",
-			"NoActiveClient",
-			"NotAllowed",
-			)
-	})
-})
-
-var EventResult = ResultType("EventResult", func() {
-	Description("Event notifications sent to URL when call transfer has been initiated.")
-	TypeName("EventResult")
-	ContentType("application/xml")
-
-	Attributes(func() {
-		Extend(EventPayload)
-	})
-	Attribute("callTransferParam", String, func() {
-		Description("+2347XXXXXXXXX:20, (20 is the duration in seconds)")
-	})
 	Attribute("status", String, func() {
 		Enum("Success")
 	})
-	Attribute("callSessionState", String, func() {
-		Enum("Active",
-			"Transferred",
-			"TransferCompleted",
-			)
-	})
-	Attribute("isActive", String, func() {
-		Enum("0", "1")
-		Default("1")
+	Attribute("callTransferParam", String, func() {
+		Description("+2347XXXXXXXXX:20, (20 is the duration in seconds)")
 	})
 	Attribute("callTransferredToNumber", String, func() {
 		Description("Number call was transferred to")
@@ -330,60 +283,15 @@ var EventResult = ResultType("EventResult", func() {
 	Attribute("callTransferState", String, func() {
 		Enum(" Active",
 			"Completed",
-			" CallerHangup",
+			"CallerHangup",
 			"CalleeHangup",
-			)
+		)
 	})
 	Attribute("callTransferHangupCause", String, func() {
 		Enum("DestinationNotSupported",
 			"InvalidPhoneNumber",
 			"NoActiveClient",
 			"NotAllowed",
-			)
-	})
-
-	// Call transferred but failed
-	View("CallTransferredButFailed", func() {
-		Attribute("callSessionState")
-		Attribute("isActive")
-		Attribute("callTransferHangupCause")
-	})
-
-	// Call successfully transferred
-	View("CallTransferredSuccessfully", func() {
-		Attribute("callSessionState")
-		Attribute("isActive")
-		Attribute("callTransferredToNumber")
-		Attribute("callTransferState")
-	})
-
-	// Call transfer ends
-	View("CallTransferEnds", func() {
-		Attribute("callSessionState")
-		Attribute("isActive")
-		Attribute("callTransferredToNumber")
-		Attribute("callTransferState")
-	})
-
-	// Caller hang up
-	View("CallerHangup", func() {
-		Attribute("callSessionState")
-		Attribute("isActive")
-		Attribute("callTransferState")
-	})
-
-	// Callee hangup
-	View("CalleeHangup", func() {
-		Attribute("callSessionState")
-		Attribute("isActive")
-		Attribute("callTransferState")
-	})
-
-	// End of call
-	View("CallEnd", func() {
-		Attribute("callTransferParam")
-		Attribute("status")
-		Attribute("callSessionState")
-		Attribute("isActive")
+		)
 	})
 })

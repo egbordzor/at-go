@@ -20,7 +20,12 @@ var _ = Service("subscription", func() {
 		Payload(CheckoutPayload)
 
 		// Result describes the method result.
-		Result(CheckoutResult)
+		Result(CheckoutMedia)
+
+		// Requests to the service consist of HTTP POST requests.
+		// Live: https://api.africastalking.com/checkout/token/create
+		// Sandbox: https://api.sandbox.africastalking.com/checkout/token/create
+		POST("/checkout/token/create")
 
 		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
@@ -40,11 +45,6 @@ var _ = Service("subscription", func() {
 				})
 				Required("Content-Type")
 			})
-
-			// Requests to the service consist of HTTP POST requests.
-			// Live: https://api.africastalking.com/checkout/token/create
-			// Sandbox: https://api.sandbox.africastalking.com/checkout/token/create
-			POST("/checkout/token/create")
 
 			// Responses use a "200 OK" HTTP status.
 			// The result is encoded in the response body.
@@ -60,7 +60,12 @@ var _ = Service("subscription", func() {
 		Payload(SubscriptionPayload)
 
 		// Result describes the method result.
-		Result(SubscriptionResult)
+		Result(SubscriptionMedia)
+
+		// Requests to the service consist of HTTP POST requests.
+		// Live: https://api.africastalking.com/checkout/token/create
+		// Sandbox: https://api.sandbox.africastalking.com/checkout/token/create
+		POST("/checkout/token/create")
 
 		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
@@ -80,11 +85,6 @@ var _ = Service("subscription", func() {
 				})
 				Required("Content-Type")
 			})
-
-			// Requests to the service consist of HTTP POST requests.
-			// Live: https://api.africastalking.com/checkout/token/create
-			// Sandbox: https://api.sandbox.africastalking.com/checkout/token/create
-			POST("/checkout/token/create")
 
 			// Responses use a "200 OK" HTTP status.
 			// The result is encoded in the response body.
@@ -100,7 +100,12 @@ var _ = Service("subscription", func() {
 		Payload(FetchSubscriptionPayload)
 
 		// Result describes the method result.
-		Result(FetchSubscriptionResult)
+		Result(FetchSubscriptionMedia)
+
+		// Requests to the service consist of HTTP GET requests.
+		// Live: https://api.africastalking.com/version1/subscription
+		// Sandbox: https://api.sandbox.africastalking.com/version1/subscription
+		GET("/version1/subscription")
 
 		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
@@ -120,11 +125,6 @@ var _ = Service("subscription", func() {
 				})
 				Required("Content-Type")
 			})
-
-			// Requests to the service consist of HTTP GET requests.
-			// Live: https://api.africastalking.com/version1/subscription
-			// Sandbox: https://api.sandbox.africastalking.com/version1/subscription
-			GET("/version1/subscription")
 
 			// Responses use a "200 OK" HTTP status.
 			// The result is encoded in the response body.
@@ -140,7 +140,12 @@ var _ = Service("subscription", func() {
 		Payload(PurgeSubscriptionPayload)
 
 		// Result describes the method result.
-		Result(PurgeSubscriptionResult)
+		Result(PurgeSubscriptionMedia)
+
+		// Requests to the service consist of HTTP POST requests.
+		// Live: https://api.africastalking.com/version1/subscription/delete
+		// Sandbox: https://api.sandbox.africastalking.com/version1/subscription/delete
+		POST("/version1/subscription/delete")
 
 		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
@@ -160,11 +165,6 @@ var _ = Service("subscription", func() {
 				})
 				Required("Content-Type")
 			})
-
-			// Requests to the service consist of HTTP POST requests.
-			// Live: https://api.africastalking.com/version1/subscription/delete
-			// Sandbox: https://api.sandbox.africastalking.com/version1/subscription/delete
-			POST("/version1/subscription/delete")
 
 			// Responses use a "200 OK" HTTP status.
 			// The result is encoded in the response body.
@@ -186,7 +186,7 @@ var CheckoutPayload = Type("CheckoutPayload", func() {
 
 })
 
-var CheckoutResult = ResultType("CheckoutResult", func() {
+var CheckoutMedia = ResultType("CheckoutMedia", func() {
 	Description("Generate checkout token response")
 	TypeName("CheckoutResult")
 	ContentType("application/json")
@@ -236,7 +236,7 @@ var SubscriptionPayload = Type("SubscriptionPayload", func() {
 
 })
 
-var SubscriptionResult = ResultType("SubscriptionResult", func() {
+var SubscriptionMedia = ResultType("SubscriptionMedia", func() {
 	Description("Premium SMS Create Subscription response")
 	TypeName("SubscribeResult")
 	ContentType("application/json")
@@ -278,7 +278,7 @@ var FetchSubscriptionPayload = Type("FetchSubscriptionPayload", func() {
 	Required("username", "shortCode", "keyword")
 })
 
-var FetchSubscriptionResult = ResultType("FetchSubscriptionResult", func() {
+var FetchSubscriptionMedia = ResultType("FetchSubscriptionMedia", func() {
 	Description("Fetch Subscriptions response")
 	TypeName("FetchResult")
 	ContentType("application/json")
@@ -326,7 +326,7 @@ var PurgeSubscriptionPayload = Type("PurgeSubscriptionPayload", func() {
 	Required("username", "shortCode", "keyword", "phoneNumber")
 })
 
-var PurgeSubscriptionResult = ResultType("PurgeSubscriptionResult", func() {
+var PurgeSubscriptionMedia = ResultType("PurgeSubscriptionMedia", func() {
 	Description("Delete Subscription Response")
 	TypeName("PurgeSubscriptionResult ")
 	ContentType("application/json")

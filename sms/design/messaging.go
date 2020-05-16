@@ -7,10 +7,14 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var _ = Service("sms", func() {
+var _ = Service("messaging", func() {
 	Title("Messaging Service.")
 
-	// Method describes a service method (endpoint)
+	HTTP(func() {
+		Path("/version1/messaging")
+	})
+
+	// Method describes a service method (endpoint).
 	Method("send", func() {
 		Description("Send SMS through your application")
 
@@ -18,7 +22,12 @@ var _ = Service("sms", func() {
 		Payload(SendSMSPayload)
 
 		// Result describes the method result.
-		Result(SendSMSResult)
+		Result(SendSMSMedia)
+
+		// Requests to the service consist of HTTP POST requests.
+		// Live: https://api.africastalking.com/version1/messaging
+		// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
+		POST("/")
 
 		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
@@ -39,11 +48,6 @@ var _ = Service("sms", func() {
 				Required("Content-Type")
 			})
 
-			// Requests to the service consist of HTTP POST requests.
-			// Live: https://api.africastalking.com/version1/messaging
-			// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
-			POST("/version1/messaging")
-
 			// Responses use a "200 OK" HTTP status.
 			// The result is encoded in the response body.
 			Response(StatusOK)
@@ -58,10 +62,19 @@ var _ = Service("sms", func() {
 		Payload(FetchMessagesPayload)
 
 		// Result describes the method result.
-		Result(FetchMessagesResult)
+		Result(FetchMessagesMedia)
+
+		Error("not_found")
+		Error("bad_request")
+		Error("internal_error")
 
 		// HTTP describes the HTTP transport mapping.
 		HTTP(func() {
+
+			// Requests to the service consist of HTTP GET requests.
+			// Live: https://api.africastalking.com/version1/messaging
+			// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
+			GET("/")
 			Headers(func() {
 
 				// Attribute describes an object field
@@ -79,14 +92,19 @@ var _ = Service("sms", func() {
 				Required("Content-Type")
 			})
 
-			// Requests to the service consist of HTTP GET requests.
-			// Live: https://api.africastalking.com/version1/messaging
-			// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
-			GET("/version1/messaging")
-
 			// Responses use a "200 OK" HTTP status.
 			// The result is encoded in the response body.
 			Response(StatusOK)
+
+			Response("not_found", StatusNotFound, func() {
+				Tag("code", "not_found")
+			})
+			Response("bad_request", StatusBadRequest, func() {
+				Tag("code", "bad_request")
+			})
+			Response("internal_error", StatusInternalServerError, func() {
+				Tag("code", "internal_error")
+			})
 		})
 	})
 })
@@ -153,7 +171,7 @@ var SendSMSPayload = Type("SendSMSPayload", func() {
 	Required("username", "to", "message")
 })
 
-var SendSMSResult = ResultType("SendSMSResult", func() {
+var SendSMSMedia = ResultType("SendSMSMedia", func() {
 	Description("Send SMS Response ")
 	TypeName("SubscribeResult")
 	ContentType("application/json")
@@ -270,7 +288,7 @@ var FetchMessagesPayload = Type("FetchMessagesPayload", func() {
 	Required("username")
 })
 
-var FetchMessagesResult = ResultType("FetchMessagesResult", func() {
+var FetchMessagesMedia = ResultType("FetchMessagesMedia", func() {
 	Description("Fetch Messages Response")
 	TypeName("FetchMessagesResult")
 	ContentType("application/json")
