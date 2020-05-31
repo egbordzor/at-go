@@ -11,10 +11,10 @@ import (
 var _ = API("callbacks", func() {
 
 	// API title.
-	Title("Callback API")
+	Title("Callback HTTP service")
 
 	// Description of API
-	Description("HTTP service for interacting with Callback APIs")
+	Description("HTTP service for interacting with callbacks supporting AfricasTalking APIs")
 
 	// Version of API
 	Version("1.0")
@@ -42,27 +42,16 @@ var _ = API("callbacks", func() {
 	})
 
 	// Server describes a single process listening for client requests.
-	Server("voice", func() {
-		Description("voice hosts the Voice Service.")
+	Server("atcallbacksvr", func() {
+		Description("atcallbacksvr hosts callbacks that support AfricasTalking APIs.")
 
 		// List services hosted by this server.
-		Services(
-			"sms",
-			"voice",
-			"ussd",
-			"swagger",
-			"health",
-		)
+		Services("sms", "voice", "ussd", "airtime", "payments", "iot")
 
 		// List the Hosts and their transport URLs.
-		Host("development", func() {
-			Description("Development hosts.")
-			URI("https://voice.sandbox.africastalking.com/voice")
-		})
-
-		Host("production", func() {
-			Description("Production hosts.")
-			URI("https://voice.africastalking.com/voice")
+		Host("local", func() {
+			Description("Localhost")
+			URI("http://localhost:3000/callbacks/africastalking")
 		})
 	})
 })

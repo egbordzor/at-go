@@ -8,13 +8,13 @@ import (
 )
 
 // API describes the global properties of the API server.
-var _ = API("sms", func() {
+var _ = API("at", func() {
 
 	// API title.
-	Title("Messaging API")
+	Title("AfricasTalking API")
 
 	// Description of API.
-	Description("HTTP service for interacting with AT's SMS API.")
+	Description("HTTP service for interacting with all AfricasTalking API.")
 
 	// Version of API
 	Version("1.0")
@@ -42,26 +42,29 @@ var _ = API("sms", func() {
 	})
 
 	// Server describes a single process listening for client requests.
-	Server("smsServer", func() {
-		Description("smsServer hosts the Messaging Service.")
+	Server("atsvr", func() {
+		Description("atsvr hosts the AfricasTalking HTTP Service.")
 
 		// List services hosted by this server.
-		Services(
-			"messaging",
-			"subscription",
-			"swagger",
-			"health",
-		)
+		Services()
 
 		// List the Hosts and their transport URLs.
 		Host("development", func() {
 			Description("Development hosts.")
-			URI("https://voice.sandbox.africastalking.com")
+			URI("https://api.sandbox.africastalking.com")
 		})
 
 		Host("production", func() {
 			Description("Production hosts.")
-			URI("https://api.africastalking.com")
+			URI("https://{subdomain}.africastalking.com")
+
+			// Variable describes a URI variable.
+			Variable("subdomain", String, "Name of Sub-Domain", func() {
+				// URI parameters must have a default value
+				// and/or an enum validation.
+				Enum("api", "content")
+				Default("api")
+			})
 		})
 	})
 })

@@ -7,9 +7,28 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// Authenticating using your API Key and Username
+// Making an API call
+// Include the API key in the request header as a field called apiKey.
+// Include the Username as well, varied for different requests as following:
+//
+// 1. For GET requests e.g. fetch messages.
+// The username should be passed as a query parameter.
+//
+// 2. For POST requests in which parameters are sent as a url encoded form
+// e.g. in sending SMS.
+// The username should be included as one of the parameters within the form.
+//
+// 3. For POST requests that require JSON in the request body
+// e.g. in mobile checkout.
+// The username should be included in the JSON sent in the body of the request.
+
+// Authenticating an API using username and API Key.
 var APIKeyHeader = Type("APIKeyHeader", func() {
-	Attribute("apiKey", String, "Africa’s Talking application apiKey.")
+	Description("Authenticating an API using username and API Key.")
+
+	Attribute("apiKey", String, func() {
+		Description("Africa’s Talking application apiKey.")
+	})
 	Attribute("Content-Type", String, func() {
 		Description("The requests content type.")
 		Enum("application/x-www-form-urlencoded", "application/json")
@@ -19,14 +38,16 @@ var APIKeyHeader = Type("APIKeyHeader", func() {
 		Enum("application/json", "application/xml")
 		Default("application/xml")
 	})
-
-	// Required adds a "required" validation to the attribute.
 	Required("apiKey", "Content-Type")
 })
 
-// Authenticating with an Auth Token
+// Authenticating an API using an Auth Token
 var AuthTokenHeader = Type("AuthTokenHeader", func() {
-	Attribute("authToken", String, "Generated Auth Token.")
+	Description("Authenticating an API using an Auth Token")
+
+	Attribute("authToken", String, func() {
+		Description("Generated Auth Token.")
+	})
 	Attribute("Content-Type", String, func() {
 		Description("The requests content type.")
 		Enum("application/x-www-form-urlencoded", "application/xml")
@@ -36,5 +57,5 @@ var AuthTokenHeader = Type("AuthTokenHeader", func() {
 		Enum("application/json", "application/xml")
 		Default("application/xml")
 	})
-
+	Required("authToken", "Content-Type")
 })

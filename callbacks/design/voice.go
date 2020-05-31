@@ -7,83 +7,21 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// Service describes a Voice Callback Service that handles
-// Voice notifications sent from Africa'sTalking gateway.
-var _ = Service("voice", func() {
-	Title("Voice Callback Service")
+// Voice Notifications
+// The Voice API sends a notification when a specific event happens.
+// To receive these notifications you need to setup a voice callback URL.
+// From the dashboard select Voice -> Phone Numbers -> Actions -> Callback.
+//
+// Voice API notifications are sent for various categories as shown below:
+// Outbound calls: Sent whenever you make a call from a registered SIP number.
+// Inbound calls: Sent when a call comes to your virtual or SIP number.
+// After input: Sent whenever an action in your response requires user input
+// (such as GetDigits and Record)
+// When call ends: Sent after a call ends.
+// This is the final notification and contains some extra information
+// about the call like the cost and duration.
+var VoiceNotification = Type("VoiceNotification", func() {
 
-	HTTP(func() {
-		Path("/voice")
-	})
-
-	// Method describes handling of outbound
-	// calls via the handle service method (endpoint).
-	Method("handle", func() {
-		Description("Voice Notification delivered to our callback URL")
-		Payload(NotificationContent)
-		Result(String)
-
-		POST("/notifications")
-
-		HTTP(func() {
-			Headers(func() {
-				Attribute("Content-Type", String, func() {
-					Description("The requests content type.")
-					Enum("application/x-www-form-urlencoded", "application/json", "application/xml")
-					Default("application/xml")
-				})
-				Attribute("Accept", String, func() {
-					Description("The requests response type.")
-					Enum("application/json", "application/xml")
-					Default("application/xml")
-				})
-				Required("Content-Type")
-			})
-			Response(StatusOK)
-		})
-	})
-
-	// Method describes a service method (endpoint).
-	Method("events", func() {
-		Description("Event Notifications sent from AT after call transfer initiated.")
-
-		// Payload describes the method payload.
-		Payload(CallTransferEvent)
-
-		// Result describes the method result.
-		Result(String)
-
-		POST("/transferevents")
-
-		// HTTP describes the HTTP transport mapping.
-		HTTP(func() {
-			Headers(func() {
-
-				// Attribute describes an object field
-				Attribute("apiKey", String, "Africa’s Talking application apiKey.")
-				Attribute("Content-Type", String, func() {
-					Description("The requests content type.")
-					Enum("application/x-www-form-urlencoded", "application/json", "application/xml")
-					Default("application/x-www-form-urlencoded")
-				})
-				Attribute("Accept", String, func() {
-					Description("The requests response type.")
-					Enum("application/json", "application/xml")
-					Default("application/json")
-				})
-				Required("Content-Type")
-			})
-
-			// Responses use a "200 OK" HTTP status.
-			// The result is encoded in the response body.
-			Response(StatusOK)
-		})
-	})
-
-})
-
-// VoiceNotification are voice notification contents sent to our callback URL.
-var NotificationContent = Type("NotificationContent", func() {
 	// The API will set a value of 0 in the
 	// final request to your application.
 	// That request will contain details
