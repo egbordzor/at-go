@@ -7,6 +7,27 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
+// TokenMedia defines a result type used to describe a method response
+var TokenMedia = ResultType("TokenMedia", func() {
+	Attribute("token", String, func() {
+		Description("Generated Auth Token.")
+		Example("ATtkn_abcdefghijklmnopqrstuvwxyz")
+	})
+	Attribute("lifetimeInSeconds", Int, func() {
+		Description("Token Lifetime")
+		Example(3600)
+	})
+
+	// Required adds a "required" validation to the attribute.
+	Required("token", "lifetimeInSeconds")
+
+	// View defines a view for the result type.
+	View("default", func() {
+		Attribute("token")
+		Attribute("lifetimeInSeconds")
+	})
+})
+
 // Making an API call
 // Include the API key in the request header as a field called apiKey.
 // Include the Username as well, varied for different requests as following:
