@@ -35,7 +35,7 @@ Enrich your users call experience by adding features that would be inaccessible 
 ## [4. Payments API](https://github.com/wondenge/at-go/wiki/4.-Payments-API)
 
 <p align="center">
-<img src="https://africastalking.com/img/payments/c2b.svg" alt="Mobile Customer to Business(C2B)" height="300"  width="300" />
+<img src="/src/img/payments/payments.svg" alt="Payments API" height="300"  width="300" />
 </p>
 Build solutions to collect and disburse money through mobile money processor channels.
 
