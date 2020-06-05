@@ -1,4 +1,7 @@
-# SMS API
+<p align="center">
+<img src="https://africastalking.com/img/sms/banner.svg" alt="SMS API" title="SMS API" />
+</p>
+<h1 align="center">SMS API</h1>
 
 This API enables you to send effective text communication to your customers when they need it. There are a wide variety of ways you can add text messaging to your mobile and web applications.
 

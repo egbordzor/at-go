@@ -1,29 +1,55 @@
-# AfricasTalking Golang SDK
+<p align="center">
+<img src="https://africastalking.com/img/home/api_process.svg" alt="IoT API" title="IoT API" height="700" 
+ width="700" />
+</p>
+<h1 align="center">AfricasTalking Golang SDK</h1>
 
-## 1. [SMS API](https://github.com/wondenge/at-go/blob/master/sms/README.md)
+- This [SDK](https://github.com/wondenge/at-go) helps you intergrate your [Golang](https://golang.org/) application with [Africa's Talking](https://africastalking.com/) APIs to powering your communications solutions across africa.
 
-This API enables you to send effective text communication to your customers when they need it. There are a wide variety of ways you can add text messaging to your mobile and web applications.
+- With simplified access to telco infrastructure, developers use Africa's Talking powerful SMS, USSD, Voice, Airtime and Payments APIs to bring their ideas to life, as they build and sustain scalable businesses.
+- Africa's Talking provide a variety of communication and payments API products listed below, that are everything you need to build high impact mobile engagement solutions. The platform allows you to work on building superior customer engagement experiences without the complexity that comes from working directly with mobile operators.
 
-## 2. [USSD API](https://github.com/wondenge/at-go/blob/master/ussd/README.md)
+## [1. SMS API](https://github.com/wondenge/at-go/wiki/1.-SMS-API)
 
-This API enables you to build real time interactive experiences for your users that is accessible on both feature and smartphones. USSD in short is a service that allows mobile phone users to interact with a remote application from their device in real time. A predefined session is started once a user dials in to facilitate the transfer of information between your application and the user. It is a highly scalable service as it does not require an internet connection and is supported by both feature and smartphones
+<p align="center">
+<img src="https://africastalking.com/img/sms/banner.svg" alt="SMS API" title="SMS API" height="300" width="300"/>
+</p>
+Engage easily and effectively with your customers through text messaging.
 
-## 3. [Voice API](https://github.com/wondenge/at-go/blob/master/voice/README.md)
+## [2. USSD API](https://github.com/wondenge/at-go/wiki/2.-USSD-API)
 
-This API helps you take advantage of fully web based voice infrastructure and deploy fully fledged services without the need for expensive physical equipment. Programmable Voice allows you to enrich your call experience by adding features that would have otherwise be inaccessible using the normal physical lines. Our fully featured API gives you a wide number of actions that you can use together to build intuitive solutions.
+<p align="center">
+<img src="https://africastalking.com/img/ussd/banner.png" alt="USSD API" title="USSD API"  height="300" width="300" />
+</p>
 
-## 4. [Payments API](https://github.com/wondenge/at-go/blob/master/payments/README.md)
+Build real-time interactive text based solutions that can be accessed on every type of mobile phone.
 
-Provide an easy way to disburse or receive mobile money on your application using the Payments API. We provide a robust, easy to use and secure API integration that solves all your mobile money needs.The Payment API allows users to seamlessly send or receive mobile money on your applications. We provide painless integration, which reduces time to market and provides transaction notifications that are displayed on our simple and secure dashboard. We currently offer mobile money API through Safaricom MPESA.
+## [3. Voice API](https://github.com/wondenge/at-go/wiki/3.-Voice-API)
 
-## 5. [Airtime API](https://github.com/wondenge/at-go/blob/master/airtime/README.md)
+<p align="center">
+<img src="https://africastalking.com/img/voice/banner.png" alt="Voice API" title="Voice API" height="500" 
+ width="500"/>
+</p>
+Enrich your users call experience by adding features that would be inaccessible using normal physical phone lines.
 
-This API is a quick, painless, scalable way for distributing virtual airtime across mobile service providers in Africa. Airtime distribution services are offered instantly to mobile subscribers with instant notifications on delivery or failure.
+## [4. Payments API](https://github.com/wondenge/at-go/wiki/4.-Payments-API)
 
-## 6. [Internet of Things (IoT) API](https://github.com/wondenge/at-go/blob/master/iot/README.md)
+<p align="center">
+<img src="https://africastalking.com/img/payments/c2b.svg" alt="Mobile Customer to Business(C2B)" height="300"  width="300" />
+</p>
+Build solutions to collect and disburse money through mobile money processor channels.
 
-This API connects and manages a large number of IoT devices via a massively scalable Internet of Things platform for easy device management, machine-to-machine communication and data visualisation.
+## [5. Airtime API](https://github.com/wondenge/at-go/wiki/5.-Airtime-API)
 
-## Disclaimer
+<p align="center">
+<img src="https://africastalking.com/img/airtime/phone.png" alt="Airtime API" title="Airtime API" height="300" 
+ width="300"/>
+</p>
+Incentivise or make micro payments to your users by instantly sending virtual airtime.
 
-This SDK is still under rapid development and prototyping. Once it's tested for all use cases in production, I will remove this notice.
+## [6. IoT API](<https://github.com/wondenge/at-go/wiki/6.-Internet-of-Things-(IoT)-API>)
+
+<p align="center">
+<img src="https://africastalking.com/img/iot/banner.png" alt="IoT API" title="IoT API" height="300"  width="300" />
+</p>
+Connect, manage and visualize data from your remote devices through Africa's Talking easy-to-use APIs.

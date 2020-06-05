@@ -1,4 +1,7 @@
-# Voice
+<h1 align="center">Voice API</h1>
+<p align="center">
+<img src="https://africastalking.com/img/voice/banner.png" alt="Voice API" title="Voice API" />
+</p>
 
 This API helps you take advantage of fully web based voice infrastructure and deploy fully fledged services without the need for expensive physical equipment. Programmable Voice allows you to enrich your call experience by adding features that would have otherwise be inaccessible using the normal physical lines. Our fully featured API gives you a wide number of actions that you can use together to build intuitive solutions.
 
