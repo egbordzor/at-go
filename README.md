@@ -1,5 +1,5 @@
 <p align="center">
-<img src="/src/img/home/api_process.svg" alt="Home" title="Home" height="700" 
+<img src="/src/img/home/api_process.svg" alt="Home" title="Home" height="500" 
  width="700" />
 </p>
 <h1 align="center">AfricasTalking Golang SDK</h1>
@@ -27,8 +27,7 @@ Build real-time interactive text based solutions that can be accessed on every t
 ## [3. Voice API](https://github.com/wondenge/at-go/wiki/3.-Voice-API)
 
 <p align="center">
-<img src="/src/img/voice/voice.png" alt="Voice API" title="Voice API" height="500" 
- width="500"/>
+<img src="/src/img/voice/voice.png" alt="Voice API" title="Voice API" height="500" width="500"/>
 </p>
 Enrich your users call experience by adding features that would be inaccessible using normal physical phone lines.
 
@@ -42,8 +41,7 @@ Build solutions to collect and disburse money through mobile money processor cha
 ## [5. Airtime API](https://github.com/wondenge/at-go/wiki/5.-Airtime-API)
 
 <p align="center">
-<img src="/src/img/airtime/airtime.png" alt="Airtime API" title="Airtime API" height="300" 
- width="300"/>
+<img src="/src/img/airtime/airtime.png" alt="Airtime API" title="Airtime API" height="300" width="300"/>
 </p>
 Incentivise or make micro payments to your users by instantly sending virtual airtime.
 
