@@ -1,12 +1,6 @@
 package design
 
 import (
-	. "github.com/wondenge/at-go/airtime/design"
-	. "github.com/wondenge/at-go/iot/design"
-	. "github.com/wondenge/at-go/payments/design"
-	. "github.com/wondenge/at-go/sms/design"
-	. "github.com/wondenge/at-go/user/design"
-	. "github.com/wondenge/at-go/voice/design"
 	. "goa.design/goa/v3/dsl"
 	_ "goa.design/plugins/v3/docs"      // Generates documentation
 	_ "goa.design/plugins/v3/goakit"    // Enables goakit
