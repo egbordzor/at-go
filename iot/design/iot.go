@@ -7,26 +7,9 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var _ = Service("iot", func() {
-
-	// 6. IoT API
-	Method("publish", func() {
-		Description("Publishes messages to remote devices.")
-		Payload(IoTPayload)
-		Result(IoTResponse)
-		HTTP(func() {
-
-			// POST request to https://iot.africastalking.com/data/publish
-			POST("/data/publish")
-			Response(StatusOK)
-		})
-	})
-})
-
-// Messages can be sent between internet IoT enabled devices via MQTT or HTTP
-// This IoTPayload enables interaction via HTTP.
 var IoTPayload = Type("IoTPayload", func() {
 	Description("IoT request payload")
+
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username")
 	})

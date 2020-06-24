@@ -44,6 +44,8 @@ var _ = API("at", func() {
 	})
 })
 
+
+
 var _ = Service("africastalking", func() {
 
 	Method("generate", func() {
@@ -75,7 +77,7 @@ var _ = Service("africastalking", func() {
 			Attribute("username", String, "username of the application making the request")
 			Required("username")
 		})
-		Result(design3.UserMedia)
+		Result(UserMedia)
 		HTTP(func() {
 
 			// Requests to the service consist of HTTP GET requests.
@@ -85,6 +87,5 @@ var _ = Service("africastalking", func() {
 			Response(StatusOK)
 		})
 	})
-
 
 })

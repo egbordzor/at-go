@@ -7,23 +7,6 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var _ = Service("user", func() {
-
-	// 7. User API
-	Method("initiate", func() {
-		Description("Initiate an application data request.")
-		Payload(String)
-		Result(UserResponse)
-		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/user
-			// Sandbox: https://api.sandbox.africastalking.com/version1/user
-			GET("/version1/user")
-			Response(StatusOK)
-		})
-	})
-})
-
 var UserResponse = ResultType("UserMedia", func() {
 	Description("A User HTTP response.")
 	TypeName("UserMedia")

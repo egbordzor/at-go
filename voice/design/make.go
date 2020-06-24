@@ -40,7 +40,7 @@ var MakeCallResponse = ResultType("MakeCallResponse", func() {
 	// A list with multiple Entry each corresponding
 	// to an individual phone number and their status.
 	// Entry is a Map with details of queued numbers.
-	Attribute("entries", ArrayOf(Entry))
+	Attribute("entries", CollectionOf(VoiceEntry))
 	Attribute("errorMessage", String, func() {
 		Description("Error message if ENTIRE request was rejected by the API.")
 	})
@@ -51,7 +51,7 @@ var MakeCallResponse = ResultType("MakeCallResponse", func() {
 	})
 })
 
-var Entry = Type("Entry", func() {
+var VoiceEntry = Type("VoiceEntry", func() {
 	Attribute("phoneNumber", String, func() {
 		Description("The phone number queued.")
 	})

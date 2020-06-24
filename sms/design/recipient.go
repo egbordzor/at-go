@@ -9,6 +9,7 @@ import (
 
 var Recipient = Type("Recipient", func() {
 	Description("Recipient Attributes")
+
 	Attribute("statusCode", Int, func() {
 		Description("This corresponds to the status of the request")
 		Enum(
@@ -49,50 +50,5 @@ var Recipient = Type("Recipient", func() {
 	Attribute("messageId", String, func() {
 		Description("The messageId received when the sms was sent.")
 		Example("ATPid_SampleTxnId123")
-	})
-})
-
-var Subscriptions = Type("Subscriptions", func() {
-	Attribute("id", Int, func() {
-		Description("The id of the subscription")
-		Example(100)
-	})
-	Attribute("number", String, func() {
-		Description("The phone number subscribed to the product.")
-		Example("+254711XXXYYY")
-	})
-	Attribute("Date", String, func() {
-		Description("Timestamp when the subscription was made.")
-		Format(FormatDateTime)
-		Example("Timestamp")
-	})
-})
-
-var Messages = Type("Messages", func() {
-	Description("A list of messages from your inbox.")
-
-	Attribute("linkId", String, func() {
-		Description("A unique identifier attached to each incoming message.")
-		Example("SampleLinkId123")
-	})
-	Attribute("text", String, func() {
-		Description("The content of the message received.")
-		Example("Hello")
-	})
-	Attribute("to", String, func() {
-		Description("Your registered short code that the sms was sent out to.")
-		Example("28901")
-	})
-	Attribute("id", Int, func() {
-		Description("The id of the message.")
-		Example(15071)
-	})
-	Attribute("date", String, func() {
-		Description("The date when the sms was sent.")
-		Example("2018-03-19T08:34:18.445Z")
-	})
-	Attribute("from", String, func() {
-		Description("The sender’s phone number.")
-		Example("+254711XXXYYY")
 	})
 })

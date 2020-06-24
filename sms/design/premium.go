@@ -7,23 +7,9 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// Send Premium SMS
-// Live: https://content.africastalking.com/version1/messaging
-// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
 var PremiumPayload = Type("PremiumPayload", func() {
 	Description("Send a Premium SMS through your application")
 
-	Attribute("apiKey", String, func() {
-		Description("Africa’s Talking application apiKey")
-	})
-	Attribute("Content-Type", String, func() {
-		Description("The requests content type")
-		Default("application/x-www-form-urlencoded")
-	})
-	Attribute("Accept", String, func() {
-		Description("The requests response type.")
-		Default("application/json")
-	})
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username")
 	})
@@ -75,7 +61,7 @@ var PremiumPayload = Type("PremiumPayload", func() {
 		// In case it’s not delivered to the subscriber.
 		Description("No. of hours subscription message should be retried")
 	})
-	Required("apiKey", "Content-Type", "username", "to", "message")
+	Required("username", "to", "message")
 })
 
 var PremiumResponse = ResultType("PremiumResponse", func() {
@@ -92,7 +78,7 @@ var PremiumResponse = ResultType("PremiumResponse", func() {
 				Pattern("[a-zA-Z]+")
 				Example("Sent to 1/1 Total Cost: KES 0.8000")
 			})
-			Attribute("Recipients", ArrayOf(Recipient), func() {
+			Attribute("Recipients", CollectionOf(Recipient), func() {
 				Description("A list of recipients included in the original request.")
 				MinLength(1)
 			})

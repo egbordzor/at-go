@@ -7,25 +7,9 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var _ = Service("airtime", func() {
-
-	// 5. Airtime API
-	Method("send", func() {
-		Description("Send airtime.")
-		Payload(AirtimePayload)
-		Result(AirtimeResponse)
-		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/airtime/send
-			//Sandbox: https://api.sandbox.africastalking.com/version1/airtime/send
-			POST("/data/publish")
-			Response(StatusOK)
-		})
-	})
-})
-
 var AirtimePayload = Type("AirtimePayload", func() {
 	Description("Airtime request payload")
+
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
 	})
@@ -41,6 +25,7 @@ var AirtimePayload = Type("AirtimePayload", func() {
 			Example("KES 100.50")
 		})
 	})
+	Required("username", "recipients")
 })
 
 var AirtimeResponse = ResultType("AirtimeResponse", func() {
@@ -66,7 +51,7 @@ var AirtimeResponse = ResultType("AirtimeResponse", func() {
 			Description("Total discount applied on the airtime.")
 			Example("KES 40.0000")
 		})
-		Attribute("responses", ArrayOf(Entry))
+		Attribute("responses", CollectionOf(AirtimeEntry))
 		Attribute("errorMessage", String, func() {
 			Description("Error message if the ENTIRE request was rejected by the API.")
 			Example("None")
@@ -82,7 +67,8 @@ var AirtimeResponse = ResultType("AirtimeResponse", func() {
 	})
 })
 
-var Entry = Type("Entry", func() {
+var AirtimeEntry = Type("AirtimeEntry", func() {
+
 	Attribute("phoneNumber", String, func() {
 		Description("Phone number for this transaction.")
 		Example("+254711XXXYYY")
