@@ -13,14 +13,24 @@ import (
 var WalletTransferPayload = Type("WalletTransferPayload", func() {
 	Description("Wallet Transfer HTTP request.")
 
-	Attribute("username", String, "Africa’s Talking application username.")
-	Attribute("productName", String, "Africa’s Talking Payment product to initiate this transaction.")
-	Attribute("targetProductCode", String, "Unique product code to transfer the funds to.")
+	Attribute("username", String, func() {
+		Description("Africa’s Talking application username.")
+	})
+	Attribute("productName", String, func() {
+		Description("Africa’s Talking Payment product to initiate this transaction.")
+	})
+	Attribute("targetProductCode", String, func() {
+		Description("Unique product code to transfer the funds to.")
+	})
 	Attribute("currencyCode", String, func() {
 		Description("3-digit ISO format currency code")
 	})
-	Attribute("amount", Float64, "Amount application will be topped up with.")
-	Attribute("metadata", MapOf(String, String), "Metadata associated with the request. ")
+	Attribute("amount", Float64, func() {
+		Description("Amount application will be topped up with.")
+	})
+	Attribute("metadata", MapOf(String, String), func() {
+		Description("Metadata associated with the request. ")
+	})
 	Required("username", "productName", "targetProductCode", "currencyCode", "amount", "metadata")
 })
 
@@ -50,5 +60,11 @@ var WalletTransferResponse = ResultType("WalletTransferResponse", func() {
 			Description("A unique id that our API generates for successful requests.")
 			Example("ATPid_SampleTxnId123")
 		})
+	})
+
+	View("default", func() {
+		Attribute("status")
+		Attribute("description")
+		Attribute("transactionId")
 	})
 })

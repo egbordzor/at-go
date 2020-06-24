@@ -72,7 +72,16 @@ var ProductTransactionsPayload = Type("ProductTransactionsPayload", func() {
 	})
 	Attribute("category", String, func() {
 		Description("Transaction category you would like to consider.")
-		Enum("BankCheckout", "CardCheckout", "MobileCheckout", "MobileC2B", "MobileB2C", "MobileB2B", "BankTransfer", "WalletTransfer", "UserStashTopup")
+		Enum("BankCheckout",
+			"CardCheckout",
+			"MobileCheckout",
+			"MobileC2B",
+			"MobileB2C",
+			"MobileB2B",
+			"BankTransfer",
+			"WalletTransfer",
+			"UserStashTopup",
+			)
 	})
 	Attribute("provider", String, func() {
 		Description("Transaction provider you would like to consider.")
@@ -143,7 +152,16 @@ var WalletTransactionsPayload = Type("WalletTransactionsPayload", func() {
 	})
 	Attribute("categories", String, func() {
 		Description("List of transaction categories you would like to consider.")
-		Enum("BankCheckout", "CardCheckout", "MobileCheckout", "MobileC2B", "MobileB2C", "MobileB2B", "BankTransfer", "WalletTransfer", "UserStashTopup")
+		Enum("BankCheckout",
+			"CardCheckout",
+			"MobileCheckout",
+			"MobileC2B",
+			"MobileB2C",
+			"MobileB2B",
+			"BankTransfer",
+			"WalletTransfer",
+			"UserStashTopup",
+			)
 	})
 	Required("username", "pageNumber", "count")
 

@@ -13,11 +13,21 @@ import (
 var TopupStashPayload = Type("TopupStashPayload", func() {
 	Description("Topup Stash HTTP request.")
 
-	Attribute("username", String, "Africa’s Talking application username.")
-	Attribute("productName", String, "Africa’s Talking Payment product initiating transaction.")
-	Attribute("currencyCode", String, "3-digit ISO format currency code.")
-	Attribute("amount", Float64, "Amount application will be topped up with.")
-	Attribute("metadata", MapOf(String, String), "Metadata associated with the request.")
+	Attribute("username", String, func() {
+		Description("Africa’s Talking application username.")
+	})
+	Attribute("productName", String, func() {
+		Description("Africa’s Talking Payment product initiating transaction.")
+	})
+	Attribute("currencyCode", String, func() {
+		Description("3-digit ISO format currency code.")
+	})
+	Attribute("amount", Float64, func() {
+		Description("Amount application will be topped up with.")
+	})
+	Attribute("metadata", MapOf(String, String), func() {
+		Description("Metadata associated with the request.")
+	})
 	Required("username", "productName", "currencyCode", "amount", "metadata")
 })
 
@@ -47,5 +57,11 @@ var TopupStashResponse = ResultType("TopupStashResponse", func() {
 			Description("Unique ID for successful requests.")
 			Example("ATPid_SampleTxnId123")
 		})
+	})
+
+	View("default", func() {
+		Attribute("status")
+		Attribute("description")
+		Attribute("transactionId")
 	})
 })

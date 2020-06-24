@@ -27,13 +27,7 @@ var FetchMsgResponse = ResultType("FetchMsgResponse", func() {
 	ContentType("application/json")
 
 	Attributes(func() {
-		Attribute("SMSMessageData", func() {
-			Description("A Map detailing the eventual result of the sms request")
-			Attribute("Messages", ArrayOf(Messages), func() {
-				Description("A list of recipients included in the original request.")
-				MinLength(1)
-			})
-		})
+		Attribute("SMSMessageData", FetchSMSMessageData)
 	})
 
 	View("default", func() {

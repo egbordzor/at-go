@@ -7,7 +7,7 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var Recipient = Type("Recipient", func() {
+var Recipients = Type("Recipients", func() {
 	Description("Recipient Attributes")
 
 	Attribute("statusCode", Int, func() {

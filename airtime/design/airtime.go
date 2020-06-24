@@ -13,19 +13,21 @@ var AirtimePayload = Type("AirtimePayload", func() {
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
 	})
-	Attribute("recipients", func() {
-		Description("A url encoded json list of Recipients")
-
-		Attribute("phoneNumber", String, func() {
-			Description("Phone number that will be topped up.")
-			Example("+234811222333")
-		})
-		Attribute("amount ", String, func() {
-			Description("Value of airtime to send together with the currency code.")
-			Example("KES 100.50")
-		})
-	})
+	Attribute("recipients", ArrayOf(AirtimeRecipients))
 	Required("username", "recipients")
+})
+
+var AirtimeRecipients = Type("AirtimeRecipients", func() {
+	Description("A url encoded json list of Recipients")
+
+	Attribute("phoneNumber", String, func() {
+		Description("Phone number that will be topped up.")
+		Example("+234811222333")
+	})
+	Attribute("amount ", String, func() {
+		Description("Value of airtime to send together with the currency code.")
+		Example("KES 100.50")
+	})
 })
 
 var AirtimeResponse = ResultType("AirtimeResponse", func() {

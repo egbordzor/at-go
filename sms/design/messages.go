@@ -7,6 +7,41 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
+var BulkSMSMessageData = Type("BulkSMSMessageData", func() {
+	Description("A Map detailing the eventual result of the sms request")
+
+	Attribute("Messages", String, func() {
+		Description("A summary of the total number of recipients the sms was sent to and the total cost incurred.")
+		Pattern("[a-zA-Z]+")
+		Example("Sent to 1/1 Total Cost: KES 0.8000")
+	})
+	Attribute("Recipients", ArrayOf(Recipients), func() {
+		Description("A list of recipients included in the original request.")
+		MinLength(1)
+	})
+})
+
+var PremiumSMSMessageData = Type("PremiumSMSMessageData", func() {
+	Description("A Map detailing the eventual result of the sms request")
+
+	Attribute("Messages", String, func() {
+		Description("A summary of the total number of recipients the sms was sent to and the total cost incurred.")
+		Pattern("[a-zA-Z]+")
+		Example("Sent to 1/1 Total Cost: KES 0.8000")
+	})
+	Attribute("Recipients", ArrayOf(Recipients), func() {
+		Description("A list of recipients included in the original request.")
+		MinLength(1)
+	})
+})
+
+var FetchSMSMessageData = Type("FetchSMSMessageData", func() {
+	Attribute("Messages", ArrayOf(Messages), func() {
+		Description("")
+		MinLength(1)
+	})
+})
+
 var Messages = Type("Messages", func() {
 	Description("A list of messages from your inbox.")
 

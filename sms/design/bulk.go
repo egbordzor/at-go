@@ -73,15 +73,9 @@ var BulkResponse = ResultType("BulkResponse", func() {
 	ContentType("application/json")
 
 	Attributes(func() {
-		Attribute("SMSMessageData", func() {
-			Description("A Map detailing the eventual result of the sms request")
-			Attribute("Message", String, func() {
-				Description("Summary of recipients sms was sent to and the total cost incurred.")
-				Example("Sent to 1/1 Total Cost: KES 0.8000")
-			})
-			Attribute("Recipients", ArrayOf(Recipient))
-		})
+		Attribute("SMSMessageData", BulkSMSMessageData)
 	})
+
 	View("default", func() {
 		Attribute("SMSMessageData")
 	})

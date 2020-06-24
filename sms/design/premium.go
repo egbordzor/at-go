@@ -70,19 +70,7 @@ var PremiumResponse = ResultType("PremiumResponse", func() {
 	ContentType("application/json")
 
 	Attributes(func() {
-		Attribute("SMSMessageData", func() {
-			Description("A Map detailing the eventual result of the sms request")
-
-			Attribute("Message", String, func() {
-				Description("A summary of the total number of recipients the sms was sent to and the total cost incurred.")
-				Pattern("[a-zA-Z]+")
-				Example("Sent to 1/1 Total Cost: KES 0.8000")
-			})
-			Attribute("Recipients", ArrayOf(Recipient), func() {
-				Description("A list of recipients included in the original request.")
-				MinLength(1)
-			})
-		})
+		Attribute("SMSMessageData", PremiumSMSMessageData)
 	})
 
 	View("default", func() {
