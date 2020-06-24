@@ -78,7 +78,7 @@ var PremiumResponse = ResultType("PremiumResponse", func() {
 				Pattern("[a-zA-Z]+")
 				Example("Sent to 1/1 Total Cost: KES 0.8000")
 			})
-			Attribute("Recipients", CollectionOf(Recipient), func() {
+			Attribute("Recipients", ArrayOf(Recipient), func() {
 				Description("A list of recipients included in the original request.")
 				MinLength(1)
 			})

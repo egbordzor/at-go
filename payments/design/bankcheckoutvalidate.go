@@ -22,7 +22,7 @@ var BankCheckoutValidatePayload = Type("BankCheckoutValidatePayload", func() {
 	Required("username", "transactionId", "otp")
 })
 
-var BankCheckoutValidateResponse = Type("BankCheckoutValidateResponse", func() {
+var BankCheckoutValidateResponse = ResultType("BankCheckoutValidateResponse", func() {
 	Description("Bank Checkout Validation HTTP response.")
 	TypeName("BankCheckoutValidateResponse")
 	ContentType("application/json")

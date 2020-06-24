@@ -50,7 +50,7 @@ var MobileB2BPayload = Type("MobileB2BPayload", func() {
 	})
 })
 
-var MobileB2BResponse = Type("MobileB2BResponse", func() {
+var MobileB2BResponse = ResultType("MobileB2BResponse", func() {
 	Description("Mobile B2B HTTP response.")
 	TypeName("MobileB2BResponse")
 	ContentType("application/json")

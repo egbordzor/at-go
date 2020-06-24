@@ -28,7 +28,7 @@ var _ = API("at", func() {
 	})
 	Server("at", func() {
 		Description("at hosts the AfricasTalking HTTP Service.")
-		Services("africastalking", "health", "swagger")
+		Services("africastalking")
 		Host("development", func() {
 			Description("Development hosts.")
 			URI("https://api.sandbox.africastalking.com")
@@ -42,50 +42,4 @@ var _ = API("at", func() {
 			})
 		})
 	})
-})
-
-
-
-var _ = Service("africastalking", func() {
-
-	Method("generate", func() {
-		Description("Generates a valid auth token")
-		Payload(func() {
-			Attribute("username", String, func() {
-				Description("Africa's Talking Username.")
-				Example("sandbox")
-				Default("sandbox")
-			})
-			Attribute("apiKey", String, func() {
-				Description("Africa's Talking API Key.")
-			})
-			Required("username", "username")
-		})
-		Result(TokenMedia)
-		HTTP(func() {
-
-			// POST creates a route using the POST HTTP method.
-			// POST request to https://api.africastalking.com/auth-token/generate
-			POST("/auth-token/generate")
-			Response(StatusOK)
-		})
-	})
-
-	Method("fetch", func() {
-		Description("Initiate an application data request.")
-		Payload(func() {
-			Attribute("username", String, "username of the application making the request")
-			Required("username")
-		})
-		Result(UserMedia)
-		HTTP(func() {
-
-			// Requests to the service consist of HTTP GET requests.
-			// Live: https://api.africastalking.com/version1/user
-			// Sandbox: https://api.sandbox.africastalking.com/version1/user
-			GET("/user?username={username}")
-			Response(StatusOK)
-		})
-	})
-
 })

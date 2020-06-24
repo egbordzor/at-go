@@ -35,7 +35,7 @@ var MobileCheckoutPayload = Type("MobileCheckoutPayload", func() {
 	Required("username", "productName", "phoneNumber", "currencyCode", "amount")
 })
 
-var MobileCheckoutResponse = Type("MobileCheckoutResponse", func() {
+var MobileCheckoutResponse = ResultType("MobileCheckoutResponse", func() {
 	Description("Mobile Checkout HTTP response.")
 	TypeName("MobileCheckoutResponse")
 	ContentType("application/json")

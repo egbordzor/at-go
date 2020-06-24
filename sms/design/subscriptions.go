@@ -121,7 +121,7 @@ var FetchSubResponse = ResultType("FetchSubResponse", func() {
 	ContentType("application/json")
 
 	Attributes(func() {
-		Attribute("Subscriptions", CollectionOf(Subscriptions), func() {
+		Attribute("Subscriptions", ArrayOf(Subscriptions), func() {
 			Description("A list of subscriptions made to the product.")
 			MinLength(1)
 		})

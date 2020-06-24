@@ -79,7 +79,7 @@ var BulkResponse = ResultType("BulkResponse", func() {
 				Description("Summary of recipients sms was sent to and the total cost incurred.")
 				Example("Sent to 1/1 Total Cost: KES 0.8000")
 			})
-			Attribute("Recipients", CollectionOf(Recipient))
+			Attribute("Recipients", ArrayOf(Recipient))
 		})
 	})
 	View("default", func() {

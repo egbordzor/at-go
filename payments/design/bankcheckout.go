@@ -53,7 +53,7 @@ var BankCheckoutPayload = Type("BankCheckoutPayload", func() {
 	Required("username", "productName", "bankAccount", "currencyCode", "amount", "narration")
 })
 
-var BankCheckoutResponse = Type("BankCheckoutResponse", func() {
+var BankCheckoutResponse = ResultType("BankCheckoutResponse", func() {
 	Description("Bank Checkout HTTP response.")
 	TypeName("BankCheckoutResponse")
 	ContentType("application/json")

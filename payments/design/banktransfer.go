@@ -74,7 +74,7 @@ var BankTransferPayload = Type("BankTransferPayload", func() {
 	Required("username", "productName", "recipients")
 })
 
-var BankTransferResponse = Type("BankTransferResponse", func() {
+var BankTransferResponse = ResultType("BankTransferResponse", func() {
 	Description("Bank Transfer HTTP response.")
 	TypeName("BankTransferResponse")
 	ContentType("application/json")

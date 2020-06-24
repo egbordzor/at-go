@@ -112,7 +112,7 @@ var ProductTransactionsResponse = ResultType("ProductTransactionsResponse", func
 		})
 
 		// A list of response entries containing details of transactions that were found.
-		Attribute("responses", CollectionOf(TransactionResponse))
+		Attribute("responses", ArrayOf(TransactionResponse))
 	})
 
 	View("default", func() {

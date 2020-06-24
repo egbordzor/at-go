@@ -60,7 +60,7 @@ var MobileB2CPayload = Type("MobileB2CPayload", func() {
 	Required("username", "productName", "recipients")
 })
 
-var MobileB2CResponse = Type("MobileB2CResponse", func() {
+var MobileB2CResponse = ResultType("MobileB2CResponse", func() {
 	Description("Mobile B2C HTTP response.")
 	TypeName("MobileB2CResponse")
 	ContentType("application/json")

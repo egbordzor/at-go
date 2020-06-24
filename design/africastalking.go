@@ -1,12 +1,12 @@
 package design
 
 import (
-	. "github.com/wondenge/atgo/airtime/design"
-	. "github.com/wondenge/atgo/iot/design"
-	. "github.com/wondenge/atgo/payments/design"
-	. "github.com/wondenge/atgo/sms/design"
-	. "github.com/wondenge/atgo/user/design"
-	. "github.com/wondenge/atgo/voice/design"
+	. "github.com/wondenge/at-go/airtime/design"
+	. "github.com/wondenge/at-go/iot/design"
+	. "github.com/wondenge/at-go/payments/design"
+	. "github.com/wondenge/at-go/sms/design"
+	. "github.com/wondenge/at-go/user/design"
+	. "github.com/wondenge/at-go/voice/design"
 	. "goa.design/goa/v3/dsl"
 	_ "goa.design/plugins/v3/docs"      // Generates documentation
 	_ "goa.design/plugins/v3/goakit"    // Enables goakit
@@ -480,10 +480,36 @@ var _ = Service("africastalking", func() {
 		Result(UserResponse)
 		HTTP(func() {
 
+			// Initiate an application data request by making a HTTP GET request to the following endpoint:
 			// Live: https://api.africastalking.com/version1/user
 			// Sandbox: https://api.sandbox.africastalking.com/version1/user
 			GET("version1/user")
 			Response(StatusOK)
 		})
 	})
+
+	Method("Generate", func() {
+		Description("Generates a valid auth token")
+		Payload(func() {
+			Attribute("username", String, func() {
+				Description("Africa's Talking Username.")
+				Example("sandbox")
+				Default("sandbox")
+			})
+			Attribute("apiKey", String, func() {
+				Description("Africa's Talking API Key.")
+			})
+			Required("username", "apiKey")
+		})
+		Result(AccessTokenResponse)
+
+		HTTP(func() {
+
+			// POST creates a route using the POST HTTP method.
+			// POST request to https://api.africastalking.com/auth-token/generate
+			POST("/auth-token/generate")
+			Response(StatusOK)
+		})
+	})
+
 })

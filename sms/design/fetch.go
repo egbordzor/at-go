@@ -29,7 +29,7 @@ var FetchMsgResponse = ResultType("FetchMsgResponse", func() {
 	Attributes(func() {
 		Attribute("SMSMessageData", func() {
 			Description("A Map detailing the eventual result of the sms request")
-			Attribute("Messages", CollectionOf(Messages), func() {
+			Attribute("Messages", ArrayOf(Messages), func() {
 				Description("A list of recipients included in the original request.")
 				MinLength(1)
 			})

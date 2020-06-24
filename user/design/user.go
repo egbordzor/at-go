@@ -7,9 +7,9 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-var UserResponse = ResultType("UserMedia", func() {
+var UserResponse = ResultType("UserResponse", func() {
 	Description("A User HTTP response.")
-	TypeName("UserMedia")
+	TypeName("UserResponse")
 	ContentType("application/json")
 
 	Attributes(func() {

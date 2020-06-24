@@ -13,7 +13,7 @@ var AirtimePayload = Type("AirtimePayload", func() {
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
 	})
-	Attribute("recipients", String, func() {
+	Attribute("recipients", func() {
 		Description("A url encoded json list of Recipients")
 
 		Attribute("phoneNumber", String, func() {
@@ -51,7 +51,7 @@ var AirtimeResponse = ResultType("AirtimeResponse", func() {
 			Description("Total discount applied on the airtime.")
 			Example("KES 40.0000")
 		})
-		Attribute("responses", CollectionOf(AirtimeEntry))
+		Attribute("responses", ArrayOf(AirtimeEntry))
 		Attribute("errorMessage", String, func() {
 			Description("Error message if the ENTIRE request was rejected by the API.")
 			Example("None")
