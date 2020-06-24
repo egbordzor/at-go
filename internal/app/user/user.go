@@ -1,4 +1,4 @@
-package atgo
+package user
 
 import (
 	"bytes"
@@ -10,8 +10,8 @@ import (
 	"net/http"
 )
 
-// Send Airtime.
-func (s *africastalkingsrvc) SendAirtime(ctx context.Context, p *africastalking.AirtimePayload) (res *africastalking.AirtimeResponse, err error) {
+// Initiate an application data request.
+func (s *africastalkingsrvc) InitiateAppData(ctx context.Context, p string) (res *africastalking.UserResponse, err error) {
 
 	// Encode JSON from our instance, using marshall.
 	b, err := json.Marshal(p)
@@ -20,7 +20,7 @@ func (s *africastalkingsrvc) SendAirtime(ctx context.Context, p *africastalking.
 		fmt.Println(err.Error())
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", fmt.Sprintf("%s%s", "", "/version1/airtime/send"), bytes.NewReader(b))
+	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s%s", "", ""), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -28,14 +28,14 @@ func (s *africastalkingsrvc) SendAirtime(ctx context.Context, p *africastalking.
 	// Set Header Parameters
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppAPIKey")
+	req.Header.Set("Apikey", "MyAppApiKey")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("could not load default HTTP client: %w", err)
 	}
 
-	if err := s.logger.Log("info", fmt.Sprintf("africastalking.SendAirtime")); err != nil {
+	if err := s.logger.Log("info", fmt.Sprintf("africastalking.InitiateAppData")); err != nil {
 		err := fmt.Errorf("could not log to stdout: %w", err)
 		fmt.Println(err.Error())
 	}
@@ -56,7 +56,7 @@ func (s *africastalkingsrvc) SendAirtime(ctx context.Context, p *africastalking.
 		fmt.Println(err.Error())
 	}
 
-	res = &africastalking.AirtimeResponse{}
+	res = &africastalking.UserResponse{}
 
 	// Parse the JSON-encoded data from response body.
 	// The data is stored in the value pointed by response.
@@ -65,5 +65,8 @@ func (s *africastalkingsrvc) SendAirtime(ctx context.Context, p *africastalking.
 		fmt.Println(err.Error())
 	}
 
-	return res, err
+	// Print values of the object
+	fmt.Printf("UserResponse: %v\n", res)
+
+	return res, nil
 }

@@ -1,4 +1,4 @@
-package atgo
+package sms
 
 import (
 	"bytes"
@@ -10,8 +10,8 @@ import (
 	"net/http"
 )
 
-// Initiate an application data request.
-func (s *africastalkingsrvc) InitiateAppData(ctx context.Context, p string) (res *africastalking.UserResponse, err error) {
+// Generate a checkout token
+func (c *Client) NewCheckoutToken(ctx context.Context, p *africastalking.CheckoutTokenPayload) (res *africastalking.CheckoutTokenResponse, err error) {
 
 	// Encode JSON from our instance, using marshall.
 	b, err := json.Marshal(p)
@@ -20,7 +20,7 @@ func (s *africastalkingsrvc) InitiateAppData(ctx context.Context, p string) (res
 		fmt.Println(err.Error())
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s%s", "", ""), bytes.NewReader(b))
+	req, err := http.NewRequestWithContext(ctx, "POST", "https://api.sandbox.africastalking.com/checkout/token/create", bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -28,14 +28,13 @@ func (s *africastalkingsrvc) InitiateAppData(ctx context.Context, p string) (res
 	// Set Header Parameters
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppApiKey")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("could not load default HTTP client: %w", err)
 	}
 
-	if err := s.logger.Log("info", fmt.Sprintf("africastalking.InitiateAppData")); err != nil {
+	if err := c.logger.Log("info", fmt.Sprintf("africastalking.NewCheckoutToken")); err != nil {
 		err := fmt.Errorf("could not log to stdout: %w", err)
 		fmt.Println(err.Error())
 	}
@@ -56,7 +55,7 @@ func (s *africastalkingsrvc) InitiateAppData(ctx context.Context, p string) (res
 		fmt.Println(err.Error())
 	}
 
-	res = &africastalking.UserResponse{}
+	res = &africastalking.CheckoutTokenResponse{}
 
 	// Parse the JSON-encoded data from response body.
 	// The data is stored in the value pointed by response.
@@ -65,5 +64,5 @@ func (s *africastalkingsrvc) InitiateAppData(ctx context.Context, p string) (res
 		fmt.Println(err.Error())
 	}
 
-	return res, err
+	return res, nil
 }

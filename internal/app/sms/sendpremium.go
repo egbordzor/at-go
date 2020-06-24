@@ -1,4 +1,4 @@
-package atgo
+package sms
 
 import (
 	"bytes"
@@ -10,8 +10,8 @@ import (
 	"net/http"
 )
 
-// Publishes messages to remote devices.
-func (s *africastalkingsrvc) PublishIoT(ctx context.Context, p *africastalking.IoTPayload) (res *africastalking.IoTResponse, err error) {
+// Send Premium SMS
+func (c *Client) SendPremiumSMS(ctx context.Context, p *africastalking.PremiumPayload) (res *africastalking.PremiumSMSResponse, err error) {
 
 	// Encode JSON from our instance, using marshall.
 	b, err := json.Marshal(p)
@@ -20,8 +20,7 @@ func (s *africastalkingsrvc) PublishIoT(ctx context.Context, p *africastalking.I
 		fmt.Println(err.Error())
 	}
 
-	// Set Header Parameters
-	req, err := http.NewRequestWithContext(ctx, "POST", fmt.Sprintf("%s", "https://iot.africastalking.com/data/publish"), bytes.NewReader(b))
+	req, err := http.NewRequestWithContext(ctx, "POST", "https://api.sandbox.africastalking.com/version1/messaging", bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -29,14 +28,14 @@ func (s *africastalkingsrvc) PublishIoT(ctx context.Context, p *africastalking.I
 	// Set Header Parameters
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppAPIKey")
+	req.Header.Set("Apikey", "MyAppApiKey")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("could not load default HTTP client: %w", err)
 	}
 
-	if err := s.logger.Log("info", fmt.Sprintf("africastalking.PublishIoT")); err != nil {
+	if err := c.logger.Log("info", fmt.Sprintf("africastalking.SendPremiumSMS")); err != nil {
 		err := fmt.Errorf("could not log to stdout: %w", err)
 		fmt.Println(err.Error())
 	}
@@ -57,7 +56,7 @@ func (s *africastalkingsrvc) PublishIoT(ctx context.Context, p *africastalking.I
 		fmt.Println(err.Error())
 	}
 
-	res = &africastalking.IoTResponse{}
+	res = &africastalking.PremiumSMSResponse{}
 
 	// Parse the JSON-encoded data from response body.
 	// The data is stored in the value pointed by response.
@@ -66,5 +65,5 @@ func (s *africastalkingsrvc) PublishIoT(ctx context.Context, p *africastalking.I
 		fmt.Println(err.Error())
 	}
 
-	return res, err
+	return res, nil
 }
