@@ -1,4 +1,4 @@
-package user
+package atgo
 
 import (
 	"bytes"

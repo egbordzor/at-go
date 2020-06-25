@@ -1,8 +1,8 @@
-package atgo
+package pkg
 
 import (
 	"github.com/go-kit/kit/log"
-	africastalking "github.com/wondenge/at-go/pkg/gen/africastalking"
+	africastalking "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 // africastalking service example implementation.
