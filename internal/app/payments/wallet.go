@@ -3,7 +3,7 @@ package payments
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/pkg/gen/africastalking"
+	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 // Transfer money from one product to another.

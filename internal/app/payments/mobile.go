@@ -3,7 +3,7 @@ package payments
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/pkg/gen/africastalking"
+	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 // Initiate Mobile C2B payments on a mobile subscriber’s device.

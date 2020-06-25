@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/wondenge/at-go/pkg/gen/africastalking"
+	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 	"io/ioutil"
 	"net/http"
 )

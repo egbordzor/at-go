@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-kit/kit/log"
-	"github.com/wondenge/at-go/pkg/gen/africastalking"
+	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 	"net/http"
 	"time"
 )

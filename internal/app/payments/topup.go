@@ -3,7 +3,7 @@ package payments
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/pkg/gen/africastalking"
+	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 // Move money from a Payment Product to an application stash.
