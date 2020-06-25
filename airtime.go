@@ -1,4 +1,4 @@
-package airtime
+package atgo
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 )
 
 // Send Airtime.
-func (c *atgo.Client) sendAirtime(ctx context.Context, p *africastalking.AirtimePayload) (res *africastalking.AirtimeResponse, err error) {
+func (c *Client) sendAirtime(ctx context.Context, p *africastalking.AirtimePayload) (res *africastalking.AirtimeResponse, err error) {
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", "", "/version1/airtime/send"), p)
 	if err != nil {

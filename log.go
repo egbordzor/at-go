@@ -1,4 +1,4 @@
-package pkg
+package atgo
 
 import (
 	"github.com/go-kit/kit/log"
