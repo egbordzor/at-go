@@ -3,7 +3,7 @@
 // africastalking client
 //
 // Command:
-// $ goa gen github.com/wondenge/at-go/design -o internal/pkg
+// $ goa gen github.com/wondenge/at-go/internal/design -o internal/pkg
 
 package africastalking
 
