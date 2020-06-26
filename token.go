@@ -21,14 +21,12 @@ type (
 // Generates a valid auth token
 func (c *Client) generateToken(ctx context.Context, p *africastalking.GeneratePayload) (res *africastalking.AccessTokenResponse, err error) {
 
-	// NewRequestWithContext returns a Request suitable for use with Client.Do or Transport.RoundTrip.
-	// Contains a context for controlling the entire lifetime of a request and its response.
 	req, err := c.NewRequest("POST", "https://api.africastalking.com/tlsauth-token/generate", p)
 	if err != nil {
 		return nil, fmt.Errorf("could not create generate tlsauth token request: %v", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppApiKey")

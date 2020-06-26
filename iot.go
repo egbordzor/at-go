@@ -15,7 +15,7 @@ func (c *Client) publishIoT(ctx context.Context, p *africastalking.IoTPayload) (
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppAPIKey")

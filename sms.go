@@ -6,6 +6,11 @@ import (
 	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
+const (
+	SMSLiveURL    = "https://api.africastalking.com/version1/messaging"
+	SMSSandboxURL = "https://api.sandbox.africastalking.com/version1/messaging"
+)
+
 // Send Bulk SMS
 func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload) (res *africastalking.BulkResponse, err error) {
 
@@ -14,7 +19,7 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload)
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
@@ -36,7 +41,7 @@ func (c *Client) fetchSMS(ctx context.Context, p *africastalking.FetchMsgPayload
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
@@ -57,7 +62,7 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *africastalking.PremiumPa
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
@@ -79,7 +84,7 @@ func (c *Client) newCheckoutToken(ctx context.Context, p *africastalking.Checkou
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
@@ -100,7 +105,7 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *africastalking.N
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
@@ -122,7 +127,7 @@ func (c *Client) fetchPremiumSubscription(ctx context.Context, p *africastalking
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
@@ -143,7 +148,7 @@ func (c *Client) purgePremiumSubscription(ctx context.Context, p *africastalking
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
-	// Set Header Parameters
+	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
