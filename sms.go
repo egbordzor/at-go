@@ -25,7 +25,6 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload)
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.BulkResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -46,7 +45,6 @@ func (c *Client) fetchSMS(ctx context.Context, p *africastalking.FetchMsgPayload
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.FetchMsgResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -68,7 +66,6 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *africastalking.PremiumPa
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.PremiumSMSResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -89,7 +86,6 @@ func (c *Client) newCheckoutToken(ctx context.Context, p *africastalking.Checkou
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	res = &africastalking.CheckoutTokenResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -111,7 +107,6 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *africastalking.N
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.NewSubResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -132,7 +127,6 @@ func (c *Client) fetchPremiumSubscription(ctx context.Context, p *africastalking
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.FetchSubResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -154,7 +148,6 @@ func (c *Client) purgePremiumSubscription(ctx context.Context, p *africastalking
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.PurgeSubResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

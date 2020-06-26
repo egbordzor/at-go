@@ -6,6 +6,10 @@ import (
 	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
+const (
+	IoTLiveURL = "https://iot.africastalking.com/data/publish"
+)
+
 // Publishes messages to remote devices.
 func (c *Client) publishIoT(ctx context.Context, p *africastalking.IoTPayload) (res *africastalking.IoTResponse, err error) {
 
@@ -21,7 +25,6 @@ func (c *Client) publishIoT(ctx context.Context, p *africastalking.IoTPayload) (
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
 	res = &africastalking.IoTResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

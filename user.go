@@ -6,6 +6,11 @@ import (
 	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
+const (
+	UserLiveURL    = "https://api.africastalking.com/version1/user"
+	UserSandboxURL = "https://api.sandbox.africastalking.com/version1/user"
+)
+
 // Initiate an application data request.
 func (c *Client) initiateAppData(ctx context.Context, p string) (res *africastalking.UserResponse, err error) {
 
@@ -20,7 +25,6 @@ func (c *Client) initiateAppData(ctx context.Context, p string) (res *africastal
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.UserResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

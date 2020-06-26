@@ -34,7 +34,6 @@ func (c *Client) makeCall(ctx context.Context, p *africastalking.MakeCallPayload
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
 	res = &africastalking.MakeCallResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -101,6 +100,5 @@ func (c *Client) uploadMedia(ctx context.Context, p *africastalking.UploadMediaF
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return "", err
 	}
-
 	return res, nil
 }

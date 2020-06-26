@@ -32,7 +32,6 @@ func (c *Client) generateToken(ctx context.Context, p *africastalking.GeneratePa
 	req.Header.Set("Apikey", "MyAppApiKey")
 
 	res = &africastalking.AccessTokenResponse{}
-
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
