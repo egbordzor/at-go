@@ -29,7 +29,17 @@ type Server struct {
 	PurgePremiumSubscription http.Handler
 	MakeCall                 http.Handler
 	TransferCall             http.Handler
+	Queue                    http.Handler
 	UploadMedia              http.Handler
+	Say                      http.Handler
+	Play                     http.Handler
+	GetDigits                http.Handler
+	Dial                     http.Handler
+	Record                   http.Handler
+	Enqueue                  http.Handler
+	Dequeue                  http.Handler
+	Redirect                 http.Handler
+	Reject                   http.Handler
 	MobileCheckout           http.Handler
 	MobileB2C                http.Handler
 	MobileB2B                http.Handler
@@ -92,7 +102,17 @@ func New(
 			{"PurgePremiumSubscription", "POST", "/version1/subscription/delete"},
 			{"MakeCall", "POST", "/call"},
 			{"TransferCall", "POST", "/callTransfer"},
+			{"Queue", "POST", "/queueStatus"},
 			{"UploadMedia", "POST", "/mediaUpload"},
+			{"Say", "POST", "/callTransfer"},
+			{"Play", "POST", "/callTransfer"},
+			{"GetDigits", "POST", "/callTransfer"},
+			{"Dial", "POST", "/callTransfer"},
+			{"Record", "POST", "/callTransfer"},
+			{"Enqueue", "POST", "/callTransfer"},
+			{"Dequeue", "POST", "/callTransfer"},
+			{"Redirect", "POST", "/callTransfer"},
+			{"Reject", "POST", "/callTransfer"},
 			{"MobileCheckout", "POST", "/mobile/checkout/request"},
 			{"MobileB2C", "POST", "/mobile/b2c/request"},
 			{"MobileB2B", "POST", "/mobile/b2b/request"},
@@ -121,7 +141,17 @@ func New(
 		PurgePremiumSubscription: NewPurgePremiumSubscriptionHandler(e.PurgePremiumSubscription, mux, decoder, encoder, errhandler, formatter),
 		MakeCall:                 NewMakeCallHandler(e.MakeCall, mux, decoder, encoder, errhandler, formatter),
 		TransferCall:             NewTransferCallHandler(e.TransferCall, mux, decoder, encoder, errhandler, formatter),
+		Queue:                    NewQueueHandler(e.Queue, mux, decoder, encoder, errhandler, formatter),
 		UploadMedia:              NewUploadMediaHandler(e.UploadMedia, mux, decoder, encoder, errhandler, formatter),
+		Say:                      NewSayHandler(e.Say, mux, decoder, encoder, errhandler, formatter),
+		Play:                     NewPlayHandler(e.Play, mux, decoder, encoder, errhandler, formatter),
+		GetDigits:                NewGetDigitsHandler(e.GetDigits, mux, decoder, encoder, errhandler, formatter),
+		Dial:                     NewDialHandler(e.Dial, mux, decoder, encoder, errhandler, formatter),
+		Record:                   NewRecordHandler(e.Record, mux, decoder, encoder, errhandler, formatter),
+		Enqueue:                  NewEnqueueHandler(e.Enqueue, mux, decoder, encoder, errhandler, formatter),
+		Dequeue:                  NewDequeueHandler(e.Dequeue, mux, decoder, encoder, errhandler, formatter),
+		Redirect:                 NewRedirectHandler(e.Redirect, mux, decoder, encoder, errhandler, formatter),
+		Reject:                   NewRejectHandler(e.Reject, mux, decoder, encoder, errhandler, formatter),
 		MobileCheckout:           NewMobileCheckoutHandler(e.MobileCheckout, mux, decoder, encoder, errhandler, formatter),
 		MobileB2C:                NewMobileB2CHandler(e.MobileB2C, mux, decoder, encoder, errhandler, formatter),
 		MobileB2B:                NewMobileB2BHandler(e.MobileB2B, mux, decoder, encoder, errhandler, formatter),
@@ -157,7 +187,17 @@ func (s *Server) Use(m func(http.Handler) http.Handler) {
 	s.PurgePremiumSubscription = m(s.PurgePremiumSubscription)
 	s.MakeCall = m(s.MakeCall)
 	s.TransferCall = m(s.TransferCall)
+	s.Queue = m(s.Queue)
 	s.UploadMedia = m(s.UploadMedia)
+	s.Say = m(s.Say)
+	s.Play = m(s.Play)
+	s.GetDigits = m(s.GetDigits)
+	s.Dial = m(s.Dial)
+	s.Record = m(s.Record)
+	s.Enqueue = m(s.Enqueue)
+	s.Dequeue = m(s.Dequeue)
+	s.Redirect = m(s.Redirect)
+	s.Reject = m(s.Reject)
 	s.MobileCheckout = m(s.MobileCheckout)
 	s.MobileB2C = m(s.MobileB2C)
 	s.MobileB2B = m(s.MobileB2B)
@@ -189,7 +229,17 @@ func Mount(mux goahttp.Muxer, h *Server) {
 	MountPurgePremiumSubscriptionHandler(mux, h.PurgePremiumSubscription)
 	MountMakeCallHandler(mux, h.MakeCall)
 	MountTransferCallHandler(mux, h.TransferCall)
+	MountQueueHandler(mux, h.Queue)
 	MountUploadMediaHandler(mux, h.UploadMedia)
+	MountSayHandler(mux, h.Say)
+	MountPlayHandler(mux, h.Play)
+	MountGetDigitsHandler(mux, h.GetDigits)
+	MountDialHandler(mux, h.Dial)
+	MountRecordHandler(mux, h.Record)
+	MountEnqueueHandler(mux, h.Enqueue)
+	MountDequeueHandler(mux, h.Dequeue)
+	MountRedirectHandler(mux, h.Redirect)
+	MountRejectHandler(mux, h.Reject)
 	MountMobileCheckoutHandler(mux, h.MobileCheckout)
 	MountMobileB2CHandler(mux, h.MobileB2C)
 	MountMobileB2BHandler(mux, h.MobileB2B)
@@ -672,6 +722,57 @@ func NewTransferCallHandler(
 	})
 }
 
+// MountQueueHandler configures the mux to serve the "africastalking" service
+// "Queue" endpoint.
+func MountQueueHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/queueStatus", f)
+}
+
+// NewQueueHandler creates a HTTP handler which loads the HTTP request and
+// calls the "africastalking" service "Queue" endpoint.
+func NewQueueHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeQueueRequest(mux, decoder)
+		encodeResponse = EncodeQueueResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Queue")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
 // MountUploadMediaHandler configures the mux to serve the "africastalking"
 // service "UploadMedia" endpoint.
 func MountUploadMediaHandler(mux goahttp.Muxer, h http.Handler) {
@@ -702,6 +803,465 @@ func NewUploadMediaHandler(
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
 		ctx = context.WithValue(ctx, goa.MethodKey, "UploadMedia")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountSayHandler configures the mux to serve the "africastalking" service
+// "Say" endpoint.
+func MountSayHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewSayHandler creates a HTTP handler which loads the HTTP request and calls
+// the "africastalking" service "Say" endpoint.
+func NewSayHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeSayRequest(mux, decoder)
+		encodeResponse = EncodeSayResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Say")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountPlayHandler configures the mux to serve the "africastalking" service
+// "Play" endpoint.
+func MountPlayHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewPlayHandler creates a HTTP handler which loads the HTTP request and calls
+// the "africastalking" service "Play" endpoint.
+func NewPlayHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodePlayRequest(mux, decoder)
+		encodeResponse = EncodePlayResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Play")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountGetDigitsHandler configures the mux to serve the "africastalking"
+// service "GetDigits" endpoint.
+func MountGetDigitsHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewGetDigitsHandler creates a HTTP handler which loads the HTTP request and
+// calls the "africastalking" service "GetDigits" endpoint.
+func NewGetDigitsHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeGetDigitsRequest(mux, decoder)
+		encodeResponse = EncodeGetDigitsResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "GetDigits")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountDialHandler configures the mux to serve the "africastalking" service
+// "Dial" endpoint.
+func MountDialHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewDialHandler creates a HTTP handler which loads the HTTP request and calls
+// the "africastalking" service "Dial" endpoint.
+func NewDialHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeDialRequest(mux, decoder)
+		encodeResponse = EncodeDialResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Dial")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountRecordHandler configures the mux to serve the "africastalking" service
+// "Record" endpoint.
+func MountRecordHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewRecordHandler creates a HTTP handler which loads the HTTP request and
+// calls the "africastalking" service "Record" endpoint.
+func NewRecordHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeRecordRequest(mux, decoder)
+		encodeResponse = EncodeRecordResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Record")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountEnqueueHandler configures the mux to serve the "africastalking" service
+// "Enqueue" endpoint.
+func MountEnqueueHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewEnqueueHandler creates a HTTP handler which loads the HTTP request and
+// calls the "africastalking" service "Enqueue" endpoint.
+func NewEnqueueHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeEnqueueRequest(mux, decoder)
+		encodeResponse = EncodeEnqueueResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Enqueue")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountDequeueHandler configures the mux to serve the "africastalking" service
+// "Dequeue" endpoint.
+func MountDequeueHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewDequeueHandler creates a HTTP handler which loads the HTTP request and
+// calls the "africastalking" service "Dequeue" endpoint.
+func NewDequeueHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeDequeueRequest(mux, decoder)
+		encodeResponse = EncodeDequeueResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Dequeue")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountRedirectHandler configures the mux to serve the "africastalking"
+// service "Redirect" endpoint.
+func MountRedirectHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewRedirectHandler creates a HTTP handler which loads the HTTP request and
+// calls the "africastalking" service "Redirect" endpoint.
+func NewRedirectHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeRedirectRequest(mux, decoder)
+		encodeResponse = EncodeRedirectResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Redirect")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountRejectHandler configures the mux to serve the "africastalking" service
+// "Reject" endpoint.
+func MountRejectHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// NewRejectHandler creates a HTTP handler which loads the HTTP request and
+// calls the "africastalking" service "Reject" endpoint.
+func NewRejectHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeRejectRequest(mux, decoder)
+		encodeResponse = EncodeRejectResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "Reject")
 		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
 		payload, err := decodeRequest(r)
 		if err != nil {

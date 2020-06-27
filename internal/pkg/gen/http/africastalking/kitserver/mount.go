@@ -121,6 +121,18 @@ func MountTransferCallHandler(mux goahttp.Muxer, h http.Handler) {
 	mux.Handle("POST", "/callTransfer", f)
 }
 
+// MountQueueHandler configures the mux to serve the "africastalking" service
+// "Queue" endpoint.
+func MountQueueHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/queueStatus", f)
+}
+
 // MountUploadMediaHandler configures the mux to serve the "africastalking"
 // service "UploadMedia" endpoint.
 func MountUploadMediaHandler(mux goahttp.Muxer, h http.Handler) {
@@ -131,6 +143,114 @@ func MountUploadMediaHandler(mux goahttp.Muxer, h http.Handler) {
 		}
 	}
 	mux.Handle("POST", "/mediaUpload", f)
+}
+
+// MountSayHandler configures the mux to serve the "africastalking" service
+// "Say" endpoint.
+func MountSayHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountPlayHandler configures the mux to serve the "africastalking" service
+// "Play" endpoint.
+func MountPlayHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountGetDigitsHandler configures the mux to serve the "africastalking"
+// service "GetDigits" endpoint.
+func MountGetDigitsHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountDialHandler configures the mux to serve the "africastalking" service
+// "Dial" endpoint.
+func MountDialHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountRecordHandler configures the mux to serve the "africastalking" service
+// "Record" endpoint.
+func MountRecordHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountEnqueueHandler configures the mux to serve the "africastalking" service
+// "Enqueue" endpoint.
+func MountEnqueueHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountDequeueHandler configures the mux to serve the "africastalking" service
+// "Dequeue" endpoint.
+func MountDequeueHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountRedirectHandler configures the mux to serve the "africastalking"
+// service "Redirect" endpoint.
+func MountRedirectHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
+}
+
+// MountRejectHandler configures the mux to serve the "africastalking" service
+// "Reject" endpoint.
+func MountRejectHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/callTransfer", f)
 }
 
 // MountMobileCheckoutHandler configures the mux to serve the "africastalking"

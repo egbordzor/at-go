@@ -52,9 +52,59 @@ func TransferCallAfricastalkingPath() string {
 	return "/callTransfer"
 }
 
+// QueueAfricastalkingPath returns the URL path to the africastalking service Queue HTTP endpoint.
+func QueueAfricastalkingPath() string {
+	return "/queueStatus"
+}
+
 // UploadMediaAfricastalkingPath returns the URL path to the africastalking service UploadMedia HTTP endpoint.
 func UploadMediaAfricastalkingPath() string {
 	return "/mediaUpload"
+}
+
+// SayAfricastalkingPath returns the URL path to the africastalking service Say HTTP endpoint.
+func SayAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// PlayAfricastalkingPath returns the URL path to the africastalking service Play HTTP endpoint.
+func PlayAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// GetDigitsAfricastalkingPath returns the URL path to the africastalking service GetDigits HTTP endpoint.
+func GetDigitsAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// DialAfricastalkingPath returns the URL path to the africastalking service Dial HTTP endpoint.
+func DialAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// RecordAfricastalkingPath returns the URL path to the africastalking service Record HTTP endpoint.
+func RecordAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// EnqueueAfricastalkingPath returns the URL path to the africastalking service Enqueue HTTP endpoint.
+func EnqueueAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// DequeueAfricastalkingPath returns the URL path to the africastalking service Dequeue HTTP endpoint.
+func DequeueAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// RedirectAfricastalkingPath returns the URL path to the africastalking service Redirect HTTP endpoint.
+func RedirectAfricastalkingPath() string {
+	return "/callTransfer"
+}
+
+// RejectAfricastalkingPath returns the URL path to the africastalking service Reject HTTP endpoint.
+func RejectAfricastalkingPath() string {
+	return "/callTransfer"
 }
 
 // MobileCheckoutAfricastalkingPath returns the URL path to the africastalking service MobileCheckout HTTP endpoint.

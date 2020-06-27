@@ -178,6 +178,24 @@ func DecodeTransferCallResponse(decoder func(*http.Response) goahttp.Decoder) ki
 	}
 }
 
+// EncodeQueueRequest returns a go-kit EncodeRequestFunc suitable for encoding
+// africastalking Queue requests.
+func EncodeQueueRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeQueueRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeQueueResponse returns a go-kit DecodeResponseFunc suitable for
+// decoding africastalking Queue responses.
+func DecodeQueueResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeQueueResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
 // EncodeUploadMediaRequest returns a go-kit EncodeRequestFunc suitable for
 // encoding africastalking UploadMedia requests.
 func EncodeUploadMediaRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
@@ -191,6 +209,168 @@ func EncodeUploadMediaRequest(encoder func(*http.Request) goahttp.Encoder) kitht
 // decoding africastalking UploadMedia responses.
 func DecodeUploadMediaResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
 	dec := client.DecodeUploadMediaResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeSayRequest returns a go-kit EncodeRequestFunc suitable for encoding
+// africastalking Say requests.
+func EncodeSayRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeSayRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeSayResponse returns a go-kit DecodeResponseFunc suitable for decoding
+// africastalking Say responses.
+func DecodeSayResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeSayResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodePlayRequest returns a go-kit EncodeRequestFunc suitable for encoding
+// africastalking Play requests.
+func EncodePlayRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodePlayRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodePlayResponse returns a go-kit DecodeResponseFunc suitable for decoding
+// africastalking Play responses.
+func DecodePlayResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodePlayResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeGetDigitsRequest returns a go-kit EncodeRequestFunc suitable for
+// encoding africastalking GetDigits requests.
+func EncodeGetDigitsRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeGetDigitsRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeGetDigitsResponse returns a go-kit DecodeResponseFunc suitable for
+// decoding africastalking GetDigits responses.
+func DecodeGetDigitsResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeGetDigitsResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeDialRequest returns a go-kit EncodeRequestFunc suitable for encoding
+// africastalking Dial requests.
+func EncodeDialRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeDialRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeDialResponse returns a go-kit DecodeResponseFunc suitable for decoding
+// africastalking Dial responses.
+func DecodeDialResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeDialResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeRecordRequest returns a go-kit EncodeRequestFunc suitable for encoding
+// africastalking Record requests.
+func EncodeRecordRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeRecordRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeRecordResponse returns a go-kit DecodeResponseFunc suitable for
+// decoding africastalking Record responses.
+func DecodeRecordResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeRecordResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeEnqueueRequest returns a go-kit EncodeRequestFunc suitable for
+// encoding africastalking Enqueue requests.
+func EncodeEnqueueRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeEnqueueRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeEnqueueResponse returns a go-kit DecodeResponseFunc suitable for
+// decoding africastalking Enqueue responses.
+func DecodeEnqueueResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeEnqueueResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeDequeueRequest returns a go-kit EncodeRequestFunc suitable for
+// encoding africastalking Dequeue requests.
+func EncodeDequeueRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeDequeueRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeDequeueResponse returns a go-kit DecodeResponseFunc suitable for
+// decoding africastalking Dequeue responses.
+func DecodeDequeueResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeDequeueResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeRedirectRequest returns a go-kit EncodeRequestFunc suitable for
+// encoding africastalking Redirect requests.
+func EncodeRedirectRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeRedirectRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeRedirectResponse returns a go-kit DecodeResponseFunc suitable for
+// decoding africastalking Redirect responses.
+func DecodeRedirectResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeRedirectResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeRejectRequest returns a go-kit EncodeRequestFunc suitable for encoding
+// africastalking Reject requests.
+func EncodeRejectRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeRejectRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeRejectResponse returns a go-kit DecodeResponseFunc suitable for
+// decoding africastalking Reject responses.
+func DecodeRejectResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeRejectResponse(decoder, false)
 	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
 		return dec(resp)
 	}

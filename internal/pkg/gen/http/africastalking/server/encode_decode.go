@@ -360,6 +360,44 @@ func DecodeTransferCallRequest(mux goahttp.Muxer, decoder func(*http.Request) go
 	}
 }
 
+// EncodeQueueResponse returns an encoder for responses returned by the
+// africastalking Queue endpoint.
+func EncodeQueueResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(*africastalkingviews.QueuedStatusResult)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
+		enc := encoder(ctx, w)
+		body := NewQueueResponseBody(res.Projected)
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeQueueRequest returns a decoder for requests sent to the africastalking
+// Queue endpoint.
+func DecodeQueueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body QueueRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateQueueRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewQueuedCallsPayload(&body)
+
+		return payload, nil
+	}
+}
+
 // EncodeUploadMediaResponse returns an encoder for responses returned by the
 // africastalking UploadMedia endpoint.
 func EncodeUploadMediaResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
@@ -388,6 +426,315 @@ func DecodeUploadMediaRequest(mux goahttp.Muxer, decoder func(*http.Request) goa
 			return nil, goa.DecodePayloadError(err.Error())
 		}
 		payload := NewUploadMediaFile(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeSayResponse returns an encoder for responses returned by the
+// africastalking Say endpoint.
+func EncodeSayResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeSayRequest returns a decoder for requests sent to the africastalking
+// Say endpoint.
+func DecodeSayRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body SayRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateSayRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewSayPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodePlayResponse returns an encoder for responses returned by the
+// africastalking Play endpoint.
+func EncodePlayResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodePlayRequest returns a decoder for requests sent to the africastalking
+// Play endpoint.
+func DecodePlayRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body PlayRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidatePlayRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewPlayPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeGetDigitsResponse returns an encoder for responses returned by the
+// africastalking GetDigits endpoint.
+func EncodeGetDigitsResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeGetDigitsRequest returns a decoder for requests sent to the
+// africastalking GetDigits endpoint.
+func DecodeGetDigitsRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body GetDigitsRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		payload := NewGetDigitsPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeDialResponse returns an encoder for responses returned by the
+// africastalking Dial endpoint.
+func EncodeDialResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeDialRequest returns a decoder for requests sent to the africastalking
+// Dial endpoint.
+func DecodeDialRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body DialRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateDialRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewDialPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeRecordResponse returns an encoder for responses returned by the
+// africastalking Record endpoint.
+func EncodeRecordResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeRecordRequest returns a decoder for requests sent to the
+// africastalking Record endpoint.
+func DecodeRecordRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body RecordRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		payload := NewRecordPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeEnqueueResponse returns an encoder for responses returned by the
+// africastalking Enqueue endpoint.
+func EncodeEnqueueResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeEnqueueRequest returns a decoder for requests sent to the
+// africastalking Enqueue endpoint.
+func DecodeEnqueueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body EnqueueRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		payload := NewEnqueuePayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeDequeueResponse returns an encoder for responses returned by the
+// africastalking Dequeue endpoint.
+func EncodeDequeueResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeDequeueRequest returns a decoder for requests sent to the
+// africastalking Dequeue endpoint.
+func DecodeDequeueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body DequeueRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		payload := NewDequeuePayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeRedirectResponse returns an encoder for responses returned by the
+// africastalking Redirect endpoint.
+func EncodeRedirectResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeRedirectRequest returns a decoder for requests sent to the
+// africastalking Redirect endpoint.
+func DecodeRedirectRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body RedirectRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		payload := NewRedirectPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeRejectResponse returns an encoder for responses returned by the
+// africastalking Reject endpoint.
+func EncodeRejectResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(string)
+		enc := encoder(ctx, w)
+		body := res
+		w.WriteHeader(http.StatusCreated)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeRejectRequest returns a decoder for requests sent to the
+// africastalking Reject endpoint.
+func DecodeRejectRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body RejectRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		payload := NewRejectPayload(&body)
 
 		return payload, nil
 	}
@@ -1200,6 +1547,22 @@ func marshalAfricastalkingviewsVoiceEntryViewToVoiceEntryResponseBody(v *africas
 	}
 	if v.SessionID == nil {
 		res.SessionID = "None"
+	}
+
+	return res
+}
+
+// marshalAfricastalkingviewsQueuedStatusEntryViewToQueuedStatusEntryResponseBody
+// builds a value of type *QueuedStatusEntryResponseBody from a value of type
+// *africastalkingviews.QueuedStatusEntryView.
+func marshalAfricastalkingviewsQueuedStatusEntryViewToQueuedStatusEntryResponseBody(v *africastalkingviews.QueuedStatusEntryView) *QueuedStatusEntryResponseBody {
+	if v == nil {
+		return nil
+	}
+	res := &QueuedStatusEntryResponseBody{
+		PhoneNumber: v.PhoneNumber,
+		QueueName:   v.QueueName,
+		NumCalls:    v.NumCalls,
 	}
 
 	return res

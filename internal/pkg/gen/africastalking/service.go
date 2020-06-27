@@ -33,9 +33,30 @@ type Service interface {
 	MakeCall(context.Context, *MakeCallPayload) (res *MakeCallResponse, err error)
 	// Transfers call to another number.
 	TransferCall(context.Context, *CallTransferPayload) (res *CallTransferResponse, err error)
+	// Used when you have more calls than you can handle at one time
+	Queue(context.Context, *QueuedCallsPayload) (res *QueuedStatusResult, err error)
 	// Uploads media or audio files to Africa'sTalking servers with the extension
 	// .mp3 or .wav
 	UploadMedia(context.Context, *UploadMediaFile) (res string, err error)
+	// Set a text to be read out to the caller.
+	Say(context.Context, *SayPayload) (res string, err error)
+	// Play back an audio file located anywhere on the web.
+	Play(context.Context, *PlayPayload) (res string, err error)
+	// Get digits a user enters on their phone in response to a prompt from
+	// application
+	GetDigits(context.Context, *GetDigitsPayload) (res string, err error)
+	// Connect the user who called your phone number to an external phone number.
+	Dial(context.Context, *DialPayload) (res string, err error)
+	// Record a call session into an mp3 file.
+	Record(context.Context, *RecordPayload) (res string, err error)
+	// Pass an incoming call to a queue to be handled later.
+	Enqueue(context.Context, *EnqueuePayload) (res string, err error)
+	// Pass the calls enqueued to a separate number to be handled.
+	Dequeue(context.Context, *DequeuePayload) (res string, err error)
+	// Transfer control of the call to the script whose URL is passed in.
+	Redirect(context.Context, *RedirectPayload) (res string, err error)
+	// Reject an incoming call without incurring any usage charges.
+	Reject(context.Context, *RejectPayload) (res string, err error)
 	// Initiate Mobile C2B payments on a mobile subscriber’s device.
 	MobileCheckout(context.Context, *MobileCheckoutPayload) (res *MobileCheckoutResponse, err error)
 	// Initiate Mobile B2C request
@@ -84,7 +105,7 @@ const ServiceName = "africastalking"
 // MethodNames lists the service method names as defined in the design. These
 // are the same values that are set in the endpoint request contexts under the
 // MethodKey key.
-var MethodNames = [28]string{"SendBulkSMS", "SendPremiumSMS", "FetchSMS", "NewCheckoutToken", "NewPremiumSubscription", "FetchPremiumSubscription", "PurgePremiumSubscription", "MakeCall", "TransferCall", "UploadMedia", "MobileCheckout", "MobileB2C", "MobileB2B", "Bank Checkout", "BankCheckoutValidate", "BankTransfer", "CardCheckout", "CardCheckoutValidate", "WalletTransfer", "TopupStash", "FindTransaction", "FetchProductTransactions", "FetchWalletTransactions", "FetchWalletBalance", "SendAirtime", "PublishIoT", "InitiateAppData", "Generate"}
+var MethodNames = [38]string{"SendBulkSMS", "SendPremiumSMS", "FetchSMS", "NewCheckoutToken", "NewPremiumSubscription", "FetchPremiumSubscription", "PurgePremiumSubscription", "MakeCall", "TransferCall", "Queue", "UploadMedia", "Say", "Play", "GetDigits", "Dial", "Record", "Enqueue", "Dequeue", "Redirect", "Reject", "MobileCheckout", "MobileB2C", "MobileB2B", "Bank Checkout", "BankCheckoutValidate", "BankTransfer", "CardCheckout", "CardCheckoutValidate", "WalletTransfer", "TopupStash", "FindTransaction", "FetchProductTransactions", "FetchWalletTransactions", "FetchWalletBalance", "SendAirtime", "PublishIoT", "InitiateAppData", "Generate"}
 
 // BulkPayload is the payload type of the africastalking service SendBulkSMS
 // method.
@@ -285,6 +306,23 @@ type CallTransferResponse struct {
 	ErrorMessage *string
 }
 
+// QueuedCallsPayload is the payload type of the africastalking service Queue
+// method.
+type QueuedCallsPayload struct {
+	// Your Africa’s Talking application username.
+	Username string
+	// List of one or more numbers mapped to your Africa’s Talking account.
+	PhoneNumbers string
+}
+
+// QueuedStatusResult is the result type of the africastalking service Queue
+// method.
+type QueuedStatusResult struct {
+	Entries []*QueuedStatusEntry
+	// Error Message
+	ErrorMessage *string
+}
+
 // UploadMediaFile is the payload type of the africastalking service
 // UploadMedia method.
 type UploadMediaFile struct {
@@ -292,6 +330,85 @@ type UploadMediaFile struct {
 	Username *string
 	// The url of the file to upload.
 	URL *string
+}
+
+// SayPayload is the payload type of the africastalking service Say method.
+type SayPayload struct {
+	// This parameter specifies the voice to use
+	Voice string
+	// Instructs AT to play a beep after reading the text contained in the request
+	PlayBeep bool
+}
+
+// PlayPayload is the payload type of the africastalking service Play method.
+type PlayPayload struct {
+	// A valid URL that contains a link to the file to be played.
+	URL string
+}
+
+// GetDigitsPayload is the payload type of the africastalking service GetDigits
+// method.
+type GetDigitsPayload struct {
+	// Instructs AT to forward results of the GetDigits action to the URL value
+	// passed in.
+	CallbackURL *string
+	// This shows the number of digits you would like to grab from the user input.
+	NumDigits *string
+	// Timeout (in seconds) for getting the digits, after which the system moves on
+	// to the next element.
+	Timeout *string
+	// The key which will terminate the action of getting digits.
+	FinishOnKey *string
+}
+
+// DialPayload is the payload type of the africastalking service Dial method.
+type DialPayload struct {
+	PhoneNumbers string
+	Record       *string
+	Sequential   *string
+	CallerID     *string
+	RingBackTone *string
+	// This contains the maximum amount of time in seconds a call should take.
+	MaxDuration *string
+}
+
+// RecordPayload is the payload type of the africastalking service Record
+// method.
+type RecordPayload struct {
+	FinishOnKey *string
+	MaxLength   *string
+	Timeout     *string
+	TrimSilence *string
+	PlayBeep    *string
+	CallbackURL *string
+}
+
+// EnqueuePayload is the payload type of the africastalking service Enqueue
+// method.
+type EnqueuePayload struct {
+	HoldMusic *string
+	Name      *string
+}
+
+// DequeuePayload is the payload type of the africastalking service Dequeue
+// method.
+type DequeuePayload struct {
+	PhoneNumber *string
+	Name        *string
+}
+
+// RedirectPayload is the payload type of the africastalking service Redirect
+// method.
+type RedirectPayload struct {
+	// Reject
+	Reject *string
+}
+
+// RejectPayload is the payload type of the africastalking service Reject
+// method.
+type RejectPayload struct {
+	// Redirect
+	Redirect *string
 }
 
 // MobileCheckoutPayload is the payload type of the africastalking service
@@ -808,6 +925,12 @@ type VoiceEntry struct {
 	SessionID string
 }
 
+type QueuedStatusEntry struct {
+	PhoneNumber *string
+	QueueName   *string
+	NumCalls    *string
+}
+
 // List of Recipient elements of a B2C transaction request.
 type MobileRecipients struct {
 	// Name of the B2C transaction recipient.
@@ -1112,6 +1235,19 @@ func NewCallTransferResponse(vres *africastalkingviews.CallTransferResponse) *Ca
 func NewViewedCallTransferResponse(res *CallTransferResponse, view string) *africastalkingviews.CallTransferResponse {
 	p := newCallTransferResponseView(res)
 	return &africastalkingviews.CallTransferResponse{Projected: p, View: "default"}
+}
+
+// NewQueuedStatusResult initializes result type QueuedStatusResult from viewed
+// result type QueuedStatusResult.
+func NewQueuedStatusResult(vres *africastalkingviews.QueuedStatusResult) *QueuedStatusResult {
+	return newQueuedStatusResult(vres.Projected)
+}
+
+// NewViewedQueuedStatusResult initializes viewed result type
+// QueuedStatusResult from result type QueuedStatusResult using the given view.
+func NewViewedQueuedStatusResult(res *QueuedStatusResult, view string) *africastalkingviews.QueuedStatusResult {
+	p := newQueuedStatusResultView(res)
+	return &africastalkingviews.QueuedStatusResult{Projected: p, View: "default"}
 }
 
 // NewMobileCheckoutResponse initializes result type MobileCheckoutResponse
@@ -1556,6 +1692,36 @@ func newCallTransferResponseView(res *CallTransferResponse) *africastalkingviews
 	vres := &africastalkingviews.CallTransferResponseView{
 		Status:       res.Status,
 		ErrorMessage: res.ErrorMessage,
+	}
+	return vres
+}
+
+// newQueuedStatusResult converts projected type QueuedStatusResult to service
+// type QueuedStatusResult.
+func newQueuedStatusResult(vres *africastalkingviews.QueuedStatusResultView) *QueuedStatusResult {
+	res := &QueuedStatusResult{
+		ErrorMessage: vres.ErrorMessage,
+	}
+	if vres.Entries != nil {
+		res.Entries = make([]*QueuedStatusEntry, len(vres.Entries))
+		for i, val := range vres.Entries {
+			res.Entries[i] = transformAfricastalkingviewsQueuedStatusEntryViewToQueuedStatusEntry(val)
+		}
+	}
+	return res
+}
+
+// newQueuedStatusResultView projects result type QueuedStatusResult to
+// projected type QueuedStatusResultView using the "default" view.
+func newQueuedStatusResultView(res *QueuedStatusResult) *africastalkingviews.QueuedStatusResultView {
+	vres := &africastalkingviews.QueuedStatusResultView{
+		ErrorMessage: res.ErrorMessage,
+	}
+	if res.Entries != nil {
+		vres.Entries = make([]*africastalkingviews.QueuedStatusEntryView, len(res.Entries))
+		for i, val := range res.Entries {
+			vres.Entries[i] = transformQueuedStatusEntryToAfricastalkingviewsQueuedStatusEntryView(val)
+		}
 	}
 	return vres
 }
@@ -2307,6 +2473,38 @@ func transformVoiceEntryToAfricastalkingviewsVoiceEntryView(v *VoiceEntry) *afri
 		PhoneNumber: v.PhoneNumber,
 		Status:      v.Status,
 		SessionID:   &v.SessionID,
+	}
+
+	return res
+}
+
+// transformAfricastalkingviewsQueuedStatusEntryViewToQueuedStatusEntry builds
+// a value of type *QueuedStatusEntry from a value of type
+// *africastalkingviews.QueuedStatusEntryView.
+func transformAfricastalkingviewsQueuedStatusEntryViewToQueuedStatusEntry(v *africastalkingviews.QueuedStatusEntryView) *QueuedStatusEntry {
+	if v == nil {
+		return nil
+	}
+	res := &QueuedStatusEntry{
+		PhoneNumber: v.PhoneNumber,
+		QueueName:   v.QueueName,
+		NumCalls:    v.NumCalls,
+	}
+
+	return res
+}
+
+// transformQueuedStatusEntryToAfricastalkingviewsQueuedStatusEntryView builds
+// a value of type *africastalkingviews.QueuedStatusEntryView from a value of
+// type *QueuedStatusEntry.
+func transformQueuedStatusEntryToAfricastalkingviewsQueuedStatusEntryView(v *QueuedStatusEntry) *africastalkingviews.QueuedStatusEntryView {
+	if v == nil {
+		return nil
+	}
+	res := &africastalkingviews.QueuedStatusEntryView{
+		PhoneNumber: v.PhoneNumber,
+		QueueName:   v.QueueName,
+		NumCalls:    v.NumCalls,
 	}
 
 	return res

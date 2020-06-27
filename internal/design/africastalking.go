@@ -116,7 +116,16 @@ var _ = Service("africastalking", func() {
 		})
 	})
 
-
+	// Used when you have more calls than you can handle at one time
+	Method("Queue", func() {
+		Description("Used when you have more calls than you can handle at one time")
+		Payload(QueuedCallsPayload)
+		Result(QueuedStatusResult)
+		HTTP(func() {
+			POST("queueStatus")
+			Response(StatusCreated)
+		})
+	})
 
 	// Uploads media or audio files to Africa'sTalking servers with the extension .mp3 or .wav
 	Method("UploadMedia", func() {
@@ -125,6 +134,105 @@ var _ = Service("africastalking", func() {
 		Result(String)
 		HTTP(func() {
 			POST("mediaUpload")
+			Response(StatusCreated)
+		})
+	})
+
+	// Set a text to be read out to the caller.
+	Method("Say", func() {
+		Description("Set a text to be read out to the caller.")
+		Payload(SayPayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Play back an audio file located anywhere on the web.
+	Method("Play", func() {
+		Description("Play back an audio file located anywhere on the web.")
+		Payload(PlayPayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Get digits a user enters on their phone in response to a prompt from application
+	Method("GetDigits", func() {
+		Description("Get digits a user enters on their phone in response to a prompt from application")
+		Payload(GetDigitsPayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Connect the user who called your phone number to an external phone number.
+	Method("Dial", func() {
+		Description("Connect the user who called your phone number to an external phone number.")
+		Payload(DialPayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Record a call session into an mp3 file.
+	Method("Record", func() {
+		Description("Record a call session into an mp3 file.")
+		Payload(RecordPayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Pass an incoming call to a queue to be handled later.
+	Method("Enqueue", func() {
+		Description("Pass an incoming call to a queue to be handled later.")
+		Payload(EnqueuePayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Pass the calls enqueued to a separate number to be handled.
+	Method("Dequeue", func() {
+		Description("Pass the calls enqueued to a separate number to be handled.") // e.g by an agent.
+		Payload(DequeuePayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Transfer control of the call to the script whose URL is passed in
+	Method("Redirect", func() {
+		Description("Transfer control of the call to the script whose URL is passed in.")
+		Payload(RedirectPayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
+			Response(StatusCreated)
+		})
+	})
+
+	// Reject an incoming call without incurring any usage charges.
+	Method("Reject", func() {
+		Description("Reject an incoming call without incurring any usage charges.")
+		Payload(RejectPayload)
+		Result(String)
+		HTTP(func() {
+			POST("callTransfer")
 			Response(StatusCreated)
 		})
 	})

@@ -142,6 +142,15 @@ type TransferCallRequestBody struct {
 	HoldMusicURL *string `form:"holdMusicUrl,omitempty" json:"holdMusicUrl,omitempty" xml:"holdMusicUrl,omitempty"`
 }
 
+// QueueRequestBody is the type of the "africastalking" service "Queue"
+// endpoint HTTP request body.
+type QueueRequestBody struct {
+	// Your Africa’s Talking application username.
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
+	// List of one or more numbers mapped to your Africa’s Talking account.
+	PhoneNumbers *string `form:"phoneNumbers,omitempty" json:"phoneNumbers,omitempty" xml:"phoneNumbers,omitempty"`
+}
+
 // UploadMediaRequestBody is the type of the "africastalking" service
 // "UploadMedia" endpoint HTTP request body.
 type UploadMediaRequestBody struct {
@@ -149,6 +158,88 @@ type UploadMediaRequestBody struct {
 	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
 	// The url of the file to upload.
 	URL *string `form:"url,omitempty" json:"url,omitempty" xml:"url,omitempty"`
+}
+
+// SayRequestBody is the type of the "africastalking" service "Say" endpoint
+// HTTP request body.
+type SayRequestBody struct {
+	// This parameter specifies the voice to use
+	Voice *string `form:"voice,omitempty" json:"voice,omitempty" xml:"voice,omitempty"`
+	// Instructs AT to play a beep after reading the text contained in the request
+	PlayBeep *bool `form:"playBeep,omitempty" json:"playBeep,omitempty" xml:"playBeep,omitempty"`
+}
+
+// PlayRequestBody is the type of the "africastalking" service "Play" endpoint
+// HTTP request body.
+type PlayRequestBody struct {
+	// A valid URL that contains a link to the file to be played.
+	URL *string `form:"url,omitempty" json:"url,omitempty" xml:"url,omitempty"`
+}
+
+// GetDigitsRequestBody is the type of the "africastalking" service "GetDigits"
+// endpoint HTTP request body.
+type GetDigitsRequestBody struct {
+	// Instructs AT to forward results of the GetDigits action to the URL value
+	// passed in.
+	CallbackURL *string `form:"callbackUrl,omitempty" json:"callbackUrl,omitempty" xml:"callbackUrl,omitempty"`
+	// This shows the number of digits you would like to grab from the user input.
+	NumDigits *string `form:"numDigits,omitempty" json:"numDigits,omitempty" xml:"numDigits,omitempty"`
+	// Timeout (in seconds) for getting the digits, after which the system moves on
+	// to the next element.
+	Timeout *string `form:"timeout,omitempty" json:"timeout,omitempty" xml:"timeout,omitempty"`
+	// The key which will terminate the action of getting digits.
+	FinishOnKey *string `form:"finishOnKey,omitempty" json:"finishOnKey,omitempty" xml:"finishOnKey,omitempty"`
+}
+
+// DialRequestBody is the type of the "africastalking" service "Dial" endpoint
+// HTTP request body.
+type DialRequestBody struct {
+	PhoneNumbers *string `form:"phoneNumbers,omitempty" json:"phoneNumbers,omitempty" xml:"phoneNumbers,omitempty"`
+	Record       *string `form:"record,omitempty" json:"record,omitempty" xml:"record,omitempty"`
+	Sequential   *string `form:"sequential,omitempty" json:"sequential,omitempty" xml:"sequential,omitempty"`
+	CallerID     *string `form:"callerId,omitempty" json:"callerId,omitempty" xml:"callerId,omitempty"`
+	RingBackTone *string `form:"ringBackTone,omitempty" json:"ringBackTone,omitempty" xml:"ringBackTone,omitempty"`
+	// This contains the maximum amount of time in seconds a call should take.
+	MaxDuration *string `form:"maxDuration,omitempty" json:"maxDuration,omitempty" xml:"maxDuration,omitempty"`
+}
+
+// RecordRequestBody is the type of the "africastalking" service "Record"
+// endpoint HTTP request body.
+type RecordRequestBody struct {
+	FinishOnKey *string `form:"finishOnKey,omitempty" json:"finishOnKey,omitempty" xml:"finishOnKey,omitempty"`
+	MaxLength   *string `form:"maxLength,omitempty" json:"maxLength,omitempty" xml:"maxLength,omitempty"`
+	Timeout     *string `form:"timeout,omitempty" json:"timeout,omitempty" xml:"timeout,omitempty"`
+	TrimSilence *string `form:"trimSilence,omitempty" json:"trimSilence,omitempty" xml:"trimSilence,omitempty"`
+	PlayBeep    *string `form:"playBeep,omitempty" json:"playBeep,omitempty" xml:"playBeep,omitempty"`
+	CallbackURL *string `form:"callbackUrl,omitempty" json:"callbackUrl,omitempty" xml:"callbackUrl,omitempty"`
+}
+
+// EnqueueRequestBody is the type of the "africastalking" service "Enqueue"
+// endpoint HTTP request body.
+type EnqueueRequestBody struct {
+	HoldMusic *string `form:"holdMusic,omitempty" json:"holdMusic,omitempty" xml:"holdMusic,omitempty"`
+	Name      *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+}
+
+// DequeueRequestBody is the type of the "africastalking" service "Dequeue"
+// endpoint HTTP request body.
+type DequeueRequestBody struct {
+	PhoneNumber *string `form:"phoneNumber,omitempty" json:"phoneNumber,omitempty" xml:"phoneNumber,omitempty"`
+	Name        *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+}
+
+// RedirectRequestBody is the type of the "africastalking" service "Redirect"
+// endpoint HTTP request body.
+type RedirectRequestBody struct {
+	// Reject
+	Reject *string `form:"Reject,omitempty" json:"Reject,omitempty" xml:"Reject,omitempty"`
+}
+
+// RejectRequestBody is the type of the "africastalking" service "Reject"
+// endpoint HTTP request body.
+type RejectRequestBody struct {
+	// Redirect
+	Redirect *string `form:"Redirect,omitempty" json:"Redirect,omitempty" xml:"Redirect,omitempty"`
 }
 
 // MobileCheckoutRequestBody is the type of the "africastalking" service
@@ -470,6 +561,14 @@ type TransferCallResponseBody struct {
 	ErrorMessage *string `form:"errorMessage,omitempty" json:"errorMessage,omitempty" xml:"errorMessage,omitempty"`
 }
 
+// QueueResponseBody is the type of the "africastalking" service "Queue"
+// endpoint HTTP response body.
+type QueueResponseBody struct {
+	Entries []*QueuedStatusEntryResponseBody `form:"Entries,omitempty" json:"Entries,omitempty" xml:"Entries,omitempty"`
+	// Error Message
+	ErrorMessage *string `form:"errorMessage,omitempty" json:"errorMessage,omitempty" xml:"errorMessage,omitempty"`
+}
+
 // MobileCheckoutResponseBody is the type of the "africastalking" service
 // "MobileCheckout" endpoint HTTP response body.
 type MobileCheckoutResponseBody struct {
@@ -739,6 +838,14 @@ type VoiceEntryResponseBody struct {
 	Status      *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
 	// A unique id for the request associated to this phone number
 	SessionID string `form:"sessionId,omitempty" json:"sessionId,omitempty" xml:"sessionId,omitempty"`
+}
+
+// QueuedStatusEntryResponseBody is used to define fields on response body
+// types.
+type QueuedStatusEntryResponseBody struct {
+	PhoneNumber *string `form:"phoneNumber,omitempty" json:"phoneNumber,omitempty" xml:"phoneNumber,omitempty"`
+	QueueName   *string `form:"queueName,omitempty" json:"queueName,omitempty" xml:"queueName,omitempty"`
+	NumCalls    *string `form:"numCalls,omitempty" json:"numCalls,omitempty" xml:"numCalls,omitempty"`
 }
 
 // B2CEntryResponseBody is used to define fields on response body types.
@@ -1044,6 +1151,21 @@ func NewTransferCallResponseBody(res *africastalkingviews.CallTransferResponseVi
 	body := &TransferCallResponseBody{
 		Status:       res.Status,
 		ErrorMessage: res.ErrorMessage,
+	}
+	return body
+}
+
+// NewQueueResponseBody builds the HTTP response body from the result of the
+// "Queue" endpoint of the "africastalking" service.
+func NewQueueResponseBody(res *africastalkingviews.QueuedStatusResultView) *QueueResponseBody {
+	body := &QueueResponseBody{
+		ErrorMessage: res.ErrorMessage,
+	}
+	if res.Entries != nil {
+		body.Entries = make([]*QueuedStatusEntryResponseBody, len(res.Entries))
+		for i, val := range res.Entries {
+			body.Entries[i] = marshalAfricastalkingviewsQueuedStatusEntryViewToQueuedStatusEntryResponseBody(val)
+		}
 	}
 	return body
 }
@@ -1435,12 +1557,129 @@ func NewTransferCallCallTransferPayload(body *TransferCallRequestBody) *africast
 	return v
 }
 
+// NewQueuedCallsPayload builds a africastalking service Queue endpoint payload.
+func NewQueuedCallsPayload(body *QueueRequestBody) *africastalking.QueuedCallsPayload {
+	v := &africastalking.QueuedCallsPayload{
+		Username:     *body.Username,
+		PhoneNumbers: *body.PhoneNumbers,
+	}
+
+	return v
+}
+
 // NewUploadMediaFile builds a africastalking service UploadMedia endpoint
 // payload.
 func NewUploadMediaFile(body *UploadMediaRequestBody) *africastalking.UploadMediaFile {
 	v := &africastalking.UploadMediaFile{
 		Username: body.Username,
 		URL:      body.URL,
+	}
+
+	return v
+}
+
+// NewSayPayload builds a africastalking service Say endpoint payload.
+func NewSayPayload(body *SayRequestBody) *africastalking.SayPayload {
+	v := &africastalking.SayPayload{}
+	if body.Voice != nil {
+		v.Voice = *body.Voice
+	}
+	if body.PlayBeep != nil {
+		v.PlayBeep = *body.PlayBeep
+	}
+	if body.Voice == nil {
+		v.Voice = "woman"
+	}
+	if body.PlayBeep == nil {
+		v.PlayBeep = false
+	}
+
+	return v
+}
+
+// NewPlayPayload builds a africastalking service Play endpoint payload.
+func NewPlayPayload(body *PlayRequestBody) *africastalking.PlayPayload {
+	v := &africastalking.PlayPayload{
+		URL: *body.URL,
+	}
+
+	return v
+}
+
+// NewGetDigitsPayload builds a africastalking service GetDigits endpoint
+// payload.
+func NewGetDigitsPayload(body *GetDigitsRequestBody) *africastalking.GetDigitsPayload {
+	v := &africastalking.GetDigitsPayload{
+		CallbackURL: body.CallbackURL,
+		NumDigits:   body.NumDigits,
+		Timeout:     body.Timeout,
+		FinishOnKey: body.FinishOnKey,
+	}
+
+	return v
+}
+
+// NewDialPayload builds a africastalking service Dial endpoint payload.
+func NewDialPayload(body *DialRequestBody) *africastalking.DialPayload {
+	v := &africastalking.DialPayload{
+		PhoneNumbers: *body.PhoneNumbers,
+		Record:       body.Record,
+		Sequential:   body.Sequential,
+		CallerID:     body.CallerID,
+		RingBackTone: body.RingBackTone,
+		MaxDuration:  body.MaxDuration,
+	}
+
+	return v
+}
+
+// NewRecordPayload builds a africastalking service Record endpoint payload.
+func NewRecordPayload(body *RecordRequestBody) *africastalking.RecordPayload {
+	v := &africastalking.RecordPayload{
+		FinishOnKey: body.FinishOnKey,
+		MaxLength:   body.MaxLength,
+		Timeout:     body.Timeout,
+		TrimSilence: body.TrimSilence,
+		PlayBeep:    body.PlayBeep,
+		CallbackURL: body.CallbackURL,
+	}
+
+	return v
+}
+
+// NewEnqueuePayload builds a africastalking service Enqueue endpoint payload.
+func NewEnqueuePayload(body *EnqueueRequestBody) *africastalking.EnqueuePayload {
+	v := &africastalking.EnqueuePayload{
+		HoldMusic: body.HoldMusic,
+		Name:      body.Name,
+	}
+
+	return v
+}
+
+// NewDequeuePayload builds a africastalking service Dequeue endpoint payload.
+func NewDequeuePayload(body *DequeueRequestBody) *africastalking.DequeuePayload {
+	v := &africastalking.DequeuePayload{
+		PhoneNumber: body.PhoneNumber,
+		Name:        body.Name,
+	}
+
+	return v
+}
+
+// NewRedirectPayload builds a africastalking service Redirect endpoint payload.
+func NewRedirectPayload(body *RedirectRequestBody) *africastalking.RedirectPayload {
+	v := &africastalking.RedirectPayload{
+		Reject: body.Reject,
+	}
+
+	return v
+}
+
+// NewRejectPayload builds a africastalking service Reject endpoint payload.
+func NewRejectPayload(body *RejectRequestBody) *africastalking.RejectPayload {
+	v := &africastalking.RejectPayload{
+		Redirect: body.Redirect,
 	}
 
 	return v
@@ -1870,6 +2109,43 @@ func ValidateTransferCallRequestBody(body *TransferCallRequestBody) (err error) 
 		if !(*body.CallLeg == "caller" || *body.CallLeg == "callee") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.callLeg", *body.CallLeg, []interface{}{"caller", "callee"}))
 		}
+	}
+	return
+}
+
+// ValidateQueueRequestBody runs the validations defined on QueueRequestBody
+func ValidateQueueRequestBody(body *QueueRequestBody) (err error) {
+	if body.Username == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("username", "body"))
+	}
+	if body.PhoneNumbers == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("phoneNumbers", "body"))
+	}
+	return
+}
+
+// ValidateSayRequestBody runs the validations defined on SayRequestBody
+func ValidateSayRequestBody(body *SayRequestBody) (err error) {
+	if body.Voice != nil {
+		if !(*body.Voice == "man" || *body.Voice == "woman") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.voice", *body.Voice, []interface{}{"man", "woman"}))
+		}
+	}
+	return
+}
+
+// ValidatePlayRequestBody runs the validations defined on PlayRequestBody
+func ValidatePlayRequestBody(body *PlayRequestBody) (err error) {
+	if body.URL == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("url", "body"))
+	}
+	return
+}
+
+// ValidateDialRequestBody runs the validations defined on DialRequestBody
+func ValidateDialRequestBody(body *DialRequestBody) (err error) {
+	if body.PhoneNumbers == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("phoneNumbers", "body"))
 	}
 	return
 }

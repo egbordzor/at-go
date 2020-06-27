@@ -24,7 +24,17 @@ type Endpoints struct {
 	PurgePremiumSubscription endpoint.Endpoint
 	MakeCall                 endpoint.Endpoint
 	TransferCall             endpoint.Endpoint
+	Queue                    endpoint.Endpoint
 	UploadMedia              endpoint.Endpoint
+	Say                      endpoint.Endpoint
+	Play                     endpoint.Endpoint
+	GetDigits                endpoint.Endpoint
+	Dial                     endpoint.Endpoint
+	Record                   endpoint.Endpoint
+	Enqueue                  endpoint.Endpoint
+	Dequeue                  endpoint.Endpoint
+	Redirect                 endpoint.Endpoint
+	Reject                   endpoint.Endpoint
 	MobileCheckout           endpoint.Endpoint
 	MobileB2C                endpoint.Endpoint
 	MobileB2B                endpoint.Endpoint
@@ -58,7 +68,17 @@ func NewEndpoints(s Service) *Endpoints {
 		PurgePremiumSubscription: NewPurgePremiumSubscriptionEndpoint(s),
 		MakeCall:                 NewMakeCallEndpoint(s),
 		TransferCall:             NewTransferCallEndpoint(s),
+		Queue:                    NewQueueEndpoint(s),
 		UploadMedia:              NewUploadMediaEndpoint(s),
+		Say:                      NewSayEndpoint(s),
+		Play:                     NewPlayEndpoint(s),
+		GetDigits:                NewGetDigitsEndpoint(s),
+		Dial:                     NewDialEndpoint(s),
+		Record:                   NewRecordEndpoint(s),
+		Enqueue:                  NewEnqueueEndpoint(s),
+		Dequeue:                  NewDequeueEndpoint(s),
+		Redirect:                 NewRedirectEndpoint(s),
+		Reject:                   NewRejectEndpoint(s),
 		MobileCheckout:           NewMobileCheckoutEndpoint(s),
 		MobileB2C:                NewMobileB2CEndpoint(s),
 		MobileB2B:                NewMobileB2BEndpoint(s),
@@ -92,7 +112,17 @@ func (e *Endpoints) Use(m func(endpoint.Endpoint) endpoint.Endpoint) {
 	e.PurgePremiumSubscription = m(e.PurgePremiumSubscription)
 	e.MakeCall = m(e.MakeCall)
 	e.TransferCall = m(e.TransferCall)
+	e.Queue = m(e.Queue)
 	e.UploadMedia = m(e.UploadMedia)
+	e.Say = m(e.Say)
+	e.Play = m(e.Play)
+	e.GetDigits = m(e.GetDigits)
+	e.Dial = m(e.Dial)
+	e.Record = m(e.Record)
+	e.Enqueue = m(e.Enqueue)
+	e.Dequeue = m(e.Dequeue)
+	e.Redirect = m(e.Redirect)
+	e.Reject = m(e.Reject)
 	e.MobileCheckout = m(e.MobileCheckout)
 	e.MobileB2C = m(e.MobileB2C)
 	e.MobileB2B = m(e.MobileB2B)
@@ -239,12 +269,107 @@ func NewTransferCallEndpoint(s Service) endpoint.Endpoint {
 	}
 }
 
+// NewQueueEndpoint returns an endpoint function that calls the method "Queue"
+// of service "africastalking".
+func NewQueueEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*QueuedCallsPayload)
+		res, err := s.Queue(ctx, p)
+		if err != nil {
+			return nil, err
+		}
+		vres := NewViewedQueuedStatusResult(res, "default")
+		return vres, nil
+	}
+}
+
 // NewUploadMediaEndpoint returns an endpoint function that calls the method
 // "UploadMedia" of service "africastalking".
 func NewUploadMediaEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		p := req.(*UploadMediaFile)
 		return s.UploadMedia(ctx, p)
+	}
+}
+
+// NewSayEndpoint returns an endpoint function that calls the method "Say" of
+// service "africastalking".
+func NewSayEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*SayPayload)
+		return s.Say(ctx, p)
+	}
+}
+
+// NewPlayEndpoint returns an endpoint function that calls the method "Play" of
+// service "africastalking".
+func NewPlayEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*PlayPayload)
+		return s.Play(ctx, p)
+	}
+}
+
+// NewGetDigitsEndpoint returns an endpoint function that calls the method
+// "GetDigits" of service "africastalking".
+func NewGetDigitsEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*GetDigitsPayload)
+		return s.GetDigits(ctx, p)
+	}
+}
+
+// NewDialEndpoint returns an endpoint function that calls the method "Dial" of
+// service "africastalking".
+func NewDialEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*DialPayload)
+		return s.Dial(ctx, p)
+	}
+}
+
+// NewRecordEndpoint returns an endpoint function that calls the method
+// "Record" of service "africastalking".
+func NewRecordEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*RecordPayload)
+		return s.Record(ctx, p)
+	}
+}
+
+// NewEnqueueEndpoint returns an endpoint function that calls the method
+// "Enqueue" of service "africastalking".
+func NewEnqueueEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*EnqueuePayload)
+		return s.Enqueue(ctx, p)
+	}
+}
+
+// NewDequeueEndpoint returns an endpoint function that calls the method
+// "Dequeue" of service "africastalking".
+func NewDequeueEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*DequeuePayload)
+		return s.Dequeue(ctx, p)
+	}
+}
+
+// NewRedirectEndpoint returns an endpoint function that calls the method
+// "Redirect" of service "africastalking".
+func NewRedirectEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*RedirectPayload)
+		return s.Redirect(ctx, p)
+	}
+}
+
+// NewRejectEndpoint returns an endpoint function that calls the method
+// "Reject" of service "africastalking".
+func NewRejectEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*RejectPayload)
+		return s.Reject(ctx, p)
 	}
 }
 

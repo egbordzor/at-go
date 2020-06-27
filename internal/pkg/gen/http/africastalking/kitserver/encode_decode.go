@@ -160,6 +160,22 @@ func DecodeTransferCallRequest(mux goahttp.Muxer, decoder func(*http.Request) go
 	}
 }
 
+// EncodeQueueResponse returns a go-kit EncodeResponseFunc suitable for
+// encoding africastalking Queue responses.
+func EncodeQueueResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeQueueResponse(encoder)
+}
+
+// DecodeQueueRequest returns a go-kit DecodeRequestFunc suitable for decoding
+// africastalking Queue requests.
+func DecodeQueueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeQueueRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
 // EncodeUploadMediaResponse returns a go-kit EncodeResponseFunc suitable for
 // encoding africastalking UploadMedia responses.
 func EncodeUploadMediaResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
@@ -170,6 +186,150 @@ func EncodeUploadMediaResponse(encoder func(context.Context, http.ResponseWriter
 // decoding africastalking UploadMedia requests.
 func DecodeUploadMediaRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
 	dec := server.DecodeUploadMediaRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeSayResponse returns a go-kit EncodeResponseFunc suitable for encoding
+// africastalking Say responses.
+func EncodeSayResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeSayResponse(encoder)
+}
+
+// DecodeSayRequest returns a go-kit DecodeRequestFunc suitable for decoding
+// africastalking Say requests.
+func DecodeSayRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeSayRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodePlayResponse returns a go-kit EncodeResponseFunc suitable for encoding
+// africastalking Play responses.
+func EncodePlayResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodePlayResponse(encoder)
+}
+
+// DecodePlayRequest returns a go-kit DecodeRequestFunc suitable for decoding
+// africastalking Play requests.
+func DecodePlayRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodePlayRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeGetDigitsResponse returns a go-kit EncodeResponseFunc suitable for
+// encoding africastalking GetDigits responses.
+func EncodeGetDigitsResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeGetDigitsResponse(encoder)
+}
+
+// DecodeGetDigitsRequest returns a go-kit DecodeRequestFunc suitable for
+// decoding africastalking GetDigits requests.
+func DecodeGetDigitsRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeGetDigitsRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeDialResponse returns a go-kit EncodeResponseFunc suitable for encoding
+// africastalking Dial responses.
+func EncodeDialResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeDialResponse(encoder)
+}
+
+// DecodeDialRequest returns a go-kit DecodeRequestFunc suitable for decoding
+// africastalking Dial requests.
+func DecodeDialRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeDialRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeRecordResponse returns a go-kit EncodeResponseFunc suitable for
+// encoding africastalking Record responses.
+func EncodeRecordResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeRecordResponse(encoder)
+}
+
+// DecodeRecordRequest returns a go-kit DecodeRequestFunc suitable for decoding
+// africastalking Record requests.
+func DecodeRecordRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeRecordRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeEnqueueResponse returns a go-kit EncodeResponseFunc suitable for
+// encoding africastalking Enqueue responses.
+func EncodeEnqueueResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeEnqueueResponse(encoder)
+}
+
+// DecodeEnqueueRequest returns a go-kit DecodeRequestFunc suitable for
+// decoding africastalking Enqueue requests.
+func DecodeEnqueueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeEnqueueRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeDequeueResponse returns a go-kit EncodeResponseFunc suitable for
+// encoding africastalking Dequeue responses.
+func EncodeDequeueResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeDequeueResponse(encoder)
+}
+
+// DecodeDequeueRequest returns a go-kit DecodeRequestFunc suitable for
+// decoding africastalking Dequeue requests.
+func DecodeDequeueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeDequeueRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeRedirectResponse returns a go-kit EncodeResponseFunc suitable for
+// encoding africastalking Redirect responses.
+func EncodeRedirectResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeRedirectResponse(encoder)
+}
+
+// DecodeRedirectRequest returns a go-kit DecodeRequestFunc suitable for
+// decoding africastalking Redirect requests.
+func DecodeRedirectRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeRedirectRequest(mux, decoder)
+	return func(ctx context.Context, r *http.Request) (interface{}, error) {
+		r = r.WithContext(ctx)
+		return dec(r)
+	}
+}
+
+// EncodeRejectResponse returns a go-kit EncodeResponseFunc suitable for
+// encoding africastalking Reject responses.
+func EncodeRejectResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) kithttp.EncodeResponseFunc {
+	return server.EncodeRejectResponse(encoder)
+}
+
+// DecodeRejectRequest returns a go-kit DecodeRequestFunc suitable for decoding
+// africastalking Reject requests.
+func DecodeRejectRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) kithttp.DecodeRequestFunc {
+	dec := server.DecodeRejectRequest(mux, decoder)
 	return func(ctx context.Context, r *http.Request) (interface{}, error) {
 		r = r.WithContext(ctx)
 		return dec(r)
