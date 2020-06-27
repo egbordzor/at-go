@@ -32,7 +32,7 @@ type Service interface {
 	// Makes outbound calls.
 	MakeCall(context.Context, *MakeCallPayload) (res *MakeCallResponse, err error)
 	// Transfers call to another number.
-	TransferCall(context.Context, *CallTransferPayload) (res *Calltransferresponse, err error)
+	TransferCall(context.Context, *CallTransferPayload) (res *CallTransferResponse, err error)
 	// Set a text to be read out to the caller.
 	Say(context.Context, *Say1) (res string, err error)
 	// Play back an audio file located anywhere on the web.
@@ -53,7 +53,7 @@ type Service interface {
 	// Reject an incoming call without incurring any usage charges.
 	Reject(context.Context, *Reject1) (res string, err error)
 	// Used when you have more calls than you can handle at one time
-	Queue(context.Context, *QueuedCallsPayload) (res *Queuedstatusresult, err error)
+	Queue(context.Context, *QueuedCallsPayload) (res *QueuedStatusResult, err error)
 	// Uploads media or audio files to Africa'sTalking servers with the extension
 	// .mp3 or .wav
 	UploadMedia(context.Context, *UploadMediaFile) (res string, err error)
@@ -69,14 +69,24 @@ type Service interface {
 	BankCheckoutValidate(context.Context, *BankCheckoutValidatePayload) (res *BankCheckoutValidateResponse, err error)
 	// Initiate a bank transfer request.
 	BankTransfer(context.Context, *BankTransferPayload) (res *BankTransferResponse, err error)
-	// Collect money into your Payment Wallet
+	// Collect money into your Payment Wallet by initiating transactions that
+	// deduct money from a customers Debit or Credit Card.
 	CardCheckout(context.Context, *CardCheckoutPayload) (res *CardCheckoutResponse, err error)
 	// Validate card checkout charge requests
 	CardCheckoutValidate(context.Context, *CardCheckoutValidatePayload) (res *CardCheckoutValidateResponse, err error)
-	// Transfer money from one product to another.
+	// Transfer money from one Payment Product to another Payment Product hosted on
+	// Africa’s Talking.
 	WalletTransfer(context.Context, *WalletTransferPayload) (res *WalletTransferResponse, err error)
-	// Move money from a Payment Product to an application stash.
+	// Move money from a Payment Product to an Africa’s Talking application stash.
 	TopupStash(context.Context, *TopupStashPayload) (res *TopupStashResponse, err error)
+	// Fetch transactions of a particular payment product.
+	FindTransaction(context.Context, *FindTransactionPayload) (res *FindTransactionResponse, err error)
+	// Fetch transactions of a particular payment product.
+	FetchProductTransactions(context.Context, *ProductTransactionsPayload) (res *ProductTransactionsResponse, err error)
+	// Fetch your wallet transactions
+	FetchWalletTransactions(context.Context, *WalletTransactionsPayload) (res *WalletTransactionsResponse, err error)
+	// Fetch your wallet balance
+	FetchWalletBalance(context.Context, *WalletBalancePayload) (res *WalletBalanceResponse, err error)
 	// Send Airtime.
 	SendAirtime(context.Context, *AirtimePayload) (res *AirtimeResponse, err error)
 	// Publishes messages to remote devices.
@@ -95,7 +105,7 @@ const ServiceName = "africastalking"
 // MethodNames lists the service method names as defined in the design. These
 // are the same values that are set in the endpoint request contexts under the
 // MethodKey key.
-var MethodNames = [34]string{"SendBulkSMS", "SendPremiumSMS", "FetchSMS", "NewCheckoutToken", "NewPremiumSubscription", "FetchPremiumSubscription", "PurgePremiumSubscription", "MakeCall", "TransferCall", "Say", "Play", "GetDigits", "Dial", "Record", "Enqueue", "Dequeue", "Redirect", "Reject", "Queue", "UploadMedia", "MobileCheckout", "MobileB2C", "MobileB2B", "Bank Checkout", "BankCheckoutValidate", "BankTransfer", "CardCheckout", "CardCheckoutValidate", "WalletTransfer", "TopupStash", "SendAirtime", "PublishIoT", "InitiateAppData", "Generate"}
+var MethodNames = [38]string{"SendBulkSMS", "SendPremiumSMS", "FetchSMS", "NewCheckoutToken", "NewPremiumSubscription", "FetchPremiumSubscription", "PurgePremiumSubscription", "MakeCall", "TransferCall", "Say", "Play", "GetDigits", "Dial", "Record", "Enqueue", "Dequeue", "Redirect", "Reject", "Queue", "UploadMedia", "MobileCheckout", "MobileB2C", "MobileB2B", "Bank Checkout", "BankCheckoutValidate", "BankTransfer", "CardCheckout", "CardCheckoutValidate", "WalletTransfer", "TopupStash", "FindTransaction", "FetchProductTransactions", "FetchWalletTransactions", "FetchWalletBalance", "SendAirtime", "PublishIoT", "InitiateAppData", "Generate"}
 
 // BulkPayload is the payload type of the africastalking service SendBulkSMS
 // method.
@@ -287,9 +297,9 @@ type CallTransferPayload struct {
 	HoldMusicURL *string
 }
 
-// Calltransferresponse is the result type of the africastalking service
+// CallTransferResponse is the result type of the africastalking service
 // TransferCall method.
-type Calltransferresponse struct {
+type CallTransferResponse struct {
 	// can be either Success or Aborted
 	Status *string
 	// Why the transfer ws aborted None is successful
@@ -379,9 +389,9 @@ type QueuedCallsPayload struct {
 	PhoneNumbers string
 }
 
-// Queuedstatusresult is the result type of the africastalking service Queue
+// QueuedStatusResult is the result type of the africastalking service Queue
 // method.
-type Queuedstatusresult struct {
+type QueuedStatusResult struct {
 	Entries []*QueuedStatusEntry
 	// Error Message
 	ErrorMessage *string
@@ -410,7 +420,7 @@ type MobileCheckoutPayload struct {
 	// 3-digit ISO format currency code.
 	CurrencyCode string
 	// Amount client is expected to confirm.
-	Amount string
+	Amount float64
 	// Map of any metadata associates with the request
 	Metadata map[string]string
 }
@@ -469,14 +479,14 @@ type MobileB2BPayload struct {
 	// 3-digit ISO format currency code
 	CurrencyCode *string
 	// Amount client is expected to confirm.
-	Amount *string
+	Amount *float64
 	// Name or number of the channel receiving payment by the provider.
 	DestinationChannel *string
 	// Account name used by the business to receive money on the provided
 	// destinationChannel.
 	DestinationAccount *string
 	// A map of any metadata associated with the request.
-	Metadata *string
+	Metadata map[string]string
 }
 
 // MobileB2BResponse is the result type of the africastalking service MobileB2B
@@ -587,9 +597,9 @@ type CardCheckoutPayload struct {
 // CardCheckout method.
 type CardCheckoutResponse struct {
 	// The status of the request.
-	Status *string
+	Status string
 	// A detailed description of the request status.
-	Description *string
+	Description string
 	// Unique ID generated for successful requests.
 	TransactionID *string
 }
@@ -609,9 +619,9 @@ type CardCheckoutValidatePayload struct {
 // service CardCheckoutValidate method.
 type CardCheckoutValidateResponse struct {
 	// Corresponds to the final status of this request.
-	Status *string
+	Status string
 	// A detailed description of the request status.
-	Description *string
+	Description string
 	// Token application can use to initiate subsequent charges.
 	CheckoutToken *string
 }
@@ -624,7 +634,7 @@ type WalletTransferPayload struct {
 	// Africa’s Talking Payment product to initiate this transaction.
 	ProductName string
 	// Unique product code to transfer the funds to.
-	TargetProductCode string
+	TargetProductCode int
 	// 3-digit ISO format currency code
 	CurrencyCode string
 	// Amount application will be topped up with.
@@ -637,9 +647,9 @@ type WalletTransferPayload struct {
 // WalletTransfer method.
 type WalletTransferResponse struct {
 	// Corresponds to the status of the request.
-	Status *string
+	Status string
 	// A detailed description of the request status.
-	Description *string
+	Description string
 	// A unique id that our API generates for successful requests.
 	TransactionID *string
 }
@@ -663,11 +673,114 @@ type TopupStashPayload struct {
 // TopupStash method.
 type TopupStashResponse struct {
 	// Corresponds to the status of the request
-	Status *string
+	Status string
 	// A detailed description of the request status.
-	Description *string
+	Description string
 	// Unique ID for successful requests.
 	TransactionID *string
+}
+
+// FindTransactionPayload is the payload type of the africastalking service
+// FindTransaction method.
+type FindTransactionPayload struct {
+	// Africa’s Talking application username.
+	Username string
+	// ID of the transaction you would like to find.
+	TransactionID string
+}
+
+// FindTransactionResponse is the result type of the africastalking service
+// FindTransaction method.
+type FindTransactionResponse struct {
+	// Status of the request
+	Status *string
+	// Details of the transaction.
+	Data *TransactionResponse
+	// A message detailing what happened with a failed request.
+	ErrorMessage *string
+}
+
+// ProductTransactionsPayload is the payload type of the africastalking service
+// FetchProductTransactions method.
+type ProductTransactionsPayload struct {
+	// Africa’s Talking application username.
+	Username string
+	// Name of the payment product to fetch.
+	ProductName string
+	// Number of the page you’d like to read results from.
+	PageNumber int
+	// Number of transaction results you would like for this query.
+	Count int
+	// Transaction start date; in the format YYYY-MM-DD
+	StartDate *string
+	// Transaction end date; in the format YYYY-MM-DD
+	EndDate *string
+	// Transaction category you would like to consider.
+	Category *string
+	// Transaction provider you would like to consider.
+	Provider *string
+	// Transaction status you would like to consider
+	Status *string
+	// Transaction source you would like to consider.
+	Source *string
+	// Transaction destination you would like to consider.
+	Destination *string
+	// Transaction provider channel you would like to consider.
+	ProviderChannel *string
+}
+
+// ProductTransactionsResponse is the result type of the africastalking service
+// FetchProductTransactions method.
+type ProductTransactionsResponse struct {
+	// The status of the request.
+	Status    *string
+	Responses []*TransactionResponse
+}
+
+// WalletTransactionsPayload is the payload type of the africastalking service
+// FetchWalletTransactions method.
+type WalletTransactionsPayload struct {
+	// Africa’s Talking application username.
+	Username string
+	// Number of the page you’d like to read results from.
+	PageNumber int
+	// Number of transaction results you would like for this query.
+	Count int
+	// Transaction start date; in the format YYYY-MM-DD
+	StartDate *string
+	// Transaction end date; in the format YYYY-MM-DD
+	EndDate *string
+	// List of transaction categories you would like to consider.
+	Categories *string
+}
+
+// WalletTransactionsResponse is the result type of the africastalking service
+// FetchWalletTransactions method.
+type WalletTransactionsResponse struct {
+	// The status of the request
+	Status *string
+	// List of response Entry corresponding to a transaction result.
+	Responses []*WalletEntry
+	// A message detailing what happened with a failed request.
+	ErrorMessage *string
+}
+
+// WalletBalancePayload is the payload type of the africastalking service
+// FetchWalletBalance method.
+type WalletBalancePayload struct {
+	// Africa’s Talking application username
+	Username string
+}
+
+// WalletBalanceResponse is the result type of the africastalking service
+// FetchWalletBalance method.
+type WalletBalanceResponse struct {
+	// The status of the request.
+	Status *string
+	// Balance of the payment wallet.
+	Balance *string
+	// A message detailing what happened with a failed request.
+	ErrorMessage *string
 }
 
 // AirtimePayload is the payload type of the africastalking service SendAirtime
@@ -822,7 +935,7 @@ type MobileRecipients struct {
 	// 3-digit ISO format currency code.
 	CurrencyCode string
 	// Amount that the client is expected to confirm.
-	Amount string
+	Amount float64
 	// Channel payment will be made from.
 	ProviderChannel *string
 	// Purpose of the payment.
@@ -899,6 +1012,7 @@ type TransferEntries struct {
 	ErrorMessage *string
 }
 
+// Details of the payment card to be charged.
 type PaymentCard struct {
 	// Payment card number.
 	Number string
@@ -913,6 +1027,63 @@ type PaymentCard struct {
 	// The payment cards ATM PIN.
 	AuthToken string
 }
+
+type TransactionResponse struct {
+	// Metadata sent by your application when it initiated this transaction.
+	RequestMetadata map[string]string
+	// Type of party providing funds for this transaction (the Debit Party).
+	SourceType *string
+	// Uniquely identifies the party providing the funds for this transaction
+	Source *string
+	// Payment provider that facilitated this transaction
+	Provider *string
+	// Identifies party receiving funds in this transaction (the Credit Party)
+	DestinationType *string
+	// Contains a detailed description of this transaction .
+	Description *string
+	// Name or number of the channel used to facilitate this payment by the
+	// provider.
+	ProviderChannel *string
+	// Transaction fee charged by Africa’s Talking for this transaction.
+	TransactionFee *string
+	// Unique ID generated by the payment provider for this transaction.
+	ProviderRefID *string
+	// Map of any additional data received from a payment provider.
+	ProviderMetadata map[string]string
+	// Final status of this transaction.
+	Status *string
+	// Identifies the Africa’s Talking Payment Product used.
+	ProductName *string
+	// Category of the payment
+	Category *string
+	// Date and time when a successful transaction was completed.
+	TransactionDate *string
+	// Uniquely identifies the party receiving the funds for this transaction.
+	Destination *string
+	// Value being exchanged in this transaction.
+	Value *string
+	// Unique transactionId generated for every payment sent and received.
+	TransactionID *string
+	// Date and time when a transaction was accepted by our APIs.
+	CreationTime *string
+}
+
+type WalletEntry struct {
+	// Detailed description of this transaction
+	Description *string
+	// The remaining wallet balance after the transaction was processed.
+	Balance *string
+	// Category of the payment
+	Category *string
+	// Contains details of the specific transaction
+	TransactionData FindTransactionResponseCollection
+	// Value being exchanged in this transaction.
+	Value *string
+	// A unique transactionId generated for every payment sent and received
+	TransactionID *string
+}
+
+type FindTransactionResponseCollection []*FindTransactionResponse
 
 // A url encoded json list of Recipients
 type AirtimeRecipients struct {
@@ -1047,31 +1218,31 @@ func NewViewedMakeCallResponse(res *MakeCallResponse, view string) *africastalki
 	return &africastalkingviews.MakeCallResponse{Projected: p, View: "default"}
 }
 
-// NewCalltransferresponse initializes result type Calltransferresponse from
-// viewed result type Calltransferresponse.
-func NewCalltransferresponse(vres *africastalkingviews.Calltransferresponse) *Calltransferresponse {
-	return newCalltransferresponse(vres.Projected)
+// NewCallTransferResponse initializes result type CallTransferResponse from
+// viewed result type CallTransferResponse.
+func NewCallTransferResponse(vres *africastalkingviews.CallTransferResponse) *CallTransferResponse {
+	return newCallTransferResponse(vres.Projected)
 }
 
-// NewViewedCalltransferresponse initializes viewed result type
-// Calltransferresponse from result type Calltransferresponse using the given
+// NewViewedCallTransferResponse initializes viewed result type
+// CallTransferResponse from result type CallTransferResponse using the given
 // view.
-func NewViewedCalltransferresponse(res *Calltransferresponse, view string) *africastalkingviews.Calltransferresponse {
-	p := newCalltransferresponseView(res)
-	return &africastalkingviews.Calltransferresponse{Projected: p, View: "default"}
+func NewViewedCallTransferResponse(res *CallTransferResponse, view string) *africastalkingviews.CallTransferResponse {
+	p := newCallTransferResponseView(res)
+	return &africastalkingviews.CallTransferResponse{Projected: p, View: "default"}
 }
 
-// NewQueuedstatusresult initializes result type Queuedstatusresult from viewed
-// result type Queuedstatusresult.
-func NewQueuedstatusresult(vres *africastalkingviews.Queuedstatusresult) *Queuedstatusresult {
-	return newQueuedstatusresult(vres.Projected)
+// NewQueuedStatusResult initializes result type QueuedStatusResult from viewed
+// result type QueuedStatusResult.
+func NewQueuedStatusResult(vres *africastalkingviews.QueuedStatusResult) *QueuedStatusResult {
+	return newQueuedStatusResult(vres.Projected)
 }
 
-// NewViewedQueuedstatusresult initializes viewed result type
-// Queuedstatusresult from result type Queuedstatusresult using the given view.
-func NewViewedQueuedstatusresult(res *Queuedstatusresult, view string) *africastalkingviews.Queuedstatusresult {
-	p := newQueuedstatusresultView(res)
-	return &africastalkingviews.Queuedstatusresult{Projected: p, View: "default"}
+// NewViewedQueuedStatusResult initializes viewed result type
+// QueuedStatusResult from result type QueuedStatusResult using the given view.
+func NewViewedQueuedStatusResult(res *QueuedStatusResult, view string) *africastalkingviews.QueuedStatusResult {
+	p := newQueuedStatusResultView(res)
+	return &africastalkingviews.QueuedStatusResult{Projected: p, View: "default"}
 }
 
 // NewMobileCheckoutResponse initializes result type MobileCheckoutResponse
@@ -1211,6 +1382,64 @@ func NewTopupStashResponse(vres *africastalkingviews.TopupStashResponse) *TopupS
 func NewViewedTopupStashResponse(res *TopupStashResponse, view string) *africastalkingviews.TopupStashResponse {
 	p := newTopupStashResponseView(res)
 	return &africastalkingviews.TopupStashResponse{Projected: p, View: "default"}
+}
+
+// NewFindTransactionResponse initializes result type FindTransactionResponse
+// from viewed result type FindTransactionResponse.
+func NewFindTransactionResponse(vres *africastalkingviews.FindTransactionResponse) *FindTransactionResponse {
+	return newFindTransactionResponse(vres.Projected)
+}
+
+// NewViewedFindTransactionResponse initializes viewed result type
+// FindTransactionResponse from result type FindTransactionResponse using the
+// given view.
+func NewViewedFindTransactionResponse(res *FindTransactionResponse, view string) *africastalkingviews.FindTransactionResponse {
+	p := newFindTransactionResponseView(res)
+	return &africastalkingviews.FindTransactionResponse{Projected: p, View: "default"}
+}
+
+// NewProductTransactionsResponse initializes result type
+// ProductTransactionsResponse from viewed result type
+// ProductTransactionsResponse.
+func NewProductTransactionsResponse(vres *africastalkingviews.ProductTransactionsResponse) *ProductTransactionsResponse {
+	return newProductTransactionsResponse(vres.Projected)
+}
+
+// NewViewedProductTransactionsResponse initializes viewed result type
+// ProductTransactionsResponse from result type ProductTransactionsResponse
+// using the given view.
+func NewViewedProductTransactionsResponse(res *ProductTransactionsResponse, view string) *africastalkingviews.ProductTransactionsResponse {
+	p := newProductTransactionsResponseView(res)
+	return &africastalkingviews.ProductTransactionsResponse{Projected: p, View: "default"}
+}
+
+// NewWalletTransactionsResponse initializes result type
+// WalletTransactionsResponse from viewed result type
+// WalletTransactionsResponse.
+func NewWalletTransactionsResponse(vres *africastalkingviews.WalletTransactionsResponse) *WalletTransactionsResponse {
+	return newWalletTransactionsResponse(vres.Projected)
+}
+
+// NewViewedWalletTransactionsResponse initializes viewed result type
+// WalletTransactionsResponse from result type WalletTransactionsResponse using
+// the given view.
+func NewViewedWalletTransactionsResponse(res *WalletTransactionsResponse, view string) *africastalkingviews.WalletTransactionsResponse {
+	p := newWalletTransactionsResponseView(res)
+	return &africastalkingviews.WalletTransactionsResponse{Projected: p, View: "default"}
+}
+
+// NewWalletBalanceResponse initializes result type WalletBalanceResponse from
+// viewed result type WalletBalanceResponse.
+func NewWalletBalanceResponse(vres *africastalkingviews.WalletBalanceResponse) *WalletBalanceResponse {
+	return newWalletBalanceResponse(vres.Projected)
+}
+
+// NewViewedWalletBalanceResponse initializes viewed result type
+// WalletBalanceResponse from result type WalletBalanceResponse using the given
+// view.
+func NewViewedWalletBalanceResponse(res *WalletBalanceResponse, view string) *africastalkingviews.WalletBalanceResponse {
+	p := newWalletBalanceResponseView(res)
+	return &africastalkingviews.WalletBalanceResponse{Projected: p, View: "default"}
 }
 
 // NewAirtimeResponse initializes result type AirtimeResponse from viewed
@@ -1442,30 +1671,30 @@ func newMakeCallResponseView(res *MakeCallResponse) *africastalkingviews.MakeCal
 	return vres
 }
 
-// newCalltransferresponse converts projected type Calltransferresponse to
-// service type Calltransferresponse.
-func newCalltransferresponse(vres *africastalkingviews.CalltransferresponseView) *Calltransferresponse {
-	res := &Calltransferresponse{
+// newCallTransferResponse converts projected type CallTransferResponse to
+// service type CallTransferResponse.
+func newCallTransferResponse(vres *africastalkingviews.CallTransferResponseView) *CallTransferResponse {
+	res := &CallTransferResponse{
 		Status:       vres.Status,
 		ErrorMessage: vres.ErrorMessage,
 	}
 	return res
 }
 
-// newCalltransferresponseView projects result type Calltransferresponse to
-// projected type CalltransferresponseView using the "default" view.
-func newCalltransferresponseView(res *Calltransferresponse) *africastalkingviews.CalltransferresponseView {
-	vres := &africastalkingviews.CalltransferresponseView{
+// newCallTransferResponseView projects result type CallTransferResponse to
+// projected type CallTransferResponseView using the "default" view.
+func newCallTransferResponseView(res *CallTransferResponse) *africastalkingviews.CallTransferResponseView {
+	vres := &africastalkingviews.CallTransferResponseView{
 		Status:       res.Status,
 		ErrorMessage: res.ErrorMessage,
 	}
 	return vres
 }
 
-// newQueuedstatusresult converts projected type Queuedstatusresult to service
-// type Queuedstatusresult.
-func newQueuedstatusresult(vres *africastalkingviews.QueuedstatusresultView) *Queuedstatusresult {
-	res := &Queuedstatusresult{
+// newQueuedStatusResult converts projected type QueuedStatusResult to service
+// type QueuedStatusResult.
+func newQueuedStatusResult(vres *africastalkingviews.QueuedStatusResultView) *QueuedStatusResult {
+	res := &QueuedStatusResult{
 		ErrorMessage: vres.ErrorMessage,
 	}
 	if vres.Entries != nil {
@@ -1477,10 +1706,10 @@ func newQueuedstatusresult(vres *africastalkingviews.QueuedstatusresultView) *Qu
 	return res
 }
 
-// newQueuedstatusresultView projects result type Queuedstatusresult to
-// projected type QueuedstatusresultView using the "default" view.
-func newQueuedstatusresultView(res *Queuedstatusresult) *africastalkingviews.QueuedstatusresultView {
-	vres := &africastalkingviews.QueuedstatusresultView{
+// newQueuedStatusResultView projects result type QueuedStatusResult to
+// projected type QueuedStatusResultView using the "default" view.
+func newQueuedStatusResultView(res *QueuedStatusResult) *africastalkingviews.QueuedStatusResultView {
+	vres := &africastalkingviews.QueuedStatusResultView{
 		ErrorMessage: res.ErrorMessage,
 	}
 	if res.Entries != nil {
@@ -1657,9 +1886,13 @@ func newBankTransferResponseView(res *BankTransferResponse) *africastalkingviews
 // service type CardCheckoutResponse.
 func newCardCheckoutResponse(vres *africastalkingviews.CardCheckoutResponseView) *CardCheckoutResponse {
 	res := &CardCheckoutResponse{
-		Status:        vres.Status,
-		Description:   vres.Description,
 		TransactionID: vres.TransactionID,
+	}
+	if vres.Status != nil {
+		res.Status = *vres.Status
+	}
+	if vres.Description != nil {
+		res.Description = *vres.Description
 	}
 	return res
 }
@@ -1668,8 +1901,8 @@ func newCardCheckoutResponse(vres *africastalkingviews.CardCheckoutResponseView)
 // projected type CardCheckoutResponseView using the "default" view.
 func newCardCheckoutResponseView(res *CardCheckoutResponse) *africastalkingviews.CardCheckoutResponseView {
 	vres := &africastalkingviews.CardCheckoutResponseView{
-		Status:        res.Status,
-		Description:   res.Description,
+		Status:        &res.Status,
+		Description:   &res.Description,
 		TransactionID: res.TransactionID,
 	}
 	return vres
@@ -1679,9 +1912,13 @@ func newCardCheckoutResponseView(res *CardCheckoutResponse) *africastalkingviews
 // CardCheckoutValidateResponse to service type CardCheckoutValidateResponse.
 func newCardCheckoutValidateResponse(vres *africastalkingviews.CardCheckoutValidateResponseView) *CardCheckoutValidateResponse {
 	res := &CardCheckoutValidateResponse{
-		Status:        vres.Status,
-		Description:   vres.Description,
 		CheckoutToken: vres.CheckoutToken,
+	}
+	if vres.Status != nil {
+		res.Status = *vres.Status
+	}
+	if vres.Description != nil {
+		res.Description = *vres.Description
 	}
 	return res
 }
@@ -1691,8 +1928,8 @@ func newCardCheckoutValidateResponse(vres *africastalkingviews.CardCheckoutValid
 // CardCheckoutValidateResponseView using the "default" view.
 func newCardCheckoutValidateResponseView(res *CardCheckoutValidateResponse) *africastalkingviews.CardCheckoutValidateResponseView {
 	vres := &africastalkingviews.CardCheckoutValidateResponseView{
-		Status:        res.Status,
-		Description:   res.Description,
+		Status:        &res.Status,
+		Description:   &res.Description,
 		CheckoutToken: res.CheckoutToken,
 	}
 	return vres
@@ -1702,9 +1939,13 @@ func newCardCheckoutValidateResponseView(res *CardCheckoutValidateResponse) *afr
 // service type WalletTransferResponse.
 func newWalletTransferResponse(vres *africastalkingviews.WalletTransferResponseView) *WalletTransferResponse {
 	res := &WalletTransferResponse{
-		Status:        vres.Status,
-		Description:   vres.Description,
 		TransactionID: vres.TransactionID,
+	}
+	if vres.Status != nil {
+		res.Status = *vres.Status
+	}
+	if vres.Description != nil {
+		res.Description = *vres.Description
 	}
 	return res
 }
@@ -1713,8 +1954,8 @@ func newWalletTransferResponse(vres *africastalkingviews.WalletTransferResponseV
 // projected type WalletTransferResponseView using the "default" view.
 func newWalletTransferResponseView(res *WalletTransferResponse) *africastalkingviews.WalletTransferResponseView {
 	vres := &africastalkingviews.WalletTransferResponseView{
-		Status:        res.Status,
-		Description:   res.Description,
+		Status:        &res.Status,
+		Description:   &res.Description,
 		TransactionID: res.TransactionID,
 	}
 	return vres
@@ -1724,9 +1965,13 @@ func newWalletTransferResponseView(res *WalletTransferResponse) *africastalkingv
 // type TopupStashResponse.
 func newTopupStashResponse(vres *africastalkingviews.TopupStashResponseView) *TopupStashResponse {
 	res := &TopupStashResponse{
-		Status:        vres.Status,
-		Description:   vres.Description,
 		TransactionID: vres.TransactionID,
+	}
+	if vres.Status != nil {
+		res.Status = *vres.Status
+	}
+	if vres.Description != nil {
+		res.Description = *vres.Description
 	}
 	return res
 }
@@ -1735,9 +1980,143 @@ func newTopupStashResponse(vres *africastalkingviews.TopupStashResponseView) *To
 // projected type TopupStashResponseView using the "default" view.
 func newTopupStashResponseView(res *TopupStashResponse) *africastalkingviews.TopupStashResponseView {
 	vres := &africastalkingviews.TopupStashResponseView{
-		Status:        res.Status,
-		Description:   res.Description,
+		Status:        &res.Status,
+		Description:   &res.Description,
 		TransactionID: res.TransactionID,
+	}
+	return vres
+}
+
+// newFindTransactionResponse converts projected type FindTransactionResponse
+// to service type FindTransactionResponse.
+func newFindTransactionResponse(vres *africastalkingviews.FindTransactionResponseView) *FindTransactionResponse {
+	res := &FindTransactionResponse{
+		Status:       vres.Status,
+		ErrorMessage: vres.ErrorMessage,
+	}
+	if vres.Data != nil {
+		res.Data = transformAfricastalkingviewsTransactionResponseViewToTransactionResponse(vres.Data)
+	}
+	return res
+}
+
+// newFindTransactionResponseView projects result type FindTransactionResponse
+// to projected type FindTransactionResponseView using the "default" view.
+func newFindTransactionResponseView(res *FindTransactionResponse) *africastalkingviews.FindTransactionResponseView {
+	vres := &africastalkingviews.FindTransactionResponseView{
+		Status:       res.Status,
+		ErrorMessage: res.ErrorMessage,
+	}
+	if res.Data != nil {
+		vres.Data = transformTransactionResponseToAfricastalkingviewsTransactionResponseView(res.Data)
+	}
+	return vres
+}
+
+// newProductTransactionsResponse converts projected type
+// ProductTransactionsResponse to service type ProductTransactionsResponse.
+func newProductTransactionsResponse(vres *africastalkingviews.ProductTransactionsResponseView) *ProductTransactionsResponse {
+	res := &ProductTransactionsResponse{
+		Status: vres.Status,
+	}
+	if vres.Responses != nil {
+		res.Responses = make([]*TransactionResponse, len(vres.Responses))
+		for i, val := range vres.Responses {
+			res.Responses[i] = transformAfricastalkingviewsTransactionResponseViewToTransactionResponse(val)
+		}
+	}
+	return res
+}
+
+// newProductTransactionsResponseView projects result type
+// ProductTransactionsResponse to projected type
+// ProductTransactionsResponseView using the "default" view.
+func newProductTransactionsResponseView(res *ProductTransactionsResponse) *africastalkingviews.ProductTransactionsResponseView {
+	vres := &africastalkingviews.ProductTransactionsResponseView{
+		Status: res.Status,
+	}
+	if res.Responses != nil {
+		vres.Responses = make([]*africastalkingviews.TransactionResponseView, len(res.Responses))
+		for i, val := range res.Responses {
+			vres.Responses[i] = transformTransactionResponseToAfricastalkingviewsTransactionResponseView(val)
+		}
+	}
+	return vres
+}
+
+// newWalletTransactionsResponse converts projected type
+// WalletTransactionsResponse to service type WalletTransactionsResponse.
+func newWalletTransactionsResponse(vres *africastalkingviews.WalletTransactionsResponseView) *WalletTransactionsResponse {
+	res := &WalletTransactionsResponse{
+		Status:       vres.Status,
+		ErrorMessage: vres.ErrorMessage,
+	}
+	if vres.Responses != nil {
+		res.Responses = make([]*WalletEntry, len(vres.Responses))
+		for i, val := range vres.Responses {
+			res.Responses[i] = transformAfricastalkingviewsWalletEntryViewToWalletEntry(val)
+		}
+	}
+	return res
+}
+
+// newWalletTransactionsResponseView projects result type
+// WalletTransactionsResponse to projected type WalletTransactionsResponseView
+// using the "default" view.
+func newWalletTransactionsResponseView(res *WalletTransactionsResponse) *africastalkingviews.WalletTransactionsResponseView {
+	vres := &africastalkingviews.WalletTransactionsResponseView{
+		Status:       res.Status,
+		ErrorMessage: res.ErrorMessage,
+	}
+	if res.Responses != nil {
+		vres.Responses = make([]*africastalkingviews.WalletEntryView, len(res.Responses))
+		for i, val := range res.Responses {
+			vres.Responses[i] = transformWalletEntryToAfricastalkingviewsWalletEntryView(val)
+		}
+	}
+	return vres
+}
+
+// newFindTransactionResponseCollection converts projected type
+// FindTransactionResponseCollection to service type
+// FindTransactionResponseCollection.
+func newFindTransactionResponseCollection(vres africastalkingviews.FindTransactionResponseCollectionView) FindTransactionResponseCollection {
+	res := make(FindTransactionResponseCollection, len(vres))
+	for i, n := range vres {
+		res[i] = newFindTransactionResponse(n)
+	}
+	return res
+}
+
+// newFindTransactionResponseCollectionView projects result type
+// FindTransactionResponseCollection to projected type
+// FindTransactionResponseCollectionView using the "default" view.
+func newFindTransactionResponseCollectionView(res FindTransactionResponseCollection) africastalkingviews.FindTransactionResponseCollectionView {
+	vres := make(africastalkingviews.FindTransactionResponseCollectionView, len(res))
+	for i, n := range res {
+		vres[i] = newFindTransactionResponseView(n)
+	}
+	return vres
+}
+
+// newWalletBalanceResponse converts projected type WalletBalanceResponse to
+// service type WalletBalanceResponse.
+func newWalletBalanceResponse(vres *africastalkingviews.WalletBalanceResponseView) *WalletBalanceResponse {
+	res := &WalletBalanceResponse{
+		Status:       vres.Status,
+		Balance:      vres.Balance,
+		ErrorMessage: vres.ErrorMessage,
+	}
+	return res
+}
+
+// newWalletBalanceResponseView projects result type WalletBalanceResponse to
+// projected type WalletBalanceResponseView using the "default" view.
+func newWalletBalanceResponseView(res *WalletBalanceResponse) *africastalkingviews.WalletBalanceResponseView {
+	vres := &africastalkingviews.WalletBalanceResponseView{
+		Status:       res.Status,
+		Balance:      res.Balance,
+		ErrorMessage: res.ErrorMessage,
 	}
 	return vres
 }
@@ -2197,6 +2576,178 @@ func transformTransferEntriesToAfricastalkingviewsTransferEntriesView(v *Transfe
 		TransactionID:  v.TransactionID,
 		TransactionFee: v.TransactionFee,
 		ErrorMessage:   v.ErrorMessage,
+	}
+
+	return res
+}
+
+// transformAfricastalkingviewsTransactionResponseViewToTransactionResponse
+// builds a value of type *TransactionResponse from a value of type
+// *africastalkingviews.TransactionResponseView.
+func transformAfricastalkingviewsTransactionResponseViewToTransactionResponse(v *africastalkingviews.TransactionResponseView) *TransactionResponse {
+	if v == nil {
+		return nil
+	}
+	res := &TransactionResponse{
+		SourceType:      v.SourceType,
+		Source:          v.Source,
+		Provider:        v.Provider,
+		DestinationType: v.DestinationType,
+		Description:     v.Description,
+		ProviderChannel: v.ProviderChannel,
+		TransactionFee:  v.TransactionFee,
+		ProviderRefID:   v.ProviderRefID,
+		Status:          v.Status,
+		ProductName:     v.ProductName,
+		Category:        v.Category,
+		TransactionDate: v.TransactionDate,
+		Destination:     v.Destination,
+		Value:           v.Value,
+		TransactionID:   v.TransactionID,
+		CreationTime:    v.CreationTime,
+	}
+	if v.RequestMetadata != nil {
+		res.RequestMetadata = make(map[string]string, len(v.RequestMetadata))
+		for key, val := range v.RequestMetadata {
+			tk := key
+			tv := val
+			res.RequestMetadata[tk] = tv
+		}
+	}
+	if v.ProviderMetadata != nil {
+		res.ProviderMetadata = make(map[string]string, len(v.ProviderMetadata))
+		for key, val := range v.ProviderMetadata {
+			tk := key
+			tv := val
+			res.ProviderMetadata[tk] = tv
+		}
+	}
+
+	return res
+}
+
+// transformTransactionResponseToAfricastalkingviewsTransactionResponseView
+// builds a value of type *africastalkingviews.TransactionResponseView from a
+// value of type *TransactionResponse.
+func transformTransactionResponseToAfricastalkingviewsTransactionResponseView(v *TransactionResponse) *africastalkingviews.TransactionResponseView {
+	if v == nil {
+		return nil
+	}
+	res := &africastalkingviews.TransactionResponseView{
+		SourceType:      v.SourceType,
+		Source:          v.Source,
+		Provider:        v.Provider,
+		DestinationType: v.DestinationType,
+		Description:     v.Description,
+		ProviderChannel: v.ProviderChannel,
+		TransactionFee:  v.TransactionFee,
+		ProviderRefID:   v.ProviderRefID,
+		Status:          v.Status,
+		ProductName:     v.ProductName,
+		Category:        v.Category,
+		TransactionDate: v.TransactionDate,
+		Destination:     v.Destination,
+		Value:           v.Value,
+		TransactionID:   v.TransactionID,
+		CreationTime:    v.CreationTime,
+	}
+	if v.RequestMetadata != nil {
+		res.RequestMetadata = make(map[string]string, len(v.RequestMetadata))
+		for key, val := range v.RequestMetadata {
+			tk := key
+			tv := val
+			res.RequestMetadata[tk] = tv
+		}
+	}
+	if v.ProviderMetadata != nil {
+		res.ProviderMetadata = make(map[string]string, len(v.ProviderMetadata))
+		for key, val := range v.ProviderMetadata {
+			tk := key
+			tv := val
+			res.ProviderMetadata[tk] = tv
+		}
+	}
+
+	return res
+}
+
+// transformAfricastalkingviewsWalletEntryViewToWalletEntry builds a value of
+// type *WalletEntry from a value of type *africastalkingviews.WalletEntryView.
+func transformAfricastalkingviewsWalletEntryViewToWalletEntry(v *africastalkingviews.WalletEntryView) *WalletEntry {
+	if v == nil {
+		return nil
+	}
+	res := &WalletEntry{
+		Description:   v.Description,
+		Balance:       v.Balance,
+		Category:      v.Category,
+		Value:         v.Value,
+		TransactionID: v.TransactionID,
+	}
+	if v.TransactionData != nil {
+		res.TransactionData = make([]*FindTransactionResponse, len(v.TransactionData))
+		for i, val := range v.TransactionData {
+			res.TransactionData[i] = transformAfricastalkingviewsFindTransactionResponseViewToFindTransactionResponse(val)
+		}
+	}
+
+	return res
+}
+
+// transformAfricastalkingviewsFindTransactionResponseViewToFindTransactionResponse
+// builds a value of type *FindTransactionResponse from a value of type
+// *africastalkingviews.FindTransactionResponseView.
+func transformAfricastalkingviewsFindTransactionResponseViewToFindTransactionResponse(v *africastalkingviews.FindTransactionResponseView) *FindTransactionResponse {
+	if v == nil {
+		return nil
+	}
+	res := &FindTransactionResponse{
+		Status:       v.Status,
+		ErrorMessage: v.ErrorMessage,
+	}
+	if v.Data != nil {
+		res.Data = transformAfricastalkingviewsTransactionResponseViewToTransactionResponse(v.Data)
+	}
+
+	return res
+}
+
+// transformWalletEntryToAfricastalkingviewsWalletEntryView builds a value of
+// type *africastalkingviews.WalletEntryView from a value of type *WalletEntry.
+func transformWalletEntryToAfricastalkingviewsWalletEntryView(v *WalletEntry) *africastalkingviews.WalletEntryView {
+	if v == nil {
+		return nil
+	}
+	res := &africastalkingviews.WalletEntryView{
+		Description:   v.Description,
+		Balance:       v.Balance,
+		Category:      v.Category,
+		Value:         v.Value,
+		TransactionID: v.TransactionID,
+	}
+	if v.TransactionData != nil {
+		res.TransactionData = make([]*africastalkingviews.FindTransactionResponseView, len(v.TransactionData))
+		for i, val := range v.TransactionData {
+			res.TransactionData[i] = transformFindTransactionResponseToAfricastalkingviewsFindTransactionResponseView(val)
+		}
+	}
+
+	return res
+}
+
+// transformFindTransactionResponseToAfricastalkingviewsFindTransactionResponseView
+// builds a value of type *africastalkingviews.FindTransactionResponseView from
+// a value of type *FindTransactionResponse.
+func transformFindTransactionResponseToAfricastalkingviewsFindTransactionResponseView(v *FindTransactionResponse) *africastalkingviews.FindTransactionResponseView {
+	if v == nil {
+		return nil
+	}
+	res := &africastalkingviews.FindTransactionResponseView{
+		Status:       v.Status,
+		ErrorMessage: v.ErrorMessage,
+	}
+	if v.Data != nil {
+		res.Data = transformTransactionResponseToAfricastalkingviewsTransactionResponseView(v.Data)
 	}
 
 	return res

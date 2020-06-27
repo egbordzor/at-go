@@ -59,6 +59,15 @@ type SendPremiumSMSRequestBody struct {
 	RetryDurationInHours *string `form:"retryDurationInHours,omitempty" json:"retryDurationInHours,omitempty" xml:"retryDurationInHours,omitempty"`
 }
 
+// FetchSMSRequestBody is the type of the "africastalking" service "FetchSMS"
+// endpoint HTTP request body.
+type FetchSMSRequestBody struct {
+	// Africa’s Talking application username.
+	Username string `form:"username" json:"username" xml:"username"`
+	// This is the id of the message that you last processed.
+	LastReceivedID string `form:"lastReceivedId,omitempty" json:"lastReceivedId,omitempty" xml:"lastReceivedId,omitempty"`
+}
+
 // NewCheckoutTokenRequestBody is the type of the "africastalking" service
 // "NewCheckoutToken" endpoint HTTP request body.
 type NewCheckoutTokenRequestBody struct {
@@ -79,6 +88,19 @@ type NewPremiumSubscriptionRequestBody struct {
 	PhoneNumber string `form:"phoneNumber" json:"phoneNumber" xml:"phoneNumber"`
 	// Token used to validate the subscription request
 	CheckoutToken string `form:"checkoutToken" json:"checkoutToken" xml:"checkoutToken"`
+}
+
+// FetchPremiumSubscriptionRequestBody is the type of the "africastalking"
+// service "FetchPremiumSubscription" endpoint HTTP request body.
+type FetchPremiumSubscriptionRequestBody struct {
+	// Africa’s Talking application username.
+	Username string `form:"username" json:"username" xml:"username"`
+	// Premium short code mapped to your account
+	ShortCode string `form:"shortCode" json:"shortCode" xml:"shortCode"`
+	// Premium keyword under short code mapped to your account.
+	Keyword string `form:"keyword" json:"keyword" xml:"keyword"`
+	// ID of the subscription you believe to be your last.
+	LastReceivedID string `form:"lastReceivedId,omitempty" json:"lastReceivedId,omitempty" xml:"lastReceivedId,omitempty"`
 }
 
 // PurgePremiumSubscriptionRequestBody is the type of the "africastalking"
@@ -234,7 +256,7 @@ type MobileCheckoutRequestBody struct {
 	// 3-digit ISO format currency code.
 	CurrencyCode string `form:"currencyCode" json:"currencyCode" xml:"currencyCode"`
 	// Amount client is expected to confirm.
-	Amount string `form:"amount" json:"amount" xml:"amount"`
+	Amount float64 `form:"amount" json:"amount" xml:"amount"`
 	// Map of any metadata associates with the request
 	Metadata map[string]string `form:"metadata,omitempty" json:"metadata,omitempty" xml:"metadata,omitempty"`
 }
@@ -264,14 +286,14 @@ type MobileB2BRequestBody struct {
 	// 3-digit ISO format currency code
 	CurrencyCode *string `form:"currencyCode,omitempty" json:"currencyCode,omitempty" xml:"currencyCode,omitempty"`
 	// Amount client is expected to confirm.
-	Amount *string `form:"amount,omitempty" json:"amount,omitempty" xml:"amount,omitempty"`
+	Amount *float64 `form:"amount,omitempty" json:"amount,omitempty" xml:"amount,omitempty"`
 	// Name or number of the channel receiving payment by the provider.
 	DestinationChannel *string `form:"destinationChannel,omitempty" json:"destinationChannel,omitempty" xml:"destinationChannel,omitempty"`
 	// Account name used by the business to receive money on the provided
 	// destinationChannel.
 	DestinationAccount *string `form:"destinationAccount,omitempty" json:"destinationAccount,omitempty" xml:"destinationAccount,omitempty"`
 	// A map of any metadata associated with the request.
-	Metadata *string `form:"metadata,omitempty" json:"metadata,omitempty" xml:"metadata,omitempty"`
+	Metadata map[string]string `form:"metadata,omitempty" json:"metadata,omitempty" xml:"metadata,omitempty"`
 }
 
 // BankCheckoutRequestBody is the type of the "africastalking" service "Bank
@@ -353,7 +375,7 @@ type WalletTransferRequestBody struct {
 	// Africa’s Talking Payment product to initiate this transaction.
 	ProductName string `form:"productName" json:"productName" xml:"productName"`
 	// Unique product code to transfer the funds to.
-	TargetProductCode string `form:"targetProductCode" json:"targetProductCode" xml:"targetProductCode"`
+	TargetProductCode int `form:"targetProductCode" json:"targetProductCode" xml:"targetProductCode"`
 	// 3-digit ISO format currency code
 	CurrencyCode string `form:"currencyCode" json:"currencyCode" xml:"currencyCode"`
 	// Amount application will be topped up with.
@@ -375,6 +397,68 @@ type TopupStashRequestBody struct {
 	Amount float64 `form:"amount" json:"amount" xml:"amount"`
 	// Metadata associated with the request.
 	Metadata map[string]string `form:"metadata" json:"metadata" xml:"metadata"`
+}
+
+// FindTransactionRequestBody is the type of the "africastalking" service
+// "FindTransaction" endpoint HTTP request body.
+type FindTransactionRequestBody struct {
+	// Africa’s Talking application username.
+	Username string `form:"username" json:"username" xml:"username"`
+	// ID of the transaction you would like to find.
+	TransactionID string `form:"transactionId" json:"transactionId" xml:"transactionId"`
+}
+
+// FetchProductTransactionsRequestBody is the type of the "africastalking"
+// service "FetchProductTransactions" endpoint HTTP request body.
+type FetchProductTransactionsRequestBody struct {
+	// Africa’s Talking application username.
+	Username string `form:"username" json:"username" xml:"username"`
+	// Name of the payment product to fetch.
+	ProductName string `form:"productName" json:"productName" xml:"productName"`
+	// Number of the page you’d like to read results from.
+	PageNumber int `form:"pageNumber" json:"pageNumber" xml:"pageNumber"`
+	// Number of transaction results you would like for this query.
+	Count int `form:"count" json:"count" xml:"count"`
+	// Transaction start date; in the format YYYY-MM-DD
+	StartDate *string `form:"startDate,omitempty" json:"startDate,omitempty" xml:"startDate,omitempty"`
+	// Transaction end date; in the format YYYY-MM-DD
+	EndDate *string `form:"endDate,omitempty" json:"endDate,omitempty" xml:"endDate,omitempty"`
+	// Transaction category you would like to consider.
+	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
+	// Transaction provider you would like to consider.
+	Provider *string `form:"provider,omitempty" json:"provider,omitempty" xml:"provider,omitempty"`
+	// Transaction status you would like to consider
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// Transaction source you would like to consider.
+	Source *string `form:"source,omitempty" json:"source,omitempty" xml:"source,omitempty"`
+	// Transaction destination you would like to consider.
+	Destination *string `form:"destination,omitempty" json:"destination,omitempty" xml:"destination,omitempty"`
+	// Transaction provider channel you would like to consider.
+	ProviderChannel *string `form:"providerChannel,omitempty" json:"providerChannel,omitempty" xml:"providerChannel,omitempty"`
+}
+
+// FetchWalletTransactionsRequestBody is the type of the "africastalking"
+// service "FetchWalletTransactions" endpoint HTTP request body.
+type FetchWalletTransactionsRequestBody struct {
+	// Africa’s Talking application username.
+	Username string `form:"username" json:"username" xml:"username"`
+	// Number of the page you’d like to read results from.
+	PageNumber int `form:"pageNumber" json:"pageNumber" xml:"pageNumber"`
+	// Number of transaction results you would like for this query.
+	Count int `form:"count" json:"count" xml:"count"`
+	// Transaction start date; in the format YYYY-MM-DD
+	StartDate *string `form:"startDate,omitempty" json:"startDate,omitempty" xml:"startDate,omitempty"`
+	// Transaction end date; in the format YYYY-MM-DD
+	EndDate *string `form:"endDate,omitempty" json:"endDate,omitempty" xml:"endDate,omitempty"`
+	// List of transaction categories you would like to consider.
+	Categories *string `form:"categories,omitempty" json:"categories,omitempty" xml:"categories,omitempty"`
+}
+
+// FetchWalletBalanceRequestBody is the type of the "africastalking" service
+// "FetchWalletBalance" endpoint HTTP request body.
+type FetchWalletBalanceRequestBody struct {
+	// Africa’s Talking application username
+	Username string `form:"username" json:"username" xml:"username"`
 }
 
 // SendAirtimeRequestBody is the type of the "africastalking" service
@@ -602,6 +686,47 @@ type TopupStashResponseBody struct {
 	TransactionID *string `form:"transactionId,omitempty" json:"transactionId,omitempty" xml:"transactionId,omitempty"`
 }
 
+// FindTransactionResponseBody is the type of the "africastalking" service
+// "FindTransaction" endpoint HTTP response body.
+type FindTransactionResponseBody struct {
+	// Status of the request
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// Details of the transaction.
+	Data *TransactionResponseResponseBody `form:"data,omitempty" json:"data,omitempty" xml:"data,omitempty"`
+	// A message detailing what happened with a failed request.
+	ErrorMessage *string `form:"errorMessage,omitempty" json:"errorMessage,omitempty" xml:"errorMessage,omitempty"`
+}
+
+// FetchProductTransactionsResponseBody is the type of the "africastalking"
+// service "FetchProductTransactions" endpoint HTTP response body.
+type FetchProductTransactionsResponseBody struct {
+	// The status of the request.
+	Status    *string                            `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	Responses []*TransactionResponseResponseBody `form:"responses,omitempty" json:"responses,omitempty" xml:"responses,omitempty"`
+}
+
+// FetchWalletTransactionsResponseBody is the type of the "africastalking"
+// service "FetchWalletTransactions" endpoint HTTP response body.
+type FetchWalletTransactionsResponseBody struct {
+	// The status of the request
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// List of response Entry corresponding to a transaction result.
+	Responses []*WalletEntryResponseBody `form:"responses,omitempty" json:"responses,omitempty" xml:"responses,omitempty"`
+	// A message detailing what happened with a failed request.
+	ErrorMessage *string `form:"errorMessage,omitempty" json:"errorMessage,omitempty" xml:"errorMessage,omitempty"`
+}
+
+// FetchWalletBalanceResponseBody is the type of the "africastalking" service
+// "FetchWalletBalance" endpoint HTTP response body.
+type FetchWalletBalanceResponseBody struct {
+	// The status of the request.
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// Balance of the payment wallet.
+	Balance *string `form:"balance,omitempty" json:"balance,omitempty" xml:"balance,omitempty"`
+	// A message detailing what happened with a failed request.
+	ErrorMessage *string `form:"errorMessage,omitempty" json:"errorMessage,omitempty" xml:"errorMessage,omitempty"`
+}
+
 // SendAirtimeResponseBody is the type of the "africastalking" service
 // "SendAirtime" endpoint HTTP response body.
 type SendAirtimeResponseBody struct {
@@ -732,7 +857,7 @@ type MobileRecipientsRequestBody struct {
 	// 3-digit ISO format currency code.
 	CurrencyCode string `form:"currencyCode" json:"currencyCode" xml:"currencyCode"`
 	// Amount that the client is expected to confirm.
-	Amount string `form:"amount" json:"amount" xml:"amount"`
+	Amount float64 `form:"amount" json:"amount" xml:"amount"`
 	// Channel payment will be made from.
 	ProviderChannel *string `form:"providerChannel,omitempty" json:"providerChannel,omitempty" xml:"providerChannel,omitempty"`
 	// Purpose of the payment.
@@ -826,6 +951,79 @@ type PaymentCardRequestBody struct {
 	AuthToken string `form:"authToken" json:"authToken" xml:"authToken"`
 }
 
+// TransactionResponseResponseBody is used to define fields on response body
+// types.
+type TransactionResponseResponseBody struct {
+	// Metadata sent by your application when it initiated this transaction.
+	RequestMetadata map[string]string `form:"requestMetadata,omitempty" json:"requestMetadata,omitempty" xml:"requestMetadata,omitempty"`
+	// Type of party providing funds for this transaction (the Debit Party).
+	SourceType *string `form:"sourceType,omitempty" json:"sourceType,omitempty" xml:"sourceType,omitempty"`
+	// Uniquely identifies the party providing the funds for this transaction
+	Source *string `form:"source,omitempty" json:"source,omitempty" xml:"source,omitempty"`
+	// Payment provider that facilitated this transaction
+	Provider *string `form:"provider,omitempty" json:"provider,omitempty" xml:"provider,omitempty"`
+	// Identifies party receiving funds in this transaction (the Credit Party)
+	DestinationType *string `form:"destinationType,omitempty" json:"destinationType,omitempty" xml:"destinationType,omitempty"`
+	// Contains a detailed description of this transaction .
+	Description *string `form:"description,omitempty" json:"description,omitempty" xml:"description,omitempty"`
+	// Name or number of the channel used to facilitate this payment by the
+	// provider.
+	ProviderChannel *string `form:"providerChannel,omitempty" json:"providerChannel,omitempty" xml:"providerChannel,omitempty"`
+	// Transaction fee charged by Africa’s Talking for this transaction.
+	TransactionFee *string `form:"transactionFee,omitempty" json:"transactionFee,omitempty" xml:"transactionFee,omitempty"`
+	// Unique ID generated by the payment provider for this transaction.
+	ProviderRefID *string `form:"providerRefId,omitempty" json:"providerRefId,omitempty" xml:"providerRefId,omitempty"`
+	// Map of any additional data received from a payment provider.
+	ProviderMetadata map[string]string `form:"providerMetadata,omitempty" json:"providerMetadata,omitempty" xml:"providerMetadata,omitempty"`
+	// Final status of this transaction.
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// Identifies the Africa’s Talking Payment Product used.
+	ProductName *string `form:"productName,omitempty" json:"productName,omitempty" xml:"productName,omitempty"`
+	// Category of the payment
+	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
+	// Date and time when a successful transaction was completed.
+	TransactionDate *string `form:"transactionDate,omitempty" json:"transactionDate,omitempty" xml:"transactionDate,omitempty"`
+	// Uniquely identifies the party receiving the funds for this transaction.
+	Destination *string `form:"destination,omitempty" json:"destination,omitempty" xml:"destination,omitempty"`
+	// Value being exchanged in this transaction.
+	Value *string `form:"value,omitempty" json:"value,omitempty" xml:"value,omitempty"`
+	// Unique transactionId generated for every payment sent and received.
+	TransactionID *string `form:"transactionId,omitempty" json:"transactionId,omitempty" xml:"transactionId,omitempty"`
+	// Date and time when a transaction was accepted by our APIs.
+	CreationTime *string `form:"creationTime,omitempty" json:"creationTime,omitempty" xml:"creationTime,omitempty"`
+}
+
+// WalletEntryResponseBody is used to define fields on response body types.
+type WalletEntryResponseBody struct {
+	// Detailed description of this transaction
+	Description *string `form:"description,omitempty" json:"description,omitempty" xml:"description,omitempty"`
+	// The remaining wallet balance after the transaction was processed.
+	Balance *string `form:"balance,omitempty" json:"balance,omitempty" xml:"balance,omitempty"`
+	// Category of the payment
+	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
+	// Contains details of the specific transaction
+	TransactionData FindTransactionResponseCollectionResponseBody `form:"transactionData,omitempty" json:"transactionData,omitempty" xml:"transactionData,omitempty"`
+	// Value being exchanged in this transaction.
+	Value *string `form:"value,omitempty" json:"value,omitempty" xml:"value,omitempty"`
+	// A unique transactionId generated for every payment sent and received
+	TransactionID *string `form:"transactionId,omitempty" json:"transactionId,omitempty" xml:"transactionId,omitempty"`
+}
+
+// FindTransactionResponseCollectionResponseBody is used to define fields on
+// response body types.
+type FindTransactionResponseCollectionResponseBody []*FindTransactionResponseResponseBody
+
+// FindTransactionResponseResponseBody is used to define fields on response
+// body types.
+type FindTransactionResponseResponseBody struct {
+	// Status of the request
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// Details of the transaction.
+	Data *TransactionResponseResponseBody `form:"data,omitempty" json:"data,omitempty" xml:"data,omitempty"`
+	// A message detailing what happened with a failed request.
+	ErrorMessage *string `form:"errorMessage,omitempty" json:"errorMessage,omitempty" xml:"errorMessage,omitempty"`
+}
+
 // AirtimeRecipientsRequestBody is used to define fields on request body types.
 type AirtimeRecipientsRequestBody struct {
 	// Phone number that will be topped up.
@@ -890,6 +1088,16 @@ func NewSendPremiumSMSRequestBody(p *africastalking.PremiumPayload) *SendPremium
 	return body
 }
 
+// NewFetchSMSRequestBody builds the HTTP request body from the payload of the
+// "FetchSMS" endpoint of the "africastalking" service.
+func NewFetchSMSRequestBody(p *africastalking.FetchMsgPayload) *FetchSMSRequestBody {
+	body := &FetchSMSRequestBody{
+		Username:       p.Username,
+		LastReceivedID: p.LastReceivedID,
+	}
+	return body
+}
+
 // NewNewCheckoutTokenRequestBody builds the HTTP request body from the payload
 // of the "NewCheckoutToken" endpoint of the "africastalking" service.
 func NewNewCheckoutTokenRequestBody(p *africastalking.CheckoutTokenPayload) *NewCheckoutTokenRequestBody {
@@ -909,6 +1117,19 @@ func NewNewPremiumSubscriptionRequestBody(p *africastalking.NewSubPayload) *NewP
 		Keyword:       p.Keyword,
 		PhoneNumber:   p.PhoneNumber,
 		CheckoutToken: p.CheckoutToken,
+	}
+	return body
+}
+
+// NewFetchPremiumSubscriptionRequestBody builds the HTTP request body from the
+// payload of the "FetchPremiumSubscription" endpoint of the "africastalking"
+// service.
+func NewFetchPremiumSubscriptionRequestBody(p *africastalking.FetchSubPayload) *FetchPremiumSubscriptionRequestBody {
+	body := &FetchPremiumSubscriptionRequestBody{
+		Username:       p.Username,
+		ShortCode:      p.ShortCode,
+		Keyword:        p.Keyword,
+		LastReceivedID: p.LastReceivedID,
 	}
 	return body
 }
@@ -1117,7 +1338,14 @@ func NewMobileB2BRequestBody(p *africastalking.MobileB2BPayload) *MobileB2BReque
 		Amount:             p.Amount,
 		DestinationChannel: p.DestinationChannel,
 		DestinationAccount: p.DestinationAccount,
-		Metadata:           p.Metadata,
+	}
+	if p.Metadata != nil {
+		body.Metadata = make(map[string]string, len(p.Metadata))
+		for key, val := range p.Metadata {
+			tk := key
+			tv := val
+			body.Metadata[tk] = tv
+		}
 	}
 	return body
 }
@@ -1252,6 +1480,61 @@ func NewTopupStashRequestBody(p *africastalking.TopupStashPayload) *TopupStashRe
 	return body
 }
 
+// NewFindTransactionRequestBody builds the HTTP request body from the payload
+// of the "FindTransaction" endpoint of the "africastalking" service.
+func NewFindTransactionRequestBody(p *africastalking.FindTransactionPayload) *FindTransactionRequestBody {
+	body := &FindTransactionRequestBody{
+		Username:      p.Username,
+		TransactionID: p.TransactionID,
+	}
+	return body
+}
+
+// NewFetchProductTransactionsRequestBody builds the HTTP request body from the
+// payload of the "FetchProductTransactions" endpoint of the "africastalking"
+// service.
+func NewFetchProductTransactionsRequestBody(p *africastalking.ProductTransactionsPayload) *FetchProductTransactionsRequestBody {
+	body := &FetchProductTransactionsRequestBody{
+		Username:        p.Username,
+		ProductName:     p.ProductName,
+		PageNumber:      p.PageNumber,
+		Count:           p.Count,
+		StartDate:       p.StartDate,
+		EndDate:         p.EndDate,
+		Category:        p.Category,
+		Provider:        p.Provider,
+		Status:          p.Status,
+		Source:          p.Source,
+		Destination:     p.Destination,
+		ProviderChannel: p.ProviderChannel,
+	}
+	return body
+}
+
+// NewFetchWalletTransactionsRequestBody builds the HTTP request body from the
+// payload of the "FetchWalletTransactions" endpoint of the "africastalking"
+// service.
+func NewFetchWalletTransactionsRequestBody(p *africastalking.WalletTransactionsPayload) *FetchWalletTransactionsRequestBody {
+	body := &FetchWalletTransactionsRequestBody{
+		Username:   p.Username,
+		PageNumber: p.PageNumber,
+		Count:      p.Count,
+		StartDate:  p.StartDate,
+		EndDate:    p.EndDate,
+		Categories: p.Categories,
+	}
+	return body
+}
+
+// NewFetchWalletBalanceRequestBody builds the HTTP request body from the
+// payload of the "FetchWalletBalance" endpoint of the "africastalking" service.
+func NewFetchWalletBalanceRequestBody(p *africastalking.WalletBalancePayload) *FetchWalletBalanceRequestBody {
+	body := &FetchWalletBalanceRequestBody{
+		Username: p.Username,
+	}
+	return body
+}
+
 // NewSendAirtimeRequestBody builds the HTTP request body from the payload of
 // the "SendAirtime" endpoint of the "africastalking" service.
 func NewSendAirtimeRequestBody(p *africastalking.AirtimePayload) *SendAirtimeRequestBody {
@@ -1371,9 +1654,9 @@ func NewPurgePremiumSubscriptionPurgeSubResponseCreated(body *PurgePremiumSubscr
 	return v
 }
 
-// NewMakeCallResponseViewOK builds a "africastalking" service "MakeCall"
-// endpoint result from a HTTP "OK" response.
-func NewMakeCallResponseViewOK(body *MakeCallResponseBody) *africastalkingviews.MakeCallResponseView {
+// NewMakeCallResponseViewCreated builds a "africastalking" service "MakeCall"
+// endpoint result from a HTTP "Created" response.
+func NewMakeCallResponseViewCreated(body *MakeCallResponseBody) *africastalkingviews.MakeCallResponseView {
 	v := &africastalkingviews.MakeCallResponseView{
 		ErrorMessage: body.ErrorMessage,
 	}
@@ -1387,10 +1670,10 @@ func NewMakeCallResponseViewOK(body *MakeCallResponseBody) *africastalkingviews.
 	return v
 }
 
-// NewTransferCallCalltransferresponseOK builds a "africastalking" service
-// "TransferCall" endpoint result from a HTTP "OK" response.
-func NewTransferCallCalltransferresponseOK(body *TransferCallResponseBody) *africastalkingviews.CalltransferresponseView {
-	v := &africastalkingviews.CalltransferresponseView{
+// NewTransferCallCallTransferResponseCreated builds a "africastalking" service
+// "TransferCall" endpoint result from a HTTP "Created" response.
+func NewTransferCallCallTransferResponseCreated(body *TransferCallResponseBody) *africastalkingviews.CallTransferResponseView {
+	v := &africastalkingviews.CallTransferResponseView{
 		Status:       body.Status,
 		ErrorMessage: body.ErrorMessage,
 	}
@@ -1398,10 +1681,10 @@ func NewTransferCallCalltransferresponseOK(body *TransferCallResponseBody) *afri
 	return v
 }
 
-// NewQueuedstatusresultViewCreated builds a "africastalking" service "Queue"
+// NewQueuedStatusResultViewCreated builds a "africastalking" service "Queue"
 // endpoint result from a HTTP "Created" response.
-func NewQueuedstatusresultViewCreated(body *QueueResponseBody) *africastalkingviews.QueuedstatusresultView {
-	v := &africastalkingviews.QueuedstatusresultView{
+func NewQueuedStatusResultViewCreated(body *QueueResponseBody) *africastalkingviews.QueuedStatusResultView {
+	v := &africastalkingviews.QueuedStatusResultView{
 		ErrorMessage: body.ErrorMessage,
 	}
 	if body.Entries != nil {
@@ -1547,6 +1830,67 @@ func NewTopupStashResponseViewCreated(body *TopupStashResponseBody) *africastalk
 	return v
 }
 
+// NewFindTransactionResponseViewOK builds a "africastalking" service
+// "FindTransaction" endpoint result from a HTTP "OK" response.
+func NewFindTransactionResponseViewOK(body *FindTransactionResponseBody) *africastalkingviews.FindTransactionResponseView {
+	v := &africastalkingviews.FindTransactionResponseView{
+		Status:       body.Status,
+		ErrorMessage: body.ErrorMessage,
+	}
+	if body.Data != nil {
+		v.Data = unmarshalTransactionResponseResponseBodyToAfricastalkingviewsTransactionResponseView(body.Data)
+	}
+
+	return v
+}
+
+// NewFetchProductTransactionsProductTransactionsResponseOK builds a
+// "africastalking" service "FetchProductTransactions" endpoint result from a
+// HTTP "OK" response.
+func NewFetchProductTransactionsProductTransactionsResponseOK(body *FetchProductTransactionsResponseBody) *africastalkingviews.ProductTransactionsResponseView {
+	v := &africastalkingviews.ProductTransactionsResponseView{
+		Status: body.Status,
+	}
+	if body.Responses != nil {
+		v.Responses = make([]*africastalkingviews.TransactionResponseView, len(body.Responses))
+		for i, val := range body.Responses {
+			v.Responses[i] = unmarshalTransactionResponseResponseBodyToAfricastalkingviewsTransactionResponseView(val)
+		}
+	}
+
+	return v
+}
+
+// NewFetchWalletTransactionsWalletTransactionsResponseOK builds a
+// "africastalking" service "FetchWalletTransactions" endpoint result from a
+// HTTP "OK" response.
+func NewFetchWalletTransactionsWalletTransactionsResponseOK(body *FetchWalletTransactionsResponseBody) *africastalkingviews.WalletTransactionsResponseView {
+	v := &africastalkingviews.WalletTransactionsResponseView{
+		Status:       body.Status,
+		ErrorMessage: body.ErrorMessage,
+	}
+	if body.Responses != nil {
+		v.Responses = make([]*africastalkingviews.WalletEntryView, len(body.Responses))
+		for i, val := range body.Responses {
+			v.Responses[i] = unmarshalWalletEntryResponseBodyToAfricastalkingviewsWalletEntryView(val)
+		}
+	}
+
+	return v
+}
+
+// NewFetchWalletBalanceWalletBalanceResponseOK builds a "africastalking"
+// service "FetchWalletBalance" endpoint result from a HTTP "OK" response.
+func NewFetchWalletBalanceWalletBalanceResponseOK(body *FetchWalletBalanceResponseBody) *africastalkingviews.WalletBalanceResponseView {
+	v := &africastalkingviews.WalletBalanceResponseView{
+		Status:       body.Status,
+		Balance:      body.Balance,
+		ErrorMessage: body.ErrorMessage,
+	}
+
+	return v
+}
+
 // NewSendAirtimeAirtimeResponseOK builds a "africastalking" service
 // "SendAirtime" endpoint result from a HTTP "OK" response.
 func NewSendAirtimeAirtimeResponseOK(body *SendAirtimeResponseBody) *africastalkingviews.AirtimeResponseView {
@@ -1588,9 +1932,9 @@ func NewInitiateAppDataUserResponseOK(body *InitiateAppDataResponseBody) *africa
 	return v
 }
 
-// NewGenerateAccessTokenResponseOK builds a "africastalking" service
-// "Generate" endpoint result from a HTTP "OK" response.
-func NewGenerateAccessTokenResponseOK(body *GenerateResponseBody) *africastalkingviews.AccessTokenResponseView {
+// NewGenerateAccessTokenResponseCreated builds a "africastalking" service
+// "Generate" endpoint result from a HTTP "Created" response.
+func NewGenerateAccessTokenResponseCreated(body *GenerateResponseBody) *africastalkingviews.AccessTokenResponseView {
 	v := &africastalkingviews.AccessTokenResponseView{
 		Token:             body.Token,
 		LifetimeInSeconds: body.LifetimeInSeconds,
@@ -1685,6 +2029,10 @@ func ValidateMobileRecipientsRequestBody(body *MobileRecipientsRequestBody) (err
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.reason", *body.Reason, []interface{}{"SalaryPayment", "SalaryPaymentWithWithdrawalChargePaid", "BusinessPayment", "BusinessPaymentWithWithdrawalChargePaid", "PromotionPayment"}))
 		}
 	}
+	for k, v := range body.Metadata {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.metadata.key", k, "[a-zA-Z]+"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.metadata[key]", v, "[a-zA-Z]+"))
+	}
 	return
 }
 
@@ -1734,6 +2082,94 @@ func ValidateTransferEntriesResponseBody(body *TransferEntriesResponseBody) (err
 func ValidatePaymentCardRequestBody(body *PaymentCardRequestBody) (err error) {
 	if !(body.CountryCode == "NG") {
 		err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.countryCode", body.CountryCode, []interface{}{"NG"}))
+	}
+	return
+}
+
+// ValidateTransactionResponseResponseBody runs the validations defined on
+// TransactionResponseResponseBody
+func ValidateTransactionResponseResponseBody(body *TransactionResponseResponseBody) (err error) {
+	for k, v := range body.RequestMetadata {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.requestMetadata.key", k, "[a-zA-Z]+"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.requestMetadata[key]", v, "[a-zA-Z]+"))
+	}
+	if body.SourceType != nil {
+		if !(*body.SourceType == "PhoneNumber" || *body.SourceType == "BankAccount" || *body.SourceType == "Card" || *body.SourceType == "Wallet") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.sourceType", *body.SourceType, []interface{}{"PhoneNumber", "BankAccount", "Card", "Wallet"}))
+		}
+	}
+	if body.Provider != nil {
+		if !(*body.Provider == "Mpesa" || *body.Provider == "Segovia" || *body.Provider == "Flutterwave" || *body.Provider == "Admin" || *body.Provider == "Athena") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.provider", *body.Provider, []interface{}{"Mpesa", "Segovia", "Flutterwave", "Admin", "Athena"}))
+		}
+	}
+	if body.DestinationType != nil {
+		if !(*body.DestinationType == "phoneNumber" || *body.DestinationType == "BankAccount" || *body.DestinationType == "Card" || *body.DestinationType == "Wallet") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.destinationType", *body.DestinationType, []interface{}{"phoneNumber", "BankAccount", "Card", "Wallet"}))
+		}
+	}
+	for k, v := range body.ProviderMetadata {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.providerMetadata.key", k, "[a-zA-Z]+"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.providerMetadata[key]", v, "[a-zA-Z]+"))
+	}
+	if body.Status != nil {
+		if !(*body.Status == "Success" || *body.Status == "Failed") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.status", *body.Status, []interface{}{"Success", "Failed"}))
+		}
+	}
+	if body.Category != nil {
+		if !(*body.Category == "BankCheckout" || *body.Category == "CardCheckout" || *body.Category == "MobileCheckout" || *body.Category == "MobileC2B" || *body.Category == "MobileB2C" || *body.Category == "MobileB2B" || *body.Category == "BankTransfer" || *body.Category == "WalletTransfer" || *body.Category == "UserStashTopup") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.category", *body.Category, []interface{}{"BankCheckout", "CardCheckout", "MobileCheckout", "MobileC2B", "MobileB2C", "MobileB2B", "BankTransfer", "WalletTransfer", "UserStashTopup"}))
+		}
+	}
+	if body.TransactionDate != nil {
+		err = goa.MergeErrors(err, goa.ValidateFormat("body.transactionDate", *body.TransactionDate, goa.FormatDateTime))
+	}
+	if body.CreationTime != nil {
+		err = goa.MergeErrors(err, goa.ValidateFormat("body.creationTime", *body.CreationTime, goa.FormatDateTime))
+	}
+	return
+}
+
+// ValidateWalletEntryResponseBody runs the validations defined on
+// WalletEntryResponseBody
+func ValidateWalletEntryResponseBody(body *WalletEntryResponseBody) (err error) {
+	if body.Category != nil {
+		if !(*body.Category == "BankCheckout" || *body.Category == "CardCheckout" || *body.Category == "MobileCheckout" || *body.Category == "MobileC2B" || *body.Category == "MobileB2C" || *body.Category == "MobileB2B" || *body.Category == "BankTransfer" || *body.Category == "WalletTransfer" || *body.Category == "UserStashTopup") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.category", *body.Category, []interface{}{"BankCheckout", "CardCheckout", "MobileCheckout", "MobileC2B", "MobileB2C", "MobileB2B", "BankTransfer", "WalletTransfer", "UserStashTopup"}))
+		}
+	}
+	if err2 := ValidateFindTransactionResponseCollectionResponseBody(body.TransactionData); err2 != nil {
+		err = goa.MergeErrors(err, err2)
+	}
+	return
+}
+
+// ValidateFindTransactionResponseCollectionResponseBody runs the validations
+// defined on FindTransactionResponseCollectionResponseBody
+func ValidateFindTransactionResponseCollectionResponseBody(body FindTransactionResponseCollectionResponseBody) (err error) {
+	for _, e := range body {
+		if e != nil {
+			if err2 := ValidateFindTransactionResponseResponseBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// ValidateFindTransactionResponseResponseBody runs the validations defined on
+// FindTransactionResponseResponseBody
+func ValidateFindTransactionResponseResponseBody(body *FindTransactionResponseResponseBody) (err error) {
+	if body.Status != nil {
+		if !(*body.Status == "Success" || *body.Status == "Failed") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.status", *body.Status, []interface{}{"Success", "Failed"}))
+		}
+	}
+	if body.Data != nil {
+		if err2 := ValidateTransactionResponseResponseBody(body.Data); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	return
 }

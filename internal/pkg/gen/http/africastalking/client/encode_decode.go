@@ -188,10 +188,10 @@ func EncodeFetchSMSRequest(encoder func(*http.Request) goahttp.Encoder) func(*ht
 		if !ok {
 			return goahttp.ErrInvalidType("africastalking", "FetchSMS", "*africastalking.FetchMsgPayload", v)
 		}
-		values := req.URL.Query()
-		values.Add("username", p.Username)
-		values.Add("lastReceivedId", p.LastReceivedID)
-		req.URL.RawQuery = values.Encode()
+		body := NewFetchSMSRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("africastalking", "FetchSMS", err)
+		}
 		return nil
 	}
 }
@@ -409,12 +409,10 @@ func EncodeFetchPremiumSubscriptionRequest(encoder func(*http.Request) goahttp.E
 		if !ok {
 			return goahttp.ErrInvalidType("africastalking", "FetchPremiumSubscription", "*africastalking.FetchSubPayload", v)
 		}
-		values := req.URL.Query()
-		values.Add("username", p.Username)
-		values.Add("shortCode", p.ShortCode)
-		values.Add("keyword", p.Keyword)
-		values.Add("lastReceivedId", p.LastReceivedID)
-		req.URL.RawQuery = values.Encode()
+		body := NewFetchPremiumSubscriptionRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("africastalking", "FetchPremiumSubscription", err)
+		}
 		return nil
 	}
 }
@@ -586,7 +584,7 @@ func DecodeMakeCallResponse(decoder func(*http.Response) goahttp.Decoder, restor
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body MakeCallResponseBody
 				err  error
@@ -595,7 +593,7 @@ func DecodeMakeCallResponse(decoder func(*http.Response) goahttp.Decoder, restor
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("africastalking", "MakeCall", err)
 			}
-			p := NewMakeCallResponseViewOK(&body)
+			p := NewMakeCallResponseViewCreated(&body)
 			view := "default"
 			vres := &africastalkingviews.MakeCallResponse{Projected: p, View: view}
 			if err = africastalkingviews.ValidateMakeCallResponse(vres); err != nil {
@@ -659,7 +657,7 @@ func DecodeTransferCallResponse(decoder func(*http.Response) goahttp.Decoder, re
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body TransferCallResponseBody
 				err  error
@@ -668,13 +666,13 @@ func DecodeTransferCallResponse(decoder func(*http.Response) goahttp.Decoder, re
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("africastalking", "TransferCall", err)
 			}
-			p := NewTransferCallCalltransferresponseOK(&body)
+			p := NewTransferCallCallTransferResponseCreated(&body)
 			view := "default"
-			vres := &africastalkingviews.Calltransferresponse{Projected: p, View: view}
-			if err = africastalkingviews.ValidateCalltransferresponse(vres); err != nil {
+			vres := &africastalkingviews.CallTransferResponse{Projected: p, View: view}
+			if err = africastalkingviews.ValidateCallTransferResponse(vres); err != nil {
 				return nil, goahttp.ErrValidationError("africastalking", "TransferCall", err)
 			}
-			res := africastalking.NewCalltransferresponse(vres)
+			res := africastalking.NewCallTransferResponse(vres)
 			return res, nil
 		default:
 			body, _ := ioutil.ReadAll(resp.Body)
@@ -732,7 +730,7 @@ func DecodeSayResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -798,7 +796,7 @@ func DecodePlayResponse(decoder func(*http.Response) goahttp.Decoder, restoreBod
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -864,7 +862,7 @@ func DecodeGetDigitsResponse(decoder func(*http.Response) goahttp.Decoder, resto
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -930,7 +928,7 @@ func DecodeDialResponse(decoder func(*http.Response) goahttp.Decoder, restoreBod
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -996,7 +994,7 @@ func DecodeRecordResponse(decoder func(*http.Response) goahttp.Decoder, restoreB
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -1062,7 +1060,7 @@ func DecodeEnqueueResponse(decoder func(*http.Response) goahttp.Decoder, restore
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -1128,7 +1126,7 @@ func DecodeDequeueResponse(decoder func(*http.Response) goahttp.Decoder, restore
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -1194,7 +1192,7 @@ func DecodeRedirectResponse(decoder func(*http.Response) goahttp.Decoder, restor
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -1260,7 +1258,7 @@ func DecodeRejectResponse(decoder func(*http.Response) goahttp.Decoder, restoreB
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body string
 				err  error
@@ -1335,13 +1333,13 @@ func DecodeQueueResponse(decoder func(*http.Response) goahttp.Decoder, restoreBo
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("africastalking", "Queue", err)
 			}
-			p := NewQueuedstatusresultViewCreated(&body)
+			p := NewQueuedStatusResultViewCreated(&body)
 			view := "default"
-			vres := &africastalkingviews.Queuedstatusresult{Projected: p, View: view}
-			if err = africastalkingviews.ValidateQueuedstatusresult(vres); err != nil {
+			vres := &africastalkingviews.QueuedStatusResult{Projected: p, View: view}
+			if err = africastalkingviews.ValidateQueuedStatusResult(vres); err != nil {
 				return nil, goahttp.ErrValidationError("africastalking", "Queue", err)
 			}
-			res := africastalking.NewQueuedstatusresult(vres)
+			res := africastalking.NewQueuedStatusResult(vres)
 			return res, nil
 		default:
 			body, _ := ioutil.ReadAll(resp.Body)
@@ -2148,6 +2146,302 @@ func DecodeTopupStashResponse(decoder func(*http.Response) goahttp.Decoder, rest
 	}
 }
 
+// BuildFindTransactionRequest instantiates a HTTP request object with method
+// and path set to call the "africastalking" service "FindTransaction" endpoint
+func (c *Client) BuildFindTransactionRequest(ctx context.Context, v interface{}) (*http.Request, error) {
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: FindTransactionAfricastalkingPath()}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("africastalking", "FindTransaction", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// EncodeFindTransactionRequest returns an encoder for requests sent to the
+// africastalking FindTransaction server.
+func EncodeFindTransactionRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, interface{}) error {
+	return func(req *http.Request, v interface{}) error {
+		p, ok := v.(*africastalking.FindTransactionPayload)
+		if !ok {
+			return goahttp.ErrInvalidType("africastalking", "FindTransaction", "*africastalking.FindTransactionPayload", v)
+		}
+		body := NewFindTransactionRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("africastalking", "FindTransaction", err)
+		}
+		return nil
+	}
+}
+
+// DecodeFindTransactionResponse returns a decoder for responses returned by
+// the africastalking FindTransaction endpoint. restoreBody controls whether
+// the response body should be restored after having been read.
+func DecodeFindTransactionResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (interface{}, error) {
+	return func(resp *http.Response) (interface{}, error) {
+		if restoreBody {
+			b, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body FindTransactionResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("africastalking", "FindTransaction", err)
+			}
+			p := NewFindTransactionResponseViewOK(&body)
+			view := "default"
+			vres := &africastalkingviews.FindTransactionResponse{Projected: p, View: view}
+			if err = africastalkingviews.ValidateFindTransactionResponse(vres); err != nil {
+				return nil, goahttp.ErrValidationError("africastalking", "FindTransaction", err)
+			}
+			res := africastalking.NewFindTransactionResponse(vres)
+			return res, nil
+		default:
+			body, _ := ioutil.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("africastalking", "FindTransaction", resp.StatusCode, string(body))
+		}
+	}
+}
+
+// BuildFetchProductTransactionsRequest instantiates a HTTP request object with
+// method and path set to call the "africastalking" service
+// "FetchProductTransactions" endpoint
+func (c *Client) BuildFetchProductTransactionsRequest(ctx context.Context, v interface{}) (*http.Request, error) {
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: FetchProductTransactionsAfricastalkingPath()}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("africastalking", "FetchProductTransactions", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// EncodeFetchProductTransactionsRequest returns an encoder for requests sent
+// to the africastalking FetchProductTransactions server.
+func EncodeFetchProductTransactionsRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, interface{}) error {
+	return func(req *http.Request, v interface{}) error {
+		p, ok := v.(*africastalking.ProductTransactionsPayload)
+		if !ok {
+			return goahttp.ErrInvalidType("africastalking", "FetchProductTransactions", "*africastalking.ProductTransactionsPayload", v)
+		}
+		body := NewFetchProductTransactionsRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("africastalking", "FetchProductTransactions", err)
+		}
+		return nil
+	}
+}
+
+// DecodeFetchProductTransactionsResponse returns a decoder for responses
+// returned by the africastalking FetchProductTransactions endpoint.
+// restoreBody controls whether the response body should be restored after
+// having been read.
+func DecodeFetchProductTransactionsResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (interface{}, error) {
+	return func(resp *http.Response) (interface{}, error) {
+		if restoreBody {
+			b, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body FetchProductTransactionsResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("africastalking", "FetchProductTransactions", err)
+			}
+			p := NewFetchProductTransactionsProductTransactionsResponseOK(&body)
+			view := "default"
+			vres := &africastalkingviews.ProductTransactionsResponse{Projected: p, View: view}
+			if err = africastalkingviews.ValidateProductTransactionsResponse(vres); err != nil {
+				return nil, goahttp.ErrValidationError("africastalking", "FetchProductTransactions", err)
+			}
+			res := africastalking.NewProductTransactionsResponse(vres)
+			return res, nil
+		default:
+			body, _ := ioutil.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("africastalking", "FetchProductTransactions", resp.StatusCode, string(body))
+		}
+	}
+}
+
+// BuildFetchWalletTransactionsRequest instantiates a HTTP request object with
+// method and path set to call the "africastalking" service
+// "FetchWalletTransactions" endpoint
+func (c *Client) BuildFetchWalletTransactionsRequest(ctx context.Context, v interface{}) (*http.Request, error) {
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: FetchWalletTransactionsAfricastalkingPath()}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("africastalking", "FetchWalletTransactions", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// EncodeFetchWalletTransactionsRequest returns an encoder for requests sent to
+// the africastalking FetchWalletTransactions server.
+func EncodeFetchWalletTransactionsRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, interface{}) error {
+	return func(req *http.Request, v interface{}) error {
+		p, ok := v.(*africastalking.WalletTransactionsPayload)
+		if !ok {
+			return goahttp.ErrInvalidType("africastalking", "FetchWalletTransactions", "*africastalking.WalletTransactionsPayload", v)
+		}
+		body := NewFetchWalletTransactionsRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("africastalking", "FetchWalletTransactions", err)
+		}
+		return nil
+	}
+}
+
+// DecodeFetchWalletTransactionsResponse returns a decoder for responses
+// returned by the africastalking FetchWalletTransactions endpoint. restoreBody
+// controls whether the response body should be restored after having been read.
+func DecodeFetchWalletTransactionsResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (interface{}, error) {
+	return func(resp *http.Response) (interface{}, error) {
+		if restoreBody {
+			b, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body FetchWalletTransactionsResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("africastalking", "FetchWalletTransactions", err)
+			}
+			p := NewFetchWalletTransactionsWalletTransactionsResponseOK(&body)
+			view := "default"
+			vres := &africastalkingviews.WalletTransactionsResponse{Projected: p, View: view}
+			if err = africastalkingviews.ValidateWalletTransactionsResponse(vres); err != nil {
+				return nil, goahttp.ErrValidationError("africastalking", "FetchWalletTransactions", err)
+			}
+			res := africastalking.NewWalletTransactionsResponse(vres)
+			return res, nil
+		default:
+			body, _ := ioutil.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("africastalking", "FetchWalletTransactions", resp.StatusCode, string(body))
+		}
+	}
+}
+
+// BuildFetchWalletBalanceRequest instantiates a HTTP request object with
+// method and path set to call the "africastalking" service
+// "FetchWalletBalance" endpoint
+func (c *Client) BuildFetchWalletBalanceRequest(ctx context.Context, v interface{}) (*http.Request, error) {
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: FetchWalletBalanceAfricastalkingPath()}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("africastalking", "FetchWalletBalance", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// EncodeFetchWalletBalanceRequest returns an encoder for requests sent to the
+// africastalking FetchWalletBalance server.
+func EncodeFetchWalletBalanceRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, interface{}) error {
+	return func(req *http.Request, v interface{}) error {
+		p, ok := v.(*africastalking.WalletBalancePayload)
+		if !ok {
+			return goahttp.ErrInvalidType("africastalking", "FetchWalletBalance", "*africastalking.WalletBalancePayload", v)
+		}
+		body := NewFetchWalletBalanceRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("africastalking", "FetchWalletBalance", err)
+		}
+		return nil
+	}
+}
+
+// DecodeFetchWalletBalanceResponse returns a decoder for responses returned by
+// the africastalking FetchWalletBalance endpoint. restoreBody controls whether
+// the response body should be restored after having been read.
+func DecodeFetchWalletBalanceResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (interface{}, error) {
+	return func(resp *http.Response) (interface{}, error) {
+		if restoreBody {
+			b, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body FetchWalletBalanceResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("africastalking", "FetchWalletBalance", err)
+			}
+			p := NewFetchWalletBalanceWalletBalanceResponseOK(&body)
+			view := "default"
+			vres := &africastalkingviews.WalletBalanceResponse{Projected: p, View: view}
+			if err = africastalkingviews.ValidateWalletBalanceResponse(vres); err != nil {
+				return nil, goahttp.ErrValidationError("africastalking", "FetchWalletBalance", err)
+			}
+			res := africastalking.NewWalletBalanceResponse(vres)
+			return res, nil
+		default:
+			body, _ := ioutil.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("africastalking", "FetchWalletBalance", resp.StatusCode, string(body))
+		}
+	}
+}
+
 // BuildSendAirtimeRequest instantiates a HTTP request object with method and
 // path set to call the "africastalking" service "SendAirtime" endpoint
 func (c *Client) BuildSendAirtimeRequest(ctx context.Context, v interface{}) (*http.Request, error) {
@@ -2416,7 +2710,7 @@ func DecodeGenerateResponse(decoder func(*http.Response) goahttp.Decoder, restor
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusOK:
+		case http.StatusCreated:
 			var (
 				body GenerateResponseBody
 				err  error
@@ -2425,7 +2719,7 @@ func DecodeGenerateResponse(decoder func(*http.Response) goahttp.Decoder, restor
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("africastalking", "Generate", err)
 			}
-			p := NewGenerateAccessTokenResponseOK(&body)
+			p := NewGenerateAccessTokenResponseCreated(&body)
 			view := "default"
 			vres := &africastalkingviews.AccessTokenResponse{Projected: p, View: view}
 			if err = africastalkingviews.ValidateAccessTokenResponse(vres); err != nil {
@@ -2787,6 +3081,93 @@ func marshalPaymentCardRequestBodyToAfricastalkingPaymentCard(v *PaymentCardRequ
 		ExpiryYear:  v.ExpiryYear,
 		CountryCode: v.CountryCode,
 		AuthToken:   v.AuthToken,
+	}
+
+	return res
+}
+
+// unmarshalTransactionResponseResponseBodyToAfricastalkingviewsTransactionResponseView
+// builds a value of type *africastalkingviews.TransactionResponseView from a
+// value of type *TransactionResponseResponseBody.
+func unmarshalTransactionResponseResponseBodyToAfricastalkingviewsTransactionResponseView(v *TransactionResponseResponseBody) *africastalkingviews.TransactionResponseView {
+	if v == nil {
+		return nil
+	}
+	res := &africastalkingviews.TransactionResponseView{
+		SourceType:      v.SourceType,
+		Source:          v.Source,
+		Provider:        v.Provider,
+		DestinationType: v.DestinationType,
+		Description:     v.Description,
+		ProviderChannel: v.ProviderChannel,
+		TransactionFee:  v.TransactionFee,
+		ProviderRefID:   v.ProviderRefID,
+		Status:          v.Status,
+		ProductName:     v.ProductName,
+		Category:        v.Category,
+		TransactionDate: v.TransactionDate,
+		Destination:     v.Destination,
+		Value:           v.Value,
+		TransactionID:   v.TransactionID,
+		CreationTime:    v.CreationTime,
+	}
+	if v.RequestMetadata != nil {
+		res.RequestMetadata = make(map[string]string, len(v.RequestMetadata))
+		for key, val := range v.RequestMetadata {
+			tk := key
+			tv := val
+			res.RequestMetadata[tk] = tv
+		}
+	}
+	if v.ProviderMetadata != nil {
+		res.ProviderMetadata = make(map[string]string, len(v.ProviderMetadata))
+		for key, val := range v.ProviderMetadata {
+			tk := key
+			tv := val
+			res.ProviderMetadata[tk] = tv
+		}
+	}
+
+	return res
+}
+
+// unmarshalWalletEntryResponseBodyToAfricastalkingviewsWalletEntryView builds
+// a value of type *africastalkingviews.WalletEntryView from a value of type
+// *WalletEntryResponseBody.
+func unmarshalWalletEntryResponseBodyToAfricastalkingviewsWalletEntryView(v *WalletEntryResponseBody) *africastalkingviews.WalletEntryView {
+	if v == nil {
+		return nil
+	}
+	res := &africastalkingviews.WalletEntryView{
+		Description:   v.Description,
+		Balance:       v.Balance,
+		Category:      v.Category,
+		Value:         v.Value,
+		TransactionID: v.TransactionID,
+	}
+	if v.TransactionData != nil {
+		res.TransactionData = make([]*africastalkingviews.FindTransactionResponseView, len(v.TransactionData))
+		for i, val := range v.TransactionData {
+			res.TransactionData[i] = unmarshalFindTransactionResponseResponseBodyToAfricastalkingviewsFindTransactionResponseView(val)
+		}
+	}
+
+	return res
+}
+
+// unmarshalFindTransactionResponseResponseBodyToAfricastalkingviewsFindTransactionResponseView
+// builds a value of type *africastalkingviews.FindTransactionResponseView from
+// a value of type *FindTransactionResponseResponseBody.
+func unmarshalFindTransactionResponseResponseBodyToAfricastalkingviewsFindTransactionResponseView(v *FindTransactionResponseResponseBody) *africastalkingviews.FindTransactionResponseView {
+	if v == nil {
+		return nil
+	}
+	res := &africastalkingviews.FindTransactionResponseView{
+		Status:       v.Status,
+		ErrorMessage: v.ErrorMessage,
+	}
+	if v.Data != nil {
+		res.Data = unmarshalTransactionResponseResponseBodyToAfricastalkingviewsTransactionResponseView(v.Data)
 	}
 
 	return res

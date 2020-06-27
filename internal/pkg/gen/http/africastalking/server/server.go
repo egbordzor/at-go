@@ -50,6 +50,10 @@ type Server struct {
 	CardCheckoutValidate     http.Handler
 	WalletTransfer           http.Handler
 	TopupStash               http.Handler
+	FindTransaction          http.Handler
+	FetchProductTransactions http.Handler
+	FetchWalletTransactions  http.Handler
+	FetchWalletBalance       http.Handler
 	SendAirtime              http.Handler
 	PublishIoT               http.Handler
 	InitiateAppData          http.Handler
@@ -91,10 +95,10 @@ func New(
 		Mounts: []*MountPoint{
 			{"SendBulkSMS", "POST", "/version1/messaging"},
 			{"SendPremiumSMS", "POST", "/version1/messaging"},
-			{"FetchSMS", "GET", "/version1/messaging?{username}&{lastReceivedId}"},
+			{"FetchSMS", "GET", "/version1/messaging"},
 			{"NewCheckoutToken", "POST", "/checkout/token/create"},
 			{"NewPremiumSubscription", "POST", "/version1/subscription/create"},
-			{"FetchPremiumSubscription", "GET", "/version1/subscription?username={username}&shortCode={shortCode}&keyword={keyword}&lastReceivedId={lastReceivedId}"},
+			{"FetchPremiumSubscription", "GET", "/version1/subscription"},
 			{"PurgePremiumSubscription", "POST", "/version1/subscription/delete"},
 			{"MakeCall", "POST", "/call"},
 			{"TransferCall", "POST", "/callTransfer"},
@@ -119,6 +123,10 @@ func New(
 			{"CardCheckoutValidate", "POST", "/card/checkout/validate"},
 			{"WalletTransfer", "POST", "/transfer/wallet"},
 			{"TopupStash", "POST", "/topup/stash"},
+			{"FindTransaction", "GET", "/query/transaction/find"},
+			{"FetchProductTransactions", "GET", "/query/transaction/fetch"},
+			{"FetchWalletTransactions", "GET", "/query/wallet/fetch"},
+			{"FetchWalletBalance", "GET", "/query/wallet/balance"},
 			{"SendAirtime", "POST", "/version1/airtime/send"},
 			{"PublishIoT", "POST", "/data/publish"},
 			{"InitiateAppData", "GET", "/version1/user"},
@@ -154,6 +162,10 @@ func New(
 		CardCheckoutValidate:     NewCardCheckoutValidateHandler(e.CardCheckoutValidate, mux, decoder, encoder, errhandler, formatter),
 		WalletTransfer:           NewWalletTransferHandler(e.WalletTransfer, mux, decoder, encoder, errhandler, formatter),
 		TopupStash:               NewTopupStashHandler(e.TopupStash, mux, decoder, encoder, errhandler, formatter),
+		FindTransaction:          NewFindTransactionHandler(e.FindTransaction, mux, decoder, encoder, errhandler, formatter),
+		FetchProductTransactions: NewFetchProductTransactionsHandler(e.FetchProductTransactions, mux, decoder, encoder, errhandler, formatter),
+		FetchWalletTransactions:  NewFetchWalletTransactionsHandler(e.FetchWalletTransactions, mux, decoder, encoder, errhandler, formatter),
+		FetchWalletBalance:       NewFetchWalletBalanceHandler(e.FetchWalletBalance, mux, decoder, encoder, errhandler, formatter),
 		SendAirtime:              NewSendAirtimeHandler(e.SendAirtime, mux, decoder, encoder, errhandler, formatter),
 		PublishIoT:               NewPublishIoTHandler(e.PublishIoT, mux, decoder, encoder, errhandler, formatter),
 		InitiateAppData:          NewInitiateAppDataHandler(e.InitiateAppData, mux, decoder, encoder, errhandler, formatter),
@@ -196,6 +208,10 @@ func (s *Server) Use(m func(http.Handler) http.Handler) {
 	s.CardCheckoutValidate = m(s.CardCheckoutValidate)
 	s.WalletTransfer = m(s.WalletTransfer)
 	s.TopupStash = m(s.TopupStash)
+	s.FindTransaction = m(s.FindTransaction)
+	s.FetchProductTransactions = m(s.FetchProductTransactions)
+	s.FetchWalletTransactions = m(s.FetchWalletTransactions)
+	s.FetchWalletBalance = m(s.FetchWalletBalance)
 	s.SendAirtime = m(s.SendAirtime)
 	s.PublishIoT = m(s.PublishIoT)
 	s.InitiateAppData = m(s.InitiateAppData)
@@ -234,6 +250,10 @@ func Mount(mux goahttp.Muxer, h *Server) {
 	MountCardCheckoutValidateHandler(mux, h.CardCheckoutValidate)
 	MountWalletTransferHandler(mux, h.WalletTransfer)
 	MountTopupStashHandler(mux, h.TopupStash)
+	MountFindTransactionHandler(mux, h.FindTransaction)
+	MountFetchProductTransactionsHandler(mux, h.FetchProductTransactions)
+	MountFetchWalletTransactionsHandler(mux, h.FetchWalletTransactions)
+	MountFetchWalletBalanceHandler(mux, h.FetchWalletBalance)
 	MountSendAirtimeHandler(mux, h.SendAirtime)
 	MountPublishIoTHandler(mux, h.PublishIoT)
 	MountInitiateAppDataHandler(mux, h.InitiateAppData)
@@ -351,7 +371,7 @@ func MountFetchSMSHandler(mux goahttp.Muxer, h http.Handler) {
 			h.ServeHTTP(w, r)
 		}
 	}
-	mux.Handle("GET", "/version1/messaging?{username}&{lastReceivedId}", f)
+	mux.Handle("GET", "/version1/messaging", f)
 }
 
 // NewFetchSMSHandler creates a HTTP handler which loads the HTTP request and
@@ -505,7 +525,7 @@ func MountFetchPremiumSubscriptionHandler(mux goahttp.Muxer, h http.Handler) {
 			h.ServeHTTP(w, r)
 		}
 	}
-	mux.Handle("GET", "/version1/subscription?username={username}&shortCode={shortCode}&keyword={keyword}&lastReceivedId={lastReceivedId}", f)
+	mux.Handle("GET", "/version1/subscription", f)
 }
 
 // NewFetchPremiumSubscriptionHandler creates a HTTP handler which loads the
@@ -1754,6 +1774,212 @@ func NewTopupStashHandler(
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
 		ctx = context.WithValue(ctx, goa.MethodKey, "TopupStash")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountFindTransactionHandler configures the mux to serve the "africastalking"
+// service "FindTransaction" endpoint.
+func MountFindTransactionHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/transaction/find", f)
+}
+
+// NewFindTransactionHandler creates a HTTP handler which loads the HTTP
+// request and calls the "africastalking" service "FindTransaction" endpoint.
+func NewFindTransactionHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeFindTransactionRequest(mux, decoder)
+		encodeResponse = EncodeFindTransactionResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "FindTransaction")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountFetchProductTransactionsHandler configures the mux to serve the
+// "africastalking" service "FetchProductTransactions" endpoint.
+func MountFetchProductTransactionsHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/transaction/fetch", f)
+}
+
+// NewFetchProductTransactionsHandler creates a HTTP handler which loads the
+// HTTP request and calls the "africastalking" service
+// "FetchProductTransactions" endpoint.
+func NewFetchProductTransactionsHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeFetchProductTransactionsRequest(mux, decoder)
+		encodeResponse = EncodeFetchProductTransactionsResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "FetchProductTransactions")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountFetchWalletTransactionsHandler configures the mux to serve the
+// "africastalking" service "FetchWalletTransactions" endpoint.
+func MountFetchWalletTransactionsHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/wallet/fetch", f)
+}
+
+// NewFetchWalletTransactionsHandler creates a HTTP handler which loads the
+// HTTP request and calls the "africastalking" service
+// "FetchWalletTransactions" endpoint.
+func NewFetchWalletTransactionsHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeFetchWalletTransactionsRequest(mux, decoder)
+		encodeResponse = EncodeFetchWalletTransactionsResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "FetchWalletTransactions")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountFetchWalletBalanceHandler configures the mux to serve the
+// "africastalking" service "FetchWalletBalance" endpoint.
+func MountFetchWalletBalanceHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/wallet/balance", f)
+}
+
+// NewFetchWalletBalanceHandler creates a HTTP handler which loads the HTTP
+// request and calls the "africastalking" service "FetchWalletBalance" endpoint.
+func NewFetchWalletBalanceHandler(
+	endpoint endpoint.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeFetchWalletBalanceRequest(mux, decoder)
+		encodeResponse = EncodeFetchWalletBalanceResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "FetchWalletBalance")
 		ctx = context.WithValue(ctx, goa.ServiceKey, "africastalking")
 		payload, err := decodeRequest(r)
 		if err != nil {

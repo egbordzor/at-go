@@ -112,24 +112,21 @@ func EncodeFetchSMSResponse(encoder func(context.Context, http.ResponseWriter) g
 func DecodeFetchSMSRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
 	return func(r *http.Request) (interface{}, error) {
 		var (
-			username       string
-			lastReceivedID string
-			err            error
+			body FetchSMSRequestBody
+			err  error
 		)
-		username = r.URL.Query().Get("username")
-		if username == "" {
-			err = goa.MergeErrors(err, goa.MissingFieldError("username", "query string"))
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
 		}
-		lastReceivedIDRaw := r.URL.Query().Get("lastReceivedId")
-		if lastReceivedIDRaw != "" {
-			lastReceivedID = lastReceivedIDRaw
-		} else {
-			lastReceivedID = "0"
-		}
+		err = ValidateFetchSMSRequestBody(&body)
 		if err != nil {
 			return nil, err
 		}
-		payload := NewFetchSMSFetchMsgPayload(username, lastReceivedID)
+		payload := NewFetchSMSFetchMsgPayload(&body)
 
 		return payload, nil
 	}
@@ -229,34 +226,21 @@ func EncodeFetchPremiumSubscriptionResponse(encoder func(context.Context, http.R
 func DecodeFetchPremiumSubscriptionRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
 	return func(r *http.Request) (interface{}, error) {
 		var (
-			username       string
-			shortCode      string
-			keyword        string
-			lastReceivedID string
-			err            error
+			body FetchPremiumSubscriptionRequestBody
+			err  error
 		)
-		username = r.URL.Query().Get("username")
-		if username == "" {
-			err = goa.MergeErrors(err, goa.MissingFieldError("username", "query string"))
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
 		}
-		shortCode = r.URL.Query().Get("shortCode")
-		if shortCode == "" {
-			err = goa.MergeErrors(err, goa.MissingFieldError("shortCode", "query string"))
-		}
-		keyword = r.URL.Query().Get("keyword")
-		if keyword == "" {
-			err = goa.MergeErrors(err, goa.MissingFieldError("keyword", "query string"))
-		}
-		lastReceivedIDRaw := r.URL.Query().Get("lastReceivedId")
-		if lastReceivedIDRaw != "" {
-			lastReceivedID = lastReceivedIDRaw
-		} else {
-			lastReceivedID = "0"
-		}
+		err = ValidateFetchPremiumSubscriptionRequestBody(&body)
 		if err != nil {
 			return nil, err
 		}
-		payload := NewFetchPremiumSubscriptionFetchSubPayload(username, shortCode, keyword, lastReceivedID)
+		payload := NewFetchPremiumSubscriptionFetchSubPayload(&body)
 
 		return payload, nil
 	}
@@ -305,10 +289,10 @@ func DecodePurgePremiumSubscriptionRequest(mux goahttp.Muxer, decoder func(*http
 func EncodeMakeCallResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
 	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
 		res := v.(*africastalkingviews.MakeCallResponse)
-		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/xml")
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
 		enc := encoder(ctx, w)
 		body := NewMakeCallResponseBody(res.Projected)
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -342,10 +326,11 @@ func DecodeMakeCallRequest(mux goahttp.Muxer, decoder func(*http.Request) goahtt
 // africastalking TransferCall endpoint.
 func EncodeTransferCallResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
 	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
-		res := v.(*africastalkingviews.Calltransferresponse)
+		res := v.(*africastalkingviews.CallTransferResponse)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
 		enc := encoder(ctx, w)
 		body := NewTransferCallResponseBody(res.Projected)
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -382,7 +367,7 @@ func EncodeSayResponse(encoder func(context.Context, http.ResponseWriter) goahtt
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -419,7 +404,7 @@ func EncodePlayResponse(encoder func(context.Context, http.ResponseWriter) goaht
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -456,7 +441,7 @@ func EncodeGetDigitsResponse(encoder func(context.Context, http.ResponseWriter) 
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -489,7 +474,7 @@ func EncodeDialResponse(encoder func(context.Context, http.ResponseWriter) goaht
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -526,7 +511,7 @@ func EncodeRecordResponse(encoder func(context.Context, http.ResponseWriter) goa
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -559,7 +544,7 @@ func EncodeEnqueueResponse(encoder func(context.Context, http.ResponseWriter) go
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -592,7 +577,7 @@ func EncodeDequeueResponse(encoder func(context.Context, http.ResponseWriter) go
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -625,7 +610,7 @@ func EncodeRedirectResponse(encoder func(context.Context, http.ResponseWriter) g
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -658,7 +643,7 @@ func EncodeRejectResponse(encoder func(context.Context, http.ResponseWriter) goa
 		res := v.(string)
 		enc := encoder(ctx, w)
 		body := res
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -688,7 +673,8 @@ func DecodeRejectRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.
 // africastalking Queue endpoint.
 func EncodeQueueResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
 	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
-		res := v.(*africastalkingviews.Queuedstatusresult)
+		res := v.(*africastalkingviews.QueuedStatusResult)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
 		enc := encoder(ctx, w)
 		body := NewQueueResponseBody(res.Projected)
 		w.WriteHeader(http.StatusCreated)
@@ -1134,6 +1120,158 @@ func DecodeTopupStashRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 	}
 }
 
+// EncodeFindTransactionResponse returns an encoder for responses returned by
+// the africastalking FindTransaction endpoint.
+func EncodeFindTransactionResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(*africastalkingviews.FindTransactionResponse)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
+		enc := encoder(ctx, w)
+		body := NewFindTransactionResponseBody(res.Projected)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeFindTransactionRequest returns a decoder for requests sent to the
+// africastalking FindTransaction endpoint.
+func DecodeFindTransactionRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body FindTransactionRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateFindTransactionRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewFindTransactionPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeFetchProductTransactionsResponse returns an encoder for responses
+// returned by the africastalking FetchProductTransactions endpoint.
+func EncodeFetchProductTransactionsResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(*africastalkingviews.ProductTransactionsResponse)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
+		enc := encoder(ctx, w)
+		body := NewFetchProductTransactionsResponseBody(res.Projected)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeFetchProductTransactionsRequest returns a decoder for requests sent to
+// the africastalking FetchProductTransactions endpoint.
+func DecodeFetchProductTransactionsRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body FetchProductTransactionsRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateFetchProductTransactionsRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewFetchProductTransactionsProductTransactionsPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeFetchWalletTransactionsResponse returns an encoder for responses
+// returned by the africastalking FetchWalletTransactions endpoint.
+func EncodeFetchWalletTransactionsResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(*africastalkingviews.WalletTransactionsResponse)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
+		enc := encoder(ctx, w)
+		body := NewFetchWalletTransactionsResponseBody(res.Projected)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeFetchWalletTransactionsRequest returns a decoder for requests sent to
+// the africastalking FetchWalletTransactions endpoint.
+func DecodeFetchWalletTransactionsRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body FetchWalletTransactionsRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateFetchWalletTransactionsRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewFetchWalletTransactionsWalletTransactionsPayload(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeFetchWalletBalanceResponse returns an encoder for responses returned
+// by the africastalking FetchWalletBalance endpoint.
+func EncodeFetchWalletBalanceResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(*africastalkingviews.WalletBalanceResponse)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
+		enc := encoder(ctx, w)
+		body := NewFetchWalletBalanceResponseBody(res.Projected)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeFetchWalletBalanceRequest returns a decoder for requests sent to the
+// africastalking FetchWalletBalance endpoint.
+func DecodeFetchWalletBalanceRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body FetchWalletBalanceRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateFetchWalletBalanceRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewFetchWalletBalanceWalletBalancePayload(&body)
+
+		return payload, nil
+	}
+}
+
 // EncodeSendAirtimeResponse returns an encoder for responses returned by the
 // africastalking SendAirtime endpoint.
 func EncodeSendAirtimeResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
@@ -1252,7 +1390,7 @@ func EncodeGenerateResponse(encoder func(context.Context, http.ResponseWriter) g
 		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
 		enc := encoder(ctx, w)
 		body := NewGenerateResponseBody(res.Projected)
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
 }
@@ -1547,6 +1685,93 @@ func unmarshalPaymentCardRequestBodyToAfricastalkingPaymentCard(v *PaymentCardRe
 		ExpiryYear:  *v.ExpiryYear,
 		CountryCode: *v.CountryCode,
 		AuthToken:   *v.AuthToken,
+	}
+
+	return res
+}
+
+// marshalAfricastalkingviewsTransactionResponseViewToTransactionResponseResponseBody
+// builds a value of type *TransactionResponseResponseBody from a value of type
+// *africastalkingviews.TransactionResponseView.
+func marshalAfricastalkingviewsTransactionResponseViewToTransactionResponseResponseBody(v *africastalkingviews.TransactionResponseView) *TransactionResponseResponseBody {
+	if v == nil {
+		return nil
+	}
+	res := &TransactionResponseResponseBody{
+		SourceType:      v.SourceType,
+		Source:          v.Source,
+		Provider:        v.Provider,
+		DestinationType: v.DestinationType,
+		Description:     v.Description,
+		ProviderChannel: v.ProviderChannel,
+		TransactionFee:  v.TransactionFee,
+		ProviderRefID:   v.ProviderRefID,
+		Status:          v.Status,
+		ProductName:     v.ProductName,
+		Category:        v.Category,
+		TransactionDate: v.TransactionDate,
+		Destination:     v.Destination,
+		Value:           v.Value,
+		TransactionID:   v.TransactionID,
+		CreationTime:    v.CreationTime,
+	}
+	if v.RequestMetadata != nil {
+		res.RequestMetadata = make(map[string]string, len(v.RequestMetadata))
+		for key, val := range v.RequestMetadata {
+			tk := key
+			tv := val
+			res.RequestMetadata[tk] = tv
+		}
+	}
+	if v.ProviderMetadata != nil {
+		res.ProviderMetadata = make(map[string]string, len(v.ProviderMetadata))
+		for key, val := range v.ProviderMetadata {
+			tk := key
+			tv := val
+			res.ProviderMetadata[tk] = tv
+		}
+	}
+
+	return res
+}
+
+// marshalAfricastalkingviewsWalletEntryViewToWalletEntryResponseBody builds a
+// value of type *WalletEntryResponseBody from a value of type
+// *africastalkingviews.WalletEntryView.
+func marshalAfricastalkingviewsWalletEntryViewToWalletEntryResponseBody(v *africastalkingviews.WalletEntryView) *WalletEntryResponseBody {
+	if v == nil {
+		return nil
+	}
+	res := &WalletEntryResponseBody{
+		Description:   v.Description,
+		Balance:       v.Balance,
+		Category:      v.Category,
+		Value:         v.Value,
+		TransactionID: v.TransactionID,
+	}
+	if v.TransactionData != nil {
+		res.TransactionData = make([]*FindTransactionResponseResponseBody, len(v.TransactionData))
+		for i, val := range v.TransactionData {
+			res.TransactionData[i] = marshalAfricastalkingviewsFindTransactionResponseViewToFindTransactionResponseResponseBody(val)
+		}
+	}
+
+	return res
+}
+
+// marshalAfricastalkingviewsFindTransactionResponseViewToFindTransactionResponseResponseBody
+// builds a value of type *FindTransactionResponseResponseBody from a value of
+// type *africastalkingviews.FindTransactionResponseView.
+func marshalAfricastalkingviewsFindTransactionResponseViewToFindTransactionResponseResponseBody(v *africastalkingviews.FindTransactionResponseView) *FindTransactionResponseResponseBody {
+	if v == nil {
+		return nil
+	}
+	res := &FindTransactionResponseResponseBody{
+		Status:       v.Status,
+		ErrorMessage: v.ErrorMessage,
+	}
+	if v.Data != nil {
+		res.Data = marshalAfricastalkingviewsTransactionResponseViewToTransactionResponseResponseBody(v.Data)
 	}
 
 	return res

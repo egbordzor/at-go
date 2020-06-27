@@ -19,7 +19,7 @@ func SendPremiumSMSAfricastalkingPath() string {
 
 // FetchSMSAfricastalkingPath returns the URL path to the africastalking service FetchSMS HTTP endpoint.
 func FetchSMSAfricastalkingPath() string {
-	return "/version1/messaging?{username}&{lastReceivedId}"
+	return "/version1/messaging"
 }
 
 // NewCheckoutTokenAfricastalkingPath returns the URL path to the africastalking service NewCheckoutToken HTTP endpoint.
@@ -34,7 +34,7 @@ func NewPremiumSubscriptionAfricastalkingPath() string {
 
 // FetchPremiumSubscriptionAfricastalkingPath returns the URL path to the africastalking service FetchPremiumSubscription HTTP endpoint.
 func FetchPremiumSubscriptionAfricastalkingPath() string {
-	return "/version1/subscription?username={username}&shortCode={shortCode}&keyword={keyword}&lastReceivedId={lastReceivedId}"
+	return "/version1/subscription"
 }
 
 // PurgePremiumSubscriptionAfricastalkingPath returns the URL path to the africastalking service PurgePremiumSubscription HTTP endpoint.
@@ -155,6 +155,26 @@ func WalletTransferAfricastalkingPath() string {
 // TopupStashAfricastalkingPath returns the URL path to the africastalking service TopupStash HTTP endpoint.
 func TopupStashAfricastalkingPath() string {
 	return "/topup/stash"
+}
+
+// FindTransactionAfricastalkingPath returns the URL path to the africastalking service FindTransaction HTTP endpoint.
+func FindTransactionAfricastalkingPath() string {
+	return "/query/transaction/find"
+}
+
+// FetchProductTransactionsAfricastalkingPath returns the URL path to the africastalking service FetchProductTransactions HTTP endpoint.
+func FetchProductTransactionsAfricastalkingPath() string {
+	return "/query/transaction/fetch"
+}
+
+// FetchWalletTransactionsAfricastalkingPath returns the URL path to the africastalking service FetchWalletTransactions HTTP endpoint.
+func FetchWalletTransactionsAfricastalkingPath() string {
+	return "/query/wallet/fetch"
+}
+
+// FetchWalletBalanceAfricastalkingPath returns the URL path to the africastalking service FetchWalletBalance HTTP endpoint.
+func FetchWalletBalanceAfricastalkingPath() string {
+	return "/query/wallet/balance"
 }
 
 // SendAirtimeAfricastalkingPath returns the URL path to the africastalking service SendAirtime HTTP endpoint.

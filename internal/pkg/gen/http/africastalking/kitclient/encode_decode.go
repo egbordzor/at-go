@@ -556,6 +556,78 @@ func DecodeTopupStashResponse(decoder func(*http.Response) goahttp.Decoder) kith
 	}
 }
 
+// EncodeFindTransactionRequest returns a go-kit EncodeRequestFunc suitable for
+// encoding africastalking FindTransaction requests.
+func EncodeFindTransactionRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeFindTransactionRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeFindTransactionResponse returns a go-kit DecodeResponseFunc suitable
+// for decoding africastalking FindTransaction responses.
+func DecodeFindTransactionResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeFindTransactionResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeFetchProductTransactionsRequest returns a go-kit EncodeRequestFunc
+// suitable for encoding africastalking FetchProductTransactions requests.
+func EncodeFetchProductTransactionsRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeFetchProductTransactionsRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeFetchProductTransactionsResponse returns a go-kit DecodeResponseFunc
+// suitable for decoding africastalking FetchProductTransactions responses.
+func DecodeFetchProductTransactionsResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeFetchProductTransactionsResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeFetchWalletTransactionsRequest returns a go-kit EncodeRequestFunc
+// suitable for encoding africastalking FetchWalletTransactions requests.
+func EncodeFetchWalletTransactionsRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeFetchWalletTransactionsRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeFetchWalletTransactionsResponse returns a go-kit DecodeResponseFunc
+// suitable for decoding africastalking FetchWalletTransactions responses.
+func DecodeFetchWalletTransactionsResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeFetchWalletTransactionsResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
+// EncodeFetchWalletBalanceRequest returns a go-kit EncodeRequestFunc suitable
+// for encoding africastalking FetchWalletBalance requests.
+func EncodeFetchWalletBalanceRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {
+	enc := client.EncodeFetchWalletBalanceRequest(encoder)
+	return func(_ context.Context, r *http.Request, v interface{}) error {
+		return enc(r, v)
+	}
+}
+
+// DecodeFetchWalletBalanceResponse returns a go-kit DecodeResponseFunc
+// suitable for decoding africastalking FetchWalletBalance responses.
+func DecodeFetchWalletBalanceResponse(decoder func(*http.Response) goahttp.Decoder) kithttp.DecodeResponseFunc {
+	dec := client.DecodeFetchWalletBalanceResponse(decoder, false)
+	return func(ctx context.Context, resp *http.Response) (interface{}, error) {
+		return dec(resp)
+	}
+}
+
 // EncodeSendAirtimeRequest returns a go-kit EncodeRequestFunc suitable for
 // encoding africastalking SendAirtime requests.
 func EncodeSendAirtimeRequest(encoder func(*http.Request) goahttp.Encoder) kithttp.EncodeRequestFunc {

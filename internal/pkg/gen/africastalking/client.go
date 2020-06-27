@@ -45,6 +45,10 @@ type Client struct {
 	CardCheckoutValidateEndpoint     endpoint.Endpoint
 	WalletTransferEndpoint           endpoint.Endpoint
 	TopupStashEndpoint               endpoint.Endpoint
+	FindTransactionEndpoint          endpoint.Endpoint
+	FetchProductTransactionsEndpoint endpoint.Endpoint
+	FetchWalletTransactionsEndpoint  endpoint.Endpoint
+	FetchWalletBalanceEndpoint       endpoint.Endpoint
 	SendAirtimeEndpoint              endpoint.Endpoint
 	PublishIoTEndpoint               endpoint.Endpoint
 	InitiateAppDataEndpoint          endpoint.Endpoint
@@ -52,7 +56,7 @@ type Client struct {
 }
 
 // NewClient initializes a "africastalking" service client given the endpoints.
-func NewClient(sendBulkSMS, sendPremiumSMS, fetchSMS, newCheckoutToken, newPremiumSubscription, fetchPremiumSubscription, purgePremiumSubscription, makeCall, transferCall, say, play, getDigits, dial, record, enqueue, dequeue, redirect, reject, queue, uploadMedia, mobileCheckout, mobileB2C, mobileB2B, bankCheckout, bankCheckoutValidate, bankTransfer, cardCheckout, cardCheckoutValidate, walletTransfer, topupStash, sendAirtime, publishIoT, initiateAppData, generate endpoint.Endpoint) *Client {
+func NewClient(sendBulkSMS, sendPremiumSMS, fetchSMS, newCheckoutToken, newPremiumSubscription, fetchPremiumSubscription, purgePremiumSubscription, makeCall, transferCall, say, play, getDigits, dial, record, enqueue, dequeue, redirect, reject, queue, uploadMedia, mobileCheckout, mobileB2C, mobileB2B, bankCheckout, bankCheckoutValidate, bankTransfer, cardCheckout, cardCheckoutValidate, walletTransfer, topupStash, findTransaction, fetchProductTransactions, fetchWalletTransactions, fetchWalletBalance, sendAirtime, publishIoT, initiateAppData, generate endpoint.Endpoint) *Client {
 	return &Client{
 		SendBulkSMSEndpoint:              sendBulkSMS,
 		SendPremiumSMSEndpoint:           sendPremiumSMS,
@@ -84,6 +88,10 @@ func NewClient(sendBulkSMS, sendPremiumSMS, fetchSMS, newCheckoutToken, newPremi
 		CardCheckoutValidateEndpoint:     cardCheckoutValidate,
 		WalletTransferEndpoint:           walletTransfer,
 		TopupStashEndpoint:               topupStash,
+		FindTransactionEndpoint:          findTransaction,
+		FetchProductTransactionsEndpoint: fetchProductTransactions,
+		FetchWalletTransactionsEndpoint:  fetchWalletTransactions,
+		FetchWalletBalanceEndpoint:       fetchWalletBalance,
 		SendAirtimeEndpoint:              sendAirtime,
 		PublishIoTEndpoint:               publishIoT,
 		InitiateAppDataEndpoint:          initiateAppData,
@@ -178,13 +186,13 @@ func (c *Client) MakeCall(ctx context.Context, p *MakeCallPayload) (res *MakeCal
 
 // TransferCall calls the "TransferCall" endpoint of the "africastalking"
 // service.
-func (c *Client) TransferCall(ctx context.Context, p *CallTransferPayload) (res *Calltransferresponse, err error) {
+func (c *Client) TransferCall(ctx context.Context, p *CallTransferPayload) (res *CallTransferResponse, err error) {
 	var ires interface{}
 	ires, err = c.TransferCallEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.(*Calltransferresponse), nil
+	return ires.(*CallTransferResponse), nil
 }
 
 // Say calls the "Say" endpoint of the "africastalking" service.
@@ -278,13 +286,13 @@ func (c *Client) Reject(ctx context.Context, p *Reject1) (res string, err error)
 }
 
 // Queue calls the "Queue" endpoint of the "africastalking" service.
-func (c *Client) Queue(ctx context.Context, p *QueuedCallsPayload) (res *Queuedstatusresult, err error) {
+func (c *Client) Queue(ctx context.Context, p *QueuedCallsPayload) (res *QueuedStatusResult, err error) {
 	var ires interface{}
 	ires, err = c.QueueEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.(*Queuedstatusresult), nil
+	return ires.(*QueuedStatusResult), nil
 }
 
 // UploadMedia calls the "UploadMedia" endpoint of the "africastalking" service.
@@ -402,6 +410,50 @@ func (c *Client) TopupStash(ctx context.Context, p *TopupStashPayload) (res *Top
 		return
 	}
 	return ires.(*TopupStashResponse), nil
+}
+
+// FindTransaction calls the "FindTransaction" endpoint of the "africastalking"
+// service.
+func (c *Client) FindTransaction(ctx context.Context, p *FindTransactionPayload) (res *FindTransactionResponse, err error) {
+	var ires interface{}
+	ires, err = c.FindTransactionEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*FindTransactionResponse), nil
+}
+
+// FetchProductTransactions calls the "FetchProductTransactions" endpoint of
+// the "africastalking" service.
+func (c *Client) FetchProductTransactions(ctx context.Context, p *ProductTransactionsPayload) (res *ProductTransactionsResponse, err error) {
+	var ires interface{}
+	ires, err = c.FetchProductTransactionsEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*ProductTransactionsResponse), nil
+}
+
+// FetchWalletTransactions calls the "FetchWalletTransactions" endpoint of the
+// "africastalking" service.
+func (c *Client) FetchWalletTransactions(ctx context.Context, p *WalletTransactionsPayload) (res *WalletTransactionsResponse, err error) {
+	var ires interface{}
+	ires, err = c.FetchWalletTransactionsEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*WalletTransactionsResponse), nil
+}
+
+// FetchWalletBalance calls the "FetchWalletBalance" endpoint of the
+// "africastalking" service.
+func (c *Client) FetchWalletBalance(ctx context.Context, p *WalletBalancePayload) (res *WalletBalanceResponse, err error) {
+	var ires interface{}
+	ires, err = c.FetchWalletBalanceEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*WalletBalanceResponse), nil
 }
 
 // SendAirtime calls the "SendAirtime" endpoint of the "africastalking" service.

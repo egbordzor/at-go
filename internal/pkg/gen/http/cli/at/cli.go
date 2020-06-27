@@ -23,22 +23,22 @@ import (
 //    command (subcommand1|subcommand2|...)
 //
 func UsageCommands() string {
-	return `africastalking (send-bulk-sms|send-premium-sms|fetch-sms|new-checkout-token|new-premium-subscription|fetch-premium-subscription|purge-premium-subscription|make-call|transfer-call|say|play|get-digits|dial|record|enqueue|dequeue|redirect|reject|queue|upload-media|mobile-checkout|mobile-b2-c|mobile-b2-b|bank- -checkout|bank-checkout-validate|bank-transfer|card-checkout|card-checkout-validate|wallet-transfer|topup-stash|send-airtime|publish-io-t|initiate-app-data|generate)
+	return `africastalking (send-bulk-sms|send-premium-sms|fetch-sms|new-checkout-token|new-premium-subscription|fetch-premium-subscription|purge-premium-subscription|make-call|transfer-call|say|play|get-digits|dial|record|enqueue|dequeue|redirect|reject|queue|upload-media|mobile-checkout|mobile-b2-c|mobile-b2-b|bank- -checkout|bank-checkout-validate|bank-transfer|card-checkout|card-checkout-validate|wallet-transfer|topup-stash|find-transaction|fetch-product-transactions|fetch-wallet-transactions|fetch-wallet-balance|send-airtime|publish-io-t|initiate-app-data|generate)
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` africastalking send-bulk-sms --body '{
-      "bulkSMSMode": 183103216611454320,
+      "bulkSMSMode": 8873484351855826778,
       "enqueue": 1,
-      "from": "Et alias commodi laudantium vel quibusdam.",
-      "keyword": "Qui velit voluptatem nulla.",
-      "linkId": "Maiores enim expedita quis nulla dolorem.",
-      "message": "Quia adipisci laudantium similique tenetur.",
-      "retryDurationInHours": "Qui maiores.",
-      "to": "Et quibusdam.",
-      "username": "Vel fugit maiores minus aut dolores nisi."
+      "from": "Reprehenderit blanditiis.",
+      "keyword": "Est inventore consequatur ut quo.",
+      "linkId": "Omnis maxime provident nihil quidem.",
+      "message": "Eum a ut qui voluptatem consectetur.",
+      "retryDurationInHours": "Fuga qui repellat quidem.",
+      "to": "Vel ut ut assumenda quaerat.",
+      "username": "Et non rem."
    }'` + "\n" +
 		""
 }
@@ -61,9 +61,8 @@ func ParseEndpoint(
 		africastalkingSendPremiumSMSFlags    = flag.NewFlagSet("send-premium-sms", flag.ExitOnError)
 		africastalkingSendPremiumSMSBodyFlag = africastalkingSendPremiumSMSFlags.String("body", "REQUIRED", "")
 
-		africastalkingFetchSMSFlags              = flag.NewFlagSet("fetch-sms", flag.ExitOnError)
-		africastalkingFetchSMSUsernameFlag       = africastalkingFetchSMSFlags.String("username", "sandbox", "")
-		africastalkingFetchSMSLastReceivedIDFlag = africastalkingFetchSMSFlags.String("last-received-id", "0", "")
+		africastalkingFetchSMSFlags    = flag.NewFlagSet("fetch-sms", flag.ExitOnError)
+		africastalkingFetchSMSBodyFlag = africastalkingFetchSMSFlags.String("body", "REQUIRED", "")
 
 		africastalkingNewCheckoutTokenFlags    = flag.NewFlagSet("new-checkout-token", flag.ExitOnError)
 		africastalkingNewCheckoutTokenBodyFlag = africastalkingNewCheckoutTokenFlags.String("body", "REQUIRED", "")
@@ -71,11 +70,8 @@ func ParseEndpoint(
 		africastalkingNewPremiumSubscriptionFlags    = flag.NewFlagSet("new-premium-subscription", flag.ExitOnError)
 		africastalkingNewPremiumSubscriptionBodyFlag = africastalkingNewPremiumSubscriptionFlags.String("body", "REQUIRED", "")
 
-		africastalkingFetchPremiumSubscriptionFlags              = flag.NewFlagSet("fetch-premium-subscription", flag.ExitOnError)
-		africastalkingFetchPremiumSubscriptionUsernameFlag       = africastalkingFetchPremiumSubscriptionFlags.String("username", "sandbox", "")
-		africastalkingFetchPremiumSubscriptionShortCodeFlag      = africastalkingFetchPremiumSubscriptionFlags.String("short-code", "REQUIRED", "")
-		africastalkingFetchPremiumSubscriptionKeywordFlag        = africastalkingFetchPremiumSubscriptionFlags.String("keyword", "REQUIRED", "")
-		africastalkingFetchPremiumSubscriptionLastReceivedIDFlag = africastalkingFetchPremiumSubscriptionFlags.String("last-received-id", "0", "")
+		africastalkingFetchPremiumSubscriptionFlags    = flag.NewFlagSet("fetch-premium-subscription", flag.ExitOnError)
+		africastalkingFetchPremiumSubscriptionBodyFlag = africastalkingFetchPremiumSubscriptionFlags.String("body", "REQUIRED", "")
 
 		africastalkingPurgePremiumSubscriptionFlags    = flag.NewFlagSet("purge-premium-subscription", flag.ExitOnError)
 		africastalkingPurgePremiumSubscriptionBodyFlag = africastalkingPurgePremiumSubscriptionFlags.String("body", "REQUIRED", "")
@@ -149,6 +145,18 @@ func ParseEndpoint(
 		africastalkingTopupStashFlags    = flag.NewFlagSet("topup-stash", flag.ExitOnError)
 		africastalkingTopupStashBodyFlag = africastalkingTopupStashFlags.String("body", "REQUIRED", "")
 
+		africastalkingFindTransactionFlags    = flag.NewFlagSet("find-transaction", flag.ExitOnError)
+		africastalkingFindTransactionBodyFlag = africastalkingFindTransactionFlags.String("body", "REQUIRED", "")
+
+		africastalkingFetchProductTransactionsFlags    = flag.NewFlagSet("fetch-product-transactions", flag.ExitOnError)
+		africastalkingFetchProductTransactionsBodyFlag = africastalkingFetchProductTransactionsFlags.String("body", "REQUIRED", "")
+
+		africastalkingFetchWalletTransactionsFlags    = flag.NewFlagSet("fetch-wallet-transactions", flag.ExitOnError)
+		africastalkingFetchWalletTransactionsBodyFlag = africastalkingFetchWalletTransactionsFlags.String("body", "REQUIRED", "")
+
+		africastalkingFetchWalletBalanceFlags    = flag.NewFlagSet("fetch-wallet-balance", flag.ExitOnError)
+		africastalkingFetchWalletBalanceBodyFlag = africastalkingFetchWalletBalanceFlags.String("body", "REQUIRED", "")
+
 		africastalkingSendAirtimeFlags    = flag.NewFlagSet("send-airtime", flag.ExitOnError)
 		africastalkingSendAirtimeBodyFlag = africastalkingSendAirtimeFlags.String("body", "REQUIRED", "")
 
@@ -192,6 +200,10 @@ func ParseEndpoint(
 	africastalkingCardCheckoutValidateFlags.Usage = africastalkingCardCheckoutValidateUsage
 	africastalkingWalletTransferFlags.Usage = africastalkingWalletTransferUsage
 	africastalkingTopupStashFlags.Usage = africastalkingTopupStashUsage
+	africastalkingFindTransactionFlags.Usage = africastalkingFindTransactionUsage
+	africastalkingFetchProductTransactionsFlags.Usage = africastalkingFetchProductTransactionsUsage
+	africastalkingFetchWalletTransactionsFlags.Usage = africastalkingFetchWalletTransactionsUsage
+	africastalkingFetchWalletBalanceFlags.Usage = africastalkingFetchWalletBalanceUsage
 	africastalkingSendAirtimeFlags.Usage = africastalkingSendAirtimeUsage
 	africastalkingPublishIoTFlags.Usage = africastalkingPublishIoTUsage
 	africastalkingInitiateAppDataFlags.Usage = africastalkingInitiateAppDataUsage
@@ -321,6 +333,18 @@ func ParseEndpoint(
 			case "topup-stash":
 				epf = africastalkingTopupStashFlags
 
+			case "find-transaction":
+				epf = africastalkingFindTransactionFlags
+
+			case "fetch-product-transactions":
+				epf = africastalkingFetchProductTransactionsFlags
+
+			case "fetch-wallet-transactions":
+				epf = africastalkingFetchWalletTransactionsFlags
+
+			case "fetch-wallet-balance":
+				epf = africastalkingFetchWalletBalanceFlags
+
 			case "send-airtime":
 				epf = africastalkingSendAirtimeFlags
 
@@ -366,7 +390,7 @@ func ParseEndpoint(
 				data, err = africastalkingc.BuildSendPremiumSMSPayload(*africastalkingSendPremiumSMSBodyFlag)
 			case "fetch-sms":
 				endpoint = c.FetchSMS()
-				data, err = africastalkingc.BuildFetchSMSPayload(*africastalkingFetchSMSUsernameFlag, *africastalkingFetchSMSLastReceivedIDFlag)
+				data, err = africastalkingc.BuildFetchSMSPayload(*africastalkingFetchSMSBodyFlag)
 			case "new-checkout-token":
 				endpoint = c.NewCheckoutToken()
 				data, err = africastalkingc.BuildNewCheckoutTokenPayload(*africastalkingNewCheckoutTokenBodyFlag)
@@ -375,7 +399,7 @@ func ParseEndpoint(
 				data, err = africastalkingc.BuildNewPremiumSubscriptionPayload(*africastalkingNewPremiumSubscriptionBodyFlag)
 			case "fetch-premium-subscription":
 				endpoint = c.FetchPremiumSubscription()
-				data, err = africastalkingc.BuildFetchPremiumSubscriptionPayload(*africastalkingFetchPremiumSubscriptionUsernameFlag, *africastalkingFetchPremiumSubscriptionShortCodeFlag, *africastalkingFetchPremiumSubscriptionKeywordFlag, *africastalkingFetchPremiumSubscriptionLastReceivedIDFlag)
+				data, err = africastalkingc.BuildFetchPremiumSubscriptionPayload(*africastalkingFetchPremiumSubscriptionBodyFlag)
 			case "purge-premium-subscription":
 				endpoint = c.PurgePremiumSubscription()
 				data, err = africastalkingc.BuildPurgePremiumSubscriptionPayload(*africastalkingPurgePremiumSubscriptionBodyFlag)
@@ -448,6 +472,18 @@ func ParseEndpoint(
 			case "topup-stash":
 				endpoint = c.TopupStash()
 				data, err = africastalkingc.BuildTopupStashPayload(*africastalkingTopupStashBodyFlag)
+			case "find-transaction":
+				endpoint = c.FindTransaction()
+				data, err = africastalkingc.BuildFindTransactionPayload(*africastalkingFindTransactionBodyFlag)
+			case "fetch-product-transactions":
+				endpoint = c.FetchProductTransactions()
+				data, err = africastalkingc.BuildFetchProductTransactionsPayload(*africastalkingFetchProductTransactionsBodyFlag)
+			case "fetch-wallet-transactions":
+				endpoint = c.FetchWalletTransactions()
+				data, err = africastalkingc.BuildFetchWalletTransactionsPayload(*africastalkingFetchWalletTransactionsBodyFlag)
+			case "fetch-wallet-balance":
+				endpoint = c.FetchWalletBalance()
+				data, err = africastalkingc.BuildFetchWalletBalancePayload(*africastalkingFetchWalletBalanceBodyFlag)
 			case "send-airtime":
 				endpoint = c.SendAirtime()
 				data, err = africastalkingc.BuildSendAirtimePayload(*africastalkingSendAirtimeBodyFlag)
@@ -504,10 +540,14 @@ COMMAND:
     bank- -checkout: Collect money into your payment wallet.
     bank-checkout-validate: Validate a bank checkout charge request
     bank-transfer: Initiate a bank transfer request.
-    card-checkout: Collect money into your Payment Wallet
+    card-checkout: Collect money into your Payment Wallet by initiating transactions that deduct money from a customers Debit or Credit Card.
     card-checkout-validate: Validate card checkout charge requests
-    wallet-transfer: Transfer money from one product to another.
-    topup-stash: Move money from a Payment Product to an application stash.
+    wallet-transfer: Transfer money from one Payment Product to another Payment Product hosted on Africa’s Talking.
+    topup-stash: Move money from a Payment Product to an Africa’s Talking application stash.
+    find-transaction: Fetch transactions of a particular payment product.
+    fetch-product-transactions: Fetch transactions of a particular payment product.
+    fetch-wallet-transactions: Fetch your wallet transactions
+    fetch-wallet-balance: Fetch your wallet balance
     send-airtime: Send Airtime.
     publish-io-t: Publishes messages to remote devices.
     initiate-app-data: Initiate an application data request.
@@ -525,15 +565,15 @@ Send Bulk SMS
 
 Example:
     `+os.Args[0]+` africastalking send-bulk-sms --body '{
-      "bulkSMSMode": 183103216611454320,
+      "bulkSMSMode": 8873484351855826778,
       "enqueue": 1,
-      "from": "Et alias commodi laudantium vel quibusdam.",
-      "keyword": "Qui velit voluptatem nulla.",
-      "linkId": "Maiores enim expedita quis nulla dolorem.",
-      "message": "Quia adipisci laudantium similique tenetur.",
-      "retryDurationInHours": "Qui maiores.",
-      "to": "Et quibusdam.",
-      "username": "Vel fugit maiores minus aut dolores nisi."
+      "from": "Reprehenderit blanditiis.",
+      "keyword": "Est inventore consequatur ut quo.",
+      "linkId": "Omnis maxime provident nihil quidem.",
+      "message": "Eum a ut qui voluptatem consectetur.",
+      "retryDurationInHours": "Fuga qui repellat quidem.",
+      "to": "Vel ut ut assumenda quaerat.",
+      "username": "Et non rem."
    }'
 `, os.Args[0])
 }
@@ -546,28 +586,30 @@ Send Premium SMS
 
 Example:
     `+os.Args[0]+` africastalking send-premium-sms --body '{
-      "bulkSMSMode": 2827138256472368539,
+      "bulkSMSMode": 382502157578571911,
       "enqueue": 1,
-      "from": "Alias ipsum unde aut dolore cupiditate.",
-      "keyword": "Quasi sed id incidunt praesentium dolorem.",
-      "linkId": "Qui laborum quaerat adipisci et.",
-      "message": "Eos repellat quo.",
-      "retryDurationInHours": "Ut dolorum temporibus.",
-      "to": "Dolores molestiae vel.",
-      "username": "Et magnam maxime."
+      "from": "Magnam velit sunt itaque vel excepturi sit.",
+      "keyword": "Ea tenetur nihil.",
+      "linkId": "Quia consequatur a odio labore error.",
+      "message": "Commodi modi.",
+      "retryDurationInHours": "Magni provident ratione.",
+      "to": "Vero rerum porro nisi non tempore.",
+      "username": "Distinctio quis et ex sit soluta et."
    }'
 `, os.Args[0])
 }
 
 func africastalkingFetchSMSUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking fetch-sms -username STRING -last-received-id STRING
+	fmt.Fprintf(os.Stderr, `%s [flags] africastalking fetch-sms -body JSON
 
 Incrementally fetch messages from application inbox.
-    -username STRING: 
-    -last-received-id STRING: 
+    -body JSON: 
 
 Example:
-    `+os.Args[0]+` africastalking fetch-sms --username "Et nobis aut dolor." --last-received-id "Omnis repellat cupiditate voluptas est."
+    `+os.Args[0]+` africastalking fetch-sms --body '{
+      "lastReceivedId": "Ut sunt rerum at.",
+      "username": "Et sunt."
+   }'
 `, os.Args[0])
 }
 
@@ -579,7 +621,7 @@ Generate a checkout token
 
 Example:
     `+os.Args[0]+` africastalking new-checkout-token --body '{
-      "phoneNumber": "Quibusdam omnis."
+      "phoneNumber": "Ratione nihil earum atque autem ut."
    }'
 `, os.Args[0])
 }
@@ -596,22 +638,24 @@ Example:
       "keyword": "",
       "phoneNumber": "",
       "shortCode": "",
-      "username": "Dolorem ad est."
+      "username": "Quia dolor illum ut modi sit."
    }'
 `, os.Args[0])
 }
 
 func africastalkingFetchPremiumSubscriptionUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking fetch-premium-subscription -username STRING -short-code STRING -keyword STRING -last-received-id STRING
+	fmt.Fprintf(os.Stderr, `%s [flags] africastalking fetch-premium-subscription -body JSON
 
 Incrementally fetch your premium sms subscriptions.
-    -username STRING: 
-    -short-code STRING: 
-    -keyword STRING: 
-    -last-received-id STRING: 
+    -body JSON: 
 
 Example:
-    `+os.Args[0]+` africastalking fetch-premium-subscription --username "Tempora sint laborum repellat porro et." --short-code "" --keyword "" --last-received-id "Dolor sit."
+    `+os.Args[0]+` africastalking fetch-premium-subscription --body '{
+      "keyword": "",
+      "lastReceivedId": "Sed qui dolores nihil.",
+      "shortCode": "",
+      "username": "Eum dolores iure molestiae eligendi laudantium est."
+   }'
 `, os.Args[0])
 }
 
@@ -626,7 +670,7 @@ Example:
       "keyword": "",
       "phoneNumber": "",
       "shortCode": "",
-      "username": "Repudiandae aut esse voluptate et et eos."
+      "username": "Quia voluptatem et voluptatem necessitatibus quia minus."
    }'
 `, os.Args[0])
 }
@@ -639,10 +683,10 @@ Makes outbound calls.
 
 Example:
     `+os.Args[0]+` africastalking make-call --body '{
-      "clientRequestId": "Et optio ut quod est.",
-      "from": "Sequi vel odit nobis aut natus ut.",
-      "to": "Aliquam dolorem.",
-      "username": "Aut dolores est omnis repellat."
+      "clientRequestId": "Ab qui ut consequatur exercitationem sed.",
+      "from": "Ut quas error fuga dolorem ea.",
+      "to": "Quis dolorum iure ut perferendis quidem facilis.",
+      "username": "Molestias natus rem tempora quos facere."
    }'
 `, os.Args[0])
 }
@@ -655,10 +699,10 @@ Transfers call to another number.
 
 Example:
     `+os.Args[0]+` africastalking transfer-call --body '{
-      "callLeg": "caller",
-      "holdMusicUrl": "Quibusdam sapiente natus placeat.",
-      "phoneNumber": "Et nihil excepturi.",
-      "sessionId": "Sint voluptas esse dolore et."
+      "callLeg": "callee",
+      "holdMusicUrl": "Qui maiores.",
+      "phoneNumber": "Expedita quis nulla.",
+      "sessionId": "Consequatur maiores."
    }'
 `, os.Args[0])
 }
@@ -685,7 +729,7 @@ Play back an audio file located anywhere on the web.
 
 Example:
     `+os.Args[0]+` africastalking play --body '{
-      "url": "Ea fuga repellendus asperiores iusto nulla repudiandae."
+      "url": "Sed id incidunt praesentium dolorem accusantium qui."
    }'
 `, os.Args[0])
 }
@@ -698,10 +742,10 @@ Get digits a user enters on their phone in response to a prompt from application
 
 Example:
     `+os.Args[0]+` africastalking get-digits --body '{
-      "callbackUrl": "Qui facere.",
-      "finishOnKey": "Voluptatum est sunt labore error voluptate.",
-      "numDigits": "Est consequatur delectus dolore architecto ratione.",
-      "timeout": "Nulla neque."
+      "callbackUrl": "Dolor dicta omnis repellat cupiditate voluptas est.",
+      "finishOnKey": "Repellat porro et id dolor sit laboriosam.",
+      "numDigits": "Eaque quibusdam omnis vel dolorem.",
+      "timeout": "Est sunt tempora sint."
    }'
 `, os.Args[0])
 }
@@ -714,12 +758,12 @@ Connect the user who called your phone number to an external phone number.
 
 Example:
     `+os.Args[0]+` africastalking dial --body '{
-      "callerId": "Eaque nostrum cum.",
-      "maxDuration": "Ducimus eligendi.",
-      "phoneNumbers": "Ut ipsum eum.",
-      "record": "Molestiae enim laudantium iure veniam qui.",
-      "ringBackTone": "Nisi amet et at.",
-      "sequential": "Vero consequatur aliquid."
+      "callerId": "Aliquam dolorem.",
+      "maxDuration": "Ad voluptas dolor.",
+      "phoneNumbers": "Iste aut dolores.",
+      "record": "Omnis repellat.",
+      "ringBackTone": "Et optio ut quod est.",
+      "sequential": "Sequi vel odit nobis aut natus ut."
    }'
 `, os.Args[0])
 }
@@ -732,12 +776,12 @@ Record a call session into an mp3 file.
 
 Example:
     `+os.Args[0]+` africastalking record --body '{
-      "callbackUrl": "Mollitia et omnis ratione.",
-      "finishOnKey": "Quasi animi omnis.",
-      "maxLength": "Odit pariatur.",
-      "playBeep": "Voluptatibus facilis similique labore quo.",
-      "timeout": "Repellendus atque.",
-      "trimSilence": "Quis pariatur similique tenetur temporibus qui magnam."
+      "callbackUrl": "Natus placeat nam provident.",
+      "finishOnKey": "Illum neque itaque quibusdam perspiciatis dolorem corporis.",
+      "maxLength": "Velit qui accusantium.",
+      "playBeep": "Possimus quibusdam.",
+      "timeout": "Ratione sint.",
+      "trimSilence": "Esse dolore et enim et nihil excepturi."
    }'
 `, os.Args[0])
 }
@@ -750,8 +794,8 @@ Pass an incoming call to a queue to be handled later.
 
 Example:
     `+os.Args[0]+` africastalking enqueue --body '{
-      "holdMusic": "Perferendis libero sed sunt ea et.",
-      "name": "Nobis doloribus repudiandae ad inventore quam."
+      "holdMusic": "Animi nesciunt eveniet.",
+      "name": "Quisquam reprehenderit provident et et dolor."
    }'
 `, os.Args[0])
 }
@@ -764,8 +808,8 @@ Pass the calls enqueued to a separate number to be handled.
 
 Example:
     `+os.Args[0]+` africastalking dequeue --body '{
-      "name": "Rerum corporis ducimus reiciendis cumque.",
-      "phoneNumber": "Beatae soluta numquam ipsum."
+      "name": "Necessitatibus porro error in.",
+      "phoneNumber": "Ea fuga repellendus asperiores iusto nulla repudiandae."
    }'
 `, os.Args[0])
 }
@@ -778,7 +822,7 @@ Transfer control of the call to the script whose URL is passed in.
 
 Example:
     `+os.Args[0]+` africastalking redirect --body '{
-      "Reject": "Voluptatem earum quo."
+      "Reject": "Est consequatur delectus dolore architecto ratione."
    }'
 `, os.Args[0])
 }
@@ -791,7 +835,7 @@ Reject an incoming call without incurring any usage charges.
 
 Example:
     `+os.Args[0]+` africastalking reject --body '{
-      "Redirect": "Consequuntur fugiat eveniet quasi consequatur quia."
+      "Redirect": "Dolorem exercitationem maiores nemo ea."
    }'
 `, os.Args[0])
 }
@@ -804,8 +848,8 @@ Used when you have more calls than you can handle at one time
 
 Example:
     `+os.Args[0]+` africastalking queue --body '{
-      "phoneNumbers": "Voluptatum dicta saepe voluptatibus.",
-      "username": "Quae voluptatem dolor ut iure et."
+      "phoneNumbers": "Vero consequatur aliquid.",
+      "username": "Molestiae enim laudantium iure veniam qui."
    }'
 `, os.Args[0])
 }
@@ -818,8 +862,8 @@ Uploads media or audio files to Africa'sTalking servers with the extension .mp3 
 
 Example:
     `+os.Args[0]+` africastalking upload-media --body '{
-      "url": "Assumenda a qui voluptatem.",
-      "username": "Voluptatem dolore non sequi odio."
+      "url": "Odit pariatur.",
+      "username": "Quasi animi omnis."
    }'
 `, os.Args[0])
 }
@@ -832,16 +876,17 @@ Initiate Mobile C2B payments on a mobile subscriber’s device.
 
 Example:
     `+os.Args[0]+` africastalking mobile-checkout --body '{
-      "amount": "Sint possimus vel.",
+      "amount": 3000,
       "currencyCode": "KES",
       "metadata": {
-         "Aut impedit ut in aut.": "Possimus atque consequuntur ex enim.",
-         "Ea quo assumenda et aut molestiae.": "Laboriosam aliquam aut neque."
+         "Delectus nihil.": "Iure sit est nihil placeat.",
+         "Facilis similique labore quo dolorem mollitia.": "Omnis ratione quod ut magni.",
+         "Unde perferendis.": "Sed sunt ea."
       },
-      "phoneNumber": "Sed quibusdam molestiae ea.",
-      "productName": "Ullam rerum.",
-      "providerChannel": "Esse veniam quod sunt facere.",
-      "username": "Voluptas voluptas doloremque distinctio fugit."
+      "phoneNumber": "+254711XXXYYY",
+      "productName": "myProductName",
+      "providerChannel": "myProviderChannel",
+      "username": "MyAppUserName"
    }'
 `, os.Args[0])
 }
@@ -854,34 +899,43 @@ Initiate Mobile B2C request
 
 Example:
     `+os.Args[0]+` africastalking mobile-b2-c --body '{
-      "productName": "Cum eum omnis assumenda.",
+      "productName": "myProductName",
       "recipients": [
          {
-            "amount": "Omnis eos nulla eius atque quaerat.",
-            "currencyCode": "Voluptatum voluptas illo accusamus earum.",
+            "amount": 100.5,
+            "currencyCode": "KES",
             "metadata": {
-               "Eum rerum nihil itaque molestiae nihil.": "Repellendus ea minus.",
-               "Itaque sunt dolor quisquam voluptatem et fuga.": "Exercitationem quis repellendus non necessitatibus."
+               "OwCW": "OutQ"
             },
-            "name": "Sint dignissimos enim quod hic fugit beatae.",
-            "phoneNumber": "Quod et numquam soluta odit eum.",
-            "providerChannel": "Ut asperiores et perspiciatis.",
-            "reason": "BusinessPayment"
+            "name": "name",
+            "phoneNumber": "+254711XXXYYY",
+            "providerChannel": "myProviderChannel",
+            "reason": "SalaryPayment"
          },
          {
-            "amount": "Omnis eos nulla eius atque quaerat.",
-            "currencyCode": "Voluptatum voluptas illo accusamus earum.",
+            "amount": 100.5,
+            "currencyCode": "KES",
             "metadata": {
-               "Eum rerum nihil itaque molestiae nihil.": "Repellendus ea minus.",
-               "Itaque sunt dolor quisquam voluptatem et fuga.": "Exercitationem quis repellendus non necessitatibus."
+               "OwCW": "OutQ"
             },
-            "name": "Sint dignissimos enim quod hic fugit beatae.",
-            "phoneNumber": "Quod et numquam soluta odit eum.",
-            "providerChannel": "Ut asperiores et perspiciatis.",
-            "reason": "BusinessPayment"
+            "name": "name",
+            "phoneNumber": "+254711XXXYYY",
+            "providerChannel": "myProviderChannel",
+            "reason": "SalaryPayment"
+         },
+         {
+            "amount": 100.5,
+            "currencyCode": "KES",
+            "metadata": {
+               "OwCW": "OutQ"
+            },
+            "name": "name",
+            "phoneNumber": "+254711XXXYYY",
+            "providerChannel": "myProviderChannel",
+            "reason": "SalaryPayment"
          }
       ],
-      "username": "Sunt in."
+      "username": "MyAppUserName"
    }'
 `, os.Args[0])
 }
@@ -894,15 +948,19 @@ Initiate Mobile B2B request
 
 Example:
     `+os.Args[0]+` africastalking mobile-b2-b --body '{
-      "amount": "Ducimus odio placeat placeat ipsa.",
+      "amount": 3000,
       "currencyCode": "KES",
-      "destinationAccount": "Tempora vel.",
-      "destinationChannel": "Et nihil earum sequi accusantium.",
-      "metadata": "Quam consequatur.",
-      "productName": "Architecto atque alias ad et excepturi.",
-      "provider": "TigoTanzania",
-      "transferType": "BusinessPayBill",
-      "username": "Delectus voluptatem est in voluptas."
+      "destinationAccount": "Account Name",
+      "destinationChannel": "Buy Goods Number",
+      "metadata": {
+         "OqkdMh": "RwMfHN",
+         "QawIGK": "mr",
+         "lB": "ExdMn"
+      },
+      "productName": "myProductName",
+      "provider": "Mpesa",
+      "transferType": "BusinessBuyGoods",
+      "username": "MyAppUserName"
    }'
 `, os.Args[0])
 }
@@ -915,20 +973,20 @@ Collect money into your payment wallet.
 
 Example:
     `+os.Args[0]+` africastalking bank- -checkout --body '{
-      "amount": 0.5230229290853498,
+      "amount": 39393,
       "bankAccount": {
-         "accountName": "Sequi temporibus.",
-         "accountNumber": "Eum quibusdam maxime dolorum ad sit.",
-         "bankCode": 8697003489270813697,
-         "dateOfBirth": "2010-03-27"
+         "accountName": "Test Bank Account",
+         "accountNumber": "1234567890",
+         "bankCode": 234001,
+         "dateOfBirth": "1982-11-11"
       },
-      "currencyCode": "KES",
+      "currencyCode": "NGN",
       "metadata": {
-         "Iste aut molestiae quis cupiditate doloribus et.": "Incidunt neque minus repellat non."
+         "FwOA": "EbHFN"
       },
-      "narration": "Debitis ex nihil impedit atque eum eaque.",
-      "productName": "Illo harum quo voluptas magni iste.",
-      "username": "Corrupti consequuntur dolor corporis."
+      "narration": "payment for airtime",
+      "productName": "myPaymentProductName",
+      "username": "MyAppUserName"
    }'
 `, os.Args[0])
 }
@@ -941,9 +999,9 @@ Validate a bank checkout charge request
 
 Example:
     `+os.Args[0]+` africastalking bank-checkout-validate --body '{
-      "otp": "Sint sint nobis repellat et voluptatem.",
-      "transactionId": "Quisquam in tempora sequi.",
-      "username": "Voluptates dolor quos."
+      "otp": "Voluptatum dicta saepe voluptatibus.",
+      "transactionId": "Quae voluptatem dolor ut iure et.",
+      "username": "Sed modi consequatur architecto et."
    }'
 `, os.Args[0])
 }
@@ -956,49 +1014,55 @@ Initiate a bank transfer request.
 
 Example:
     `+os.Args[0]+` africastalking bank-transfer --body '{
-      "productName": "Molestiae est.",
+      "productName": "Repellat ut.",
       "recipients": [
          {
-            "accountName": "Unde ea.",
-            "accountNumber": "Incidunt maxime libero sint.",
-            "amount": "Possimus vel.",
-            "bankAccount": "Dicta consequuntur.",
-            "bankCode": "Totam non iure officiis.",
-            "currencyCode": "Inventore consectetur mollitia eum.",
-            "dateOfBirth": "Et aut.",
+            "accountName": "Unde aut similique eveniet occaecati in.",
+            "accountNumber": "Dignissimos dolores.",
+            "amount": "Libero quo voluptatibus blanditiis.",
+            "bankAccount": "Blanditiis et architecto ut velit perferendis ea.",
+            "bankCode": "Id voluptatem.",
+            "currencyCode": "Voluptatem dolor ullam.",
+            "dateOfBirth": "Non sequi odio dignissimos assumenda a.",
             "metadata": {
-               "Quidem eaque debitis nam voluptas est ducimus.": "Nisi sint eum et id repudiandae."
+               "Esse veniam quod sunt facere.": "Sed quibusdam molestiae ea.",
+               "Quasi praesentium voluptas voluptas doloremque distinctio.": "Cum ullam rerum.",
+               "Sint possimus vel.": "Illo ea."
             },
-            "narration": "Quos et veniam."
+            "narration": "Numquam doloribus."
          },
          {
-            "accountName": "Unde ea.",
-            "accountNumber": "Incidunt maxime libero sint.",
-            "amount": "Possimus vel.",
-            "bankAccount": "Dicta consequuntur.",
-            "bankCode": "Totam non iure officiis.",
-            "currencyCode": "Inventore consectetur mollitia eum.",
-            "dateOfBirth": "Et aut.",
+            "accountName": "Unde aut similique eveniet occaecati in.",
+            "accountNumber": "Dignissimos dolores.",
+            "amount": "Libero quo voluptatibus blanditiis.",
+            "bankAccount": "Blanditiis et architecto ut velit perferendis ea.",
+            "bankCode": "Id voluptatem.",
+            "currencyCode": "Voluptatem dolor ullam.",
+            "dateOfBirth": "Non sequi odio dignissimos assumenda a.",
             "metadata": {
-               "Quidem eaque debitis nam voluptas est ducimus.": "Nisi sint eum et id repudiandae."
+               "Esse veniam quod sunt facere.": "Sed quibusdam molestiae ea.",
+               "Quasi praesentium voluptas voluptas doloremque distinctio.": "Cum ullam rerum.",
+               "Sint possimus vel.": "Illo ea."
             },
-            "narration": "Quos et veniam."
+            "narration": "Numquam doloribus."
          },
          {
-            "accountName": "Unde ea.",
-            "accountNumber": "Incidunt maxime libero sint.",
-            "amount": "Possimus vel.",
-            "bankAccount": "Dicta consequuntur.",
-            "bankCode": "Totam non iure officiis.",
-            "currencyCode": "Inventore consectetur mollitia eum.",
-            "dateOfBirth": "Et aut.",
+            "accountName": "Unde aut similique eveniet occaecati in.",
+            "accountNumber": "Dignissimos dolores.",
+            "amount": "Libero quo voluptatibus blanditiis.",
+            "bankAccount": "Blanditiis et architecto ut velit perferendis ea.",
+            "bankCode": "Id voluptatem.",
+            "currencyCode": "Voluptatem dolor ullam.",
+            "dateOfBirth": "Non sequi odio dignissimos assumenda a.",
             "metadata": {
-               "Quidem eaque debitis nam voluptas est ducimus.": "Nisi sint eum et id repudiandae."
+               "Esse veniam quod sunt facere.": "Sed quibusdam molestiae ea.",
+               "Quasi praesentium voluptas voluptas doloremque distinctio.": "Cum ullam rerum.",
+               "Sint possimus vel.": "Illo ea."
             },
-            "narration": "Quos et veniam."
+            "narration": "Numquam doloribus."
          }
       ],
-      "username": "Ut perferendis sunt ipsam earum."
+      "username": "Vel reiciendis."
    }'
 `, os.Args[0])
 }
@@ -1006,28 +1070,28 @@ Example:
 func africastalkingCardCheckoutUsage() {
 	fmt.Fprintf(os.Stderr, `%s [flags] africastalking card-checkout -body JSON
 
-Collect money into your Payment Wallet
+Collect money into your Payment Wallet by initiating transactions that deduct money from a customers Debit or Credit Card.
     -body JSON: 
 
 Example:
     `+os.Args[0]+` africastalking card-checkout --body '{
-      "amount": 0.3079408639331346,
-      "checkoutToken": "Nam ad adipisci voluptates ut.",
-      "currencyCode": "KES",
+      "amount": 10000.5,
+      "checkoutToken": "1234",
+      "currencyCode": "NGN",
       "metadata": {
-         "Ad voluptatem veritatis porro quo est deleniti.": "Quia quas dolorum distinctio."
+         "Foo": "Bar"
       },
-      "narration": "Debitis numquam et tempore non iste.",
+      "narration": "Monthly service charge for My Online Store",
       "paymentCard": {
-         "authToken": "Doloribus fugiat eos distinctio.",
+         "authToken": "1234",
          "countryCode": "NG",
-         "cvvNumber": 7038034840975459000,
-         "expiryMonth": 8002608393396165428,
-         "expiryYear": 5166870202654348333,
-         "number": "Sint consequatur quis praesentium sapiente."
+         "cvvNumber": 123,
+         "expiryMonth": 8,
+         "expiryYear": 2019,
+         "number": "1234567890"
       },
-      "productName": "Sint aut accusantium voluptate doloribus.",
-      "username": "Hic aut eaque qui quo."
+      "productName": "myProductName",
+      "username": "MyAppUserName"
    }'
 `, os.Args[0])
 }
@@ -1040,9 +1104,9 @@ Validate card checkout charge requests
 
 Example:
     `+os.Args[0]+` africastalking card-checkout-validate --body '{
-      "otp": "Necessitatibus nihil repellat.",
-      "transactionId": "Alias ullam doloribus qui fugiat natus dolor.",
-      "username": "Voluptatem atque modi."
+      "otp": "Possimus atque consequuntur ex enim.",
+      "transactionId": "Impedit ut in aut.",
+      "username": "Quos laboriosam aliquam aut neque voluptas."
    }'
 `, os.Args[0])
 }
@@ -1050,19 +1114,19 @@ Example:
 func africastalkingWalletTransferUsage() {
 	fmt.Fprintf(os.Stderr, `%s [flags] africastalking wallet-transfer -body JSON
 
-Transfer money from one product to another.
+Transfer money from one Payment Product to another Payment Product hosted on Africa’s Talking.
     -body JSON: 
 
 Example:
     `+os.Args[0]+` africastalking wallet-transfer --body '{
-      "amount": 0.7660151954115325,
-      "currencyCode": "Harum impedit sunt omnis rerum autem suscipit.",
+      "amount": 2000,
+      "currencyCode": "KES",
       "metadata": {
-         "Aut enim deserunt accusamus consequuntur rem.": "Laudantium aut magnam tenetur."
+         "Foo": "Bar"
       },
-      "productName": "Numquam vitae nam sed.",
-      "targetProductCode": "Inventore ea vel est consequatur.",
-      "username": "Et quis voluptas enim consequatur placeat."
+      "productName": "myProductName",
+      "targetProductCode": 2373,
+      "username": "MyUserName"
    }'
 `, os.Args[0])
 }
@@ -1070,18 +1134,87 @@ Example:
 func africastalkingTopupStashUsage() {
 	fmt.Fprintf(os.Stderr, `%s [flags] africastalking topup-stash -body JSON
 
-Move money from a Payment Product to an application stash.
+Move money from a Payment Product to an Africa’s Talking application stash.
     -body JSON: 
 
 Example:
     `+os.Args[0]+` africastalking topup-stash --body '{
-      "amount": 0.510901788493485,
-      "currencyCode": "Corrupti esse quo non esse quia enim.",
+      "amount": 2000,
+      "currencyCode": "KES",
       "metadata": {
-         "Nihil minima et labore voluptatem perspiciatis.": "Exercitationem ratione."
+         "Foo": "Bar"
       },
-      "productName": "Provident sint rerum eum sed eius aut.",
-      "username": "Similique qui facere minima."
+      "productName": "myProductName",
+      "username": "MyUserName"
+   }'
+`, os.Args[0])
+}
+
+func africastalkingFindTransactionUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] africastalking find-transaction -body JSON
+
+Fetch transactions of a particular payment product.
+    -body JSON: 
+
+Example:
+    `+os.Args[0]+` africastalking find-transaction --body '{
+      "transactionId": "394828XXXV",
+      "username": "MyAppUserName"
+   }'
+`, os.Args[0])
+}
+
+func africastalkingFetchProductTransactionsUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] africastalking fetch-product-transactions -body JSON
+
+Fetch transactions of a particular payment product.
+    -body JSON: 
+
+Example:
+    `+os.Args[0]+` africastalking fetch-product-transactions --body '{
+      "category": "UserStashTopup",
+      "count": 811,
+      "destination": "BankAccount",
+      "endDate": "2011-04-10",
+      "pageNumber": 7211156821635237590,
+      "productName": "MyProductName",
+      "provider": "Athena",
+      "providerChannel": "Ullam libero velit.",
+      "source": "phoneNumber",
+      "startDate": "1991-10-20",
+      "status": "Success",
+      "username": "MyAppUserName"
+   }'
+`, os.Args[0])
+}
+
+func africastalkingFetchWalletTransactionsUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] africastalking fetch-wallet-transactions -body JSON
+
+Fetch your wallet transactions
+    -body JSON: 
+
+Example:
+    `+os.Args[0]+` africastalking fetch-wallet-transactions --body '{
+      "categories": "MobileB2C",
+      "count": 242,
+      "endDate": "2003-12-12",
+      "pageNumber": 937507102661436005,
+      "startDate": "1991-01-30",
+      "username": "MyAppUserName"
+   }'
+`, os.Args[0])
+}
+
+func africastalkingFetchWalletBalanceUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] africastalking fetch-wallet-balance -body JSON
+
+Fetch your wallet balance
+    -body JSON: 
+
+Example:
+    `+os.Args[0]+` africastalking fetch-wallet-balance --body '{
+      "username": "MyAppUserName"
    }'
 `, os.Args[0])
 }
@@ -1104,7 +1237,7 @@ Example:
             "phoneNumber": "+234811222333"
          }
       ],
-      "username": "Eum laudantium odit praesentium voluptas dignissimos eius."
+      "username": "Quisquam in tempora sequi."
    }'
 `, os.Args[0])
 }
@@ -1117,10 +1250,10 @@ Publishes messages to remote devices.
 
 Example:
     `+os.Args[0]+` africastalking publish-io-t --body '{
-      "deviceGroup": "Fuga pariatur voluptates.",
-      "payload": "Maiores eos quisquam quis nisi neque.",
+      "deviceGroup": "Quia molestiae est neque cum.",
+      "payload": "Consequuntur nesciunt.",
       "topic": "\u003cusername\u003e/\u003cdevice-group\u003e/\u003cthe-topic\u003e",
-      "username": "Repellat explicabo similique."
+      "username": "Voluptatem aliquam ut perferendis sunt ipsam."
    }'
 `, os.Args[0])
 }
@@ -1132,7 +1265,7 @@ Initiate an application data request.
     -p STRING: string is the payload type of the africastalking service InitiateAppData method.
 
 Example:
-    `+os.Args[0]+` africastalking initiate-app-data --p "Quis dolorum iure ut perferendis quidem facilis."
+    `+os.Args[0]+` africastalking initiate-app-data --p "Quasi perspiciatis omnis ipsum nostrum nisi omnis."
 `, os.Args[0])
 }
 
@@ -1144,7 +1277,7 @@ Generates a valid auth token
 
 Example:
     `+os.Args[0]+` africastalking generate --body '{
-      "apiKey": "Quia omnis sed.",
+      "apiKey": "Aut sed inventore consectetur mollitia.",
       "username": "sandbox"
    }'
 `, os.Args[0])

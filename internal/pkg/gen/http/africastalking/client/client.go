@@ -131,6 +131,22 @@ type Client struct {
 	// endpoint.
 	TopupStashDoer goahttp.Doer
 
+	// FindTransaction Doer is the HTTP client used to make requests to the
+	// FindTransaction endpoint.
+	FindTransactionDoer goahttp.Doer
+
+	// FetchProductTransactions Doer is the HTTP client used to make requests to
+	// the FetchProductTransactions endpoint.
+	FetchProductTransactionsDoer goahttp.Doer
+
+	// FetchWalletTransactions Doer is the HTTP client used to make requests to the
+	// FetchWalletTransactions endpoint.
+	FetchWalletTransactionsDoer goahttp.Doer
+
+	// FetchWalletBalance Doer is the HTTP client used to make requests to the
+	// FetchWalletBalance endpoint.
+	FetchWalletBalanceDoer goahttp.Doer
+
 	// SendAirtime Doer is the HTTP client used to make requests to the SendAirtime
 	// endpoint.
 	SendAirtimeDoer goahttp.Doer
@@ -198,6 +214,10 @@ func NewClient(
 		CardCheckoutValidateDoer:     doer,
 		WalletTransferDoer:           doer,
 		TopupStashDoer:               doer,
+		FindTransactionDoer:          doer,
+		FetchProductTransactionsDoer: doer,
+		FetchWalletTransactionsDoer:  doer,
+		FetchWalletBalanceDoer:       doer,
 		SendAirtimeDoer:              doer,
 		PublishIoTDoer:               doer,
 		InitiateAppDataDoer:          doer,
@@ -925,6 +945,102 @@ func (c *Client) TopupStash() endpoint.Endpoint {
 		resp, err := c.TopupStashDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("africastalking", "TopupStash", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// FindTransaction returns an endpoint that makes HTTP requests to the
+// africastalking service FindTransaction server.
+func (c *Client) FindTransaction() endpoint.Endpoint {
+	var (
+		encodeRequest  = EncodeFindTransactionRequest(c.encoder)
+		decodeResponse = DecodeFindTransactionResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v interface{}) (interface{}, error) {
+		req, err := c.BuildFindTransactionRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.FindTransactionDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("africastalking", "FindTransaction", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// FetchProductTransactions returns an endpoint that makes HTTP requests to the
+// africastalking service FetchProductTransactions server.
+func (c *Client) FetchProductTransactions() endpoint.Endpoint {
+	var (
+		encodeRequest  = EncodeFetchProductTransactionsRequest(c.encoder)
+		decodeResponse = DecodeFetchProductTransactionsResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v interface{}) (interface{}, error) {
+		req, err := c.BuildFetchProductTransactionsRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.FetchProductTransactionsDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("africastalking", "FetchProductTransactions", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// FetchWalletTransactions returns an endpoint that makes HTTP requests to the
+// africastalking service FetchWalletTransactions server.
+func (c *Client) FetchWalletTransactions() endpoint.Endpoint {
+	var (
+		encodeRequest  = EncodeFetchWalletTransactionsRequest(c.encoder)
+		decodeResponse = DecodeFetchWalletTransactionsResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v interface{}) (interface{}, error) {
+		req, err := c.BuildFetchWalletTransactionsRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.FetchWalletTransactionsDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("africastalking", "FetchWalletTransactions", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// FetchWalletBalance returns an endpoint that makes HTTP requests to the
+// africastalking service FetchWalletBalance server.
+func (c *Client) FetchWalletBalance() endpoint.Endpoint {
+	var (
+		encodeRequest  = EncodeFetchWalletBalanceRequest(c.encoder)
+		decodeResponse = DecodeFetchWalletBalanceResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v interface{}) (interface{}, error) {
+		req, err := c.BuildFetchWalletBalanceRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.FetchWalletBalanceDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("africastalking", "FetchWalletBalance", err)
 		}
 		return decodeResponse(resp)
 	}

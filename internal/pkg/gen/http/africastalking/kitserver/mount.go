@@ -46,7 +46,7 @@ func MountFetchSMSHandler(mux goahttp.Muxer, h http.Handler) {
 			h.ServeHTTP(w, r)
 		}
 	}
-	mux.Handle("GET", "/version1/messaging?{username}&{lastReceivedId}", f)
+	mux.Handle("GET", "/version1/messaging", f)
 }
 
 // MountNewCheckoutTokenHandler configures the mux to serve the
@@ -82,7 +82,7 @@ func MountFetchPremiumSubscriptionHandler(mux goahttp.Muxer, h http.Handler) {
 			h.ServeHTTP(w, r)
 		}
 	}
-	mux.Handle("GET", "/version1/subscription?username={username}&shortCode={shortCode}&keyword={keyword}&lastReceivedId={lastReceivedId}", f)
+	mux.Handle("GET", "/version1/subscription", f)
 }
 
 // MountPurgePremiumSubscriptionHandler configures the mux to serve the
@@ -371,6 +371,54 @@ func MountTopupStashHandler(mux goahttp.Muxer, h http.Handler) {
 		}
 	}
 	mux.Handle("POST", "/topup/stash", f)
+}
+
+// MountFindTransactionHandler configures the mux to serve the "africastalking"
+// service "FindTransaction" endpoint.
+func MountFindTransactionHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/transaction/find", f)
+}
+
+// MountFetchProductTransactionsHandler configures the mux to serve the
+// "africastalking" service "FetchProductTransactions" endpoint.
+func MountFetchProductTransactionsHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/transaction/fetch", f)
+}
+
+// MountFetchWalletTransactionsHandler configures the mux to serve the
+// "africastalking" service "FetchWalletTransactions" endpoint.
+func MountFetchWalletTransactionsHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/wallet/fetch", f)
+}
+
+// MountFetchWalletBalanceHandler configures the mux to serve the
+// "africastalking" service "FetchWalletBalance" endpoint.
+func MountFetchWalletBalanceHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/query/wallet/balance", f)
 }
 
 // MountSendAirtimeHandler configures the mux to serve the "africastalking"

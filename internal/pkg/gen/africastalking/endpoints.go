@@ -45,6 +45,10 @@ type Endpoints struct {
 	CardCheckoutValidate     endpoint.Endpoint
 	WalletTransfer           endpoint.Endpoint
 	TopupStash               endpoint.Endpoint
+	FindTransaction          endpoint.Endpoint
+	FetchProductTransactions endpoint.Endpoint
+	FetchWalletTransactions  endpoint.Endpoint
+	FetchWalletBalance       endpoint.Endpoint
 	SendAirtime              endpoint.Endpoint
 	PublishIoT               endpoint.Endpoint
 	InitiateAppData          endpoint.Endpoint
@@ -85,6 +89,10 @@ func NewEndpoints(s Service) *Endpoints {
 		CardCheckoutValidate:     NewCardCheckoutValidateEndpoint(s),
 		WalletTransfer:           NewWalletTransferEndpoint(s),
 		TopupStash:               NewTopupStashEndpoint(s),
+		FindTransaction:          NewFindTransactionEndpoint(s),
+		FetchProductTransactions: NewFetchProductTransactionsEndpoint(s),
+		FetchWalletTransactions:  NewFetchWalletTransactionsEndpoint(s),
+		FetchWalletBalance:       NewFetchWalletBalanceEndpoint(s),
 		SendAirtime:              NewSendAirtimeEndpoint(s),
 		PublishIoT:               NewPublishIoTEndpoint(s),
 		InitiateAppData:          NewInitiateAppDataEndpoint(s),
@@ -125,6 +133,10 @@ func (e *Endpoints) Use(m func(endpoint.Endpoint) endpoint.Endpoint) {
 	e.CardCheckoutValidate = m(e.CardCheckoutValidate)
 	e.WalletTransfer = m(e.WalletTransfer)
 	e.TopupStash = m(e.TopupStash)
+	e.FindTransaction = m(e.FindTransaction)
+	e.FetchProductTransactions = m(e.FetchProductTransactions)
+	e.FetchWalletTransactions = m(e.FetchWalletTransactions)
+	e.FetchWalletBalance = m(e.FetchWalletBalance)
 	e.SendAirtime = m(e.SendAirtime)
 	e.PublishIoT = m(e.PublishIoT)
 	e.InitiateAppData = m(e.InitiateAppData)
@@ -252,7 +264,7 @@ func NewTransferCallEndpoint(s Service) endpoint.Endpoint {
 		if err != nil {
 			return nil, err
 		}
-		vres := NewViewedCalltransferresponse(res, "default")
+		vres := NewViewedCallTransferResponse(res, "default")
 		return vres, nil
 	}
 }
@@ -347,7 +359,7 @@ func NewQueueEndpoint(s Service) endpoint.Endpoint {
 		if err != nil {
 			return nil, err
 		}
-		vres := NewViewedQueuedstatusresult(res, "default")
+		vres := NewViewedQueuedStatusResult(res, "default")
 		return vres, nil
 	}
 }
@@ -497,6 +509,62 @@ func NewTopupStashEndpoint(s Service) endpoint.Endpoint {
 			return nil, err
 		}
 		vres := NewViewedTopupStashResponse(res, "default")
+		return vres, nil
+	}
+}
+
+// NewFindTransactionEndpoint returns an endpoint function that calls the
+// method "FindTransaction" of service "africastalking".
+func NewFindTransactionEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*FindTransactionPayload)
+		res, err := s.FindTransaction(ctx, p)
+		if err != nil {
+			return nil, err
+		}
+		vres := NewViewedFindTransactionResponse(res, "default")
+		return vres, nil
+	}
+}
+
+// NewFetchProductTransactionsEndpoint returns an endpoint function that calls
+// the method "FetchProductTransactions" of service "africastalking".
+func NewFetchProductTransactionsEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*ProductTransactionsPayload)
+		res, err := s.FetchProductTransactions(ctx, p)
+		if err != nil {
+			return nil, err
+		}
+		vres := NewViewedProductTransactionsResponse(res, "default")
+		return vres, nil
+	}
+}
+
+// NewFetchWalletTransactionsEndpoint returns an endpoint function that calls
+// the method "FetchWalletTransactions" of service "africastalking".
+func NewFetchWalletTransactionsEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*WalletTransactionsPayload)
+		res, err := s.FetchWalletTransactions(ctx, p)
+		if err != nil {
+			return nil, err
+		}
+		vres := NewViewedWalletTransactionsResponse(res, "default")
+		return vres, nil
+	}
+}
+
+// NewFetchWalletBalanceEndpoint returns an endpoint function that calls the
+// method "FetchWalletBalance" of service "africastalking".
+func NewFetchWalletBalanceEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*WalletBalancePayload)
+		res, err := s.FetchWalletBalance(ctx, p)
+		if err != nil {
+			return nil, err
+		}
+		vres := NewViewedWalletBalanceResponse(res, "default")
 		return vres, nil
 	}
 }
