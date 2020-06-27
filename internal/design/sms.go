@@ -64,6 +64,7 @@ var BulkPayload = Type("BulkPayload", func() {
 		// In case it’s not delivered to the subscriber
 		Description("No. of hours subscription message should be retried")
 	})
+
 	Required("username", "to", "message")
 })
 
@@ -81,7 +82,6 @@ var BulkResponse = ResultType("BulkResponse", func() {
 	})
 })
 
-
 var FetchMsgPayload = Type("FetchMsgPayload", func() {
 	Description("Incrementally fetches our application inbox")
 
@@ -93,6 +93,7 @@ var FetchMsgPayload = Type("FetchMsgPayload", func() {
 		Description("This is the id of the message that you last processed.")
 		Default("0") // The default is 0.
 	})
+
 	Required("username")
 })
 
@@ -109,7 +110,6 @@ var FetchMsgResponse = ResultType("FetchMsgResponse", func() {
 		Attribute("SMSMessageData")
 	})
 })
-
 
 var PremiumPayload = Type("PremiumPayload", func() {
 	Description("Send a Premium SMS through your application")
@@ -165,6 +165,7 @@ var PremiumPayload = Type("PremiumPayload", func() {
 		// In case it’s not delivered to the subscriber.
 		Description("No. of hours subscription message should be retried")
 	})
+
 	Required("username", "to", "message")
 })
 
@@ -182,14 +183,13 @@ var PremiumResponse = ResultType("PremiumResponse", func() {
 	})
 })
 
-
-
 var CheckoutTokenPayload = Type("CheckoutTokenPayload", func() {
 	Description("Authorizes a premium SMS subscription.")
 
 	Attribute("phoneNumber", String, func() {
 		Description("Mobile phone number you want to create a subscription for.")
 	})
+
 	Required("phoneNumber")
 })
 
@@ -244,7 +244,14 @@ var NewSubPayload = Type("NewSubPayload", func() {
 		Description("Token used to validate the subscription request")
 		Example("")
 	})
-	Required("username", "shortCode", "keyword", "phoneNumber", "checkoutToken")
+
+	Required(
+		"username",
+		"shortCode",
+		"keyword",
+		"phoneNumber",
+		"checkoutToken",
+	)
 })
 
 var NewSubResponse = ResultType("NewSubResponse", func() {
@@ -289,6 +296,7 @@ var FetchSubPayload = Type("FetchSubPayload", func() {
 		Description("ID of the subscription you believe to be your last.")
 		Default("0") // Set it to 0 to for the first time.
 	})
+
 	Required("username", "shortCode", "keyword")
 })
 
@@ -328,6 +336,7 @@ var PurgeSubPayload = Type("PurgeSubPayload", func() {
 		Description("The phoneNumber to be unsubscribed.")
 		Example("")
 	})
+
 	Required("username", "shortCode", "keyword", "phoneNumber")
 })
 
@@ -369,8 +378,6 @@ var Subscriptions = Type("Subscriptions", func() {
 		Example("Timestamp")
 	})
 })
-
-
 
 var BulkSMSMessageData = Type("BulkSMSMessageData", func() {
 	Description("A Map detailing the eventual result of the sms request")
@@ -436,8 +443,6 @@ var Messages = Type("Messages", func() {
 	})
 })
 
-
-
 var Recipients = Type("Recipients", func() {
 	Description("Recipient Attributes")
 
@@ -483,4 +488,3 @@ var Recipients = Type("Recipients", func() {
 		Example("ATPid_SampleTxnId123")
 	})
 })
-

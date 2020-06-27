@@ -11,7 +11,7 @@ const (
 	WalletTransferSandboxURL = "https://payments.sandbox.africastalking.com/transfer/wallet"
 )
 
-// Transfer money from one product to another.
+// Transfer money from one Payment Product to another Payment Product hosted on Africa’s Talking.
 func (c *Client) walletTransfer(ctx context.Context, p *africastalking.WalletTransferPayload) (res *africastalking.WalletTransferResponse, err error) {
 
 	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/transfer/wallet", p)

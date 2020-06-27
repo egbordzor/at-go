@@ -12,22 +12,27 @@ var MobileCheckoutPayload = Type("MobileCheckoutPayload", func() {
 
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
+		Example("MyAppUserName")
 	})
 	Attribute("productName", String, func() {
 		Description("Africa’s Talking Payment product to initiate this transaction.")
+		Example("myProductName")
 	})
 	Attribute("providerChannel", String, func() {
 		Description("Provider channel the payment will be initiated from.")
+		Example("myProviderChannel")
 	})
 	Attribute("phoneNumber", String, func() {
 		Description("Phone number of the client that will complete this transaction.")
+		Example("+254711XXXYYY")
 	})
 	Attribute("currencyCode", String, func() {
 		Description("3-digit ISO format currency code.")
 		Example("KES")
 	})
-	Attribute("amount", String, func() {
+	Attribute("amount", Float64, func() {
 		Description("Amount client is expected to confirm.")
+		Example(3000)
 	})
 	Attribute("metadata", MapOf(String, String), func() {
 		Description("Map of any metadata associates with the request")
@@ -86,13 +91,65 @@ var MobileCheckoutResponse = ResultType("MobileCheckoutResponse", func() {
 	})
 })
 
-var MobileB2BPayload = Type("MobileB2BPayload", func() {
-	Description("Initiate Mobile B2B HTTP request.")
+var MobileB2CPayload = Type("MobileB2CPayload", func() {
+	Description("Initiate Mobile B2C HTTP request.")
+
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
+		Example("MyAppUserName")
+	})
+	Attribute("productName", String, func() {
+		Description("Africa’s Talking Payment Product to initiate this transaction.")
+		Example("myProductName")
+	})
+
+	// Please note: You can currently pass a maximum of 10 recipient elements.
+	// Recipient is a Map of a mobile subscribers account that will receive the B2C transaction.
+	Attribute("recipients", ArrayOf(MobileRecipients), func() {
+		Description("A list of B2C Mobile Recipients")
+		MinLength(1)
+		MaxLength(10)
+	})
+	Required("username", "productName", "recipients")
+})
+
+var MobileB2CResponse = ResultType("MobileB2CResponse", func() {
+	Description("Mobile B2C HTTP response.")
+	TypeName("MobileB2CResponse")
+	ContentType("application/json")
+
+	Attributes(func() {
+		Attribute("numQueued", Int, func() {
+			Description("Number of B2C transactions that were successfully queued.")
+			Example(1)
+		})
+		Attribute("totalValue", String, func() {
+			Description("Total value of all the transactions that were successfully queued.")
+			Example("KES 100000")
+		})
+		Attribute("totalTransactionFee", String, func() {
+			Description("Total transaction fee charged for all the transactions that were successfully queued. ")
+			Example("KES 2.00")
+		})
+		Attribute("entries", ArrayOf(B2CEntry), func() {
+			Description("A list of B2C entries")
+		})
+		Attribute("errorMessage", String, func() {
+			Description("Error message if the ENTIRE request was rejected by the API")
+		})
+	})
+})
+
+var MobileB2BPayload = Type("MobileB2BPayload", func() {
+	Description("Initiate Mobile B2B HTTP request.")
+
+	Attribute("username", String, func() {
+		Description("Africa’s Talking application username.")
+		Example("MyAppUserName")
 	})
 	Attribute("productName", String, func() {
 		Description("Africa’s Talking Payment Product initiating transaction.")
+		Example("myProductName")
 	})
 	Attribute("provider", String, func() {
 		Description("Provider used to process the B2C request.")
@@ -106,26 +163,40 @@ var MobileB2BPayload = Type("MobileB2BPayload", func() {
 			// Payments facilitated by our Developer Sandbox.
 			// Please note: This is not available on our production systems
 			"Athena")
+		Example("Mpesa")
 	})
+
 	Attribute("transferType", String, func() {
 		Description("Transfer type of the payment.")
 		Enum("BusinessBuyGoods", "BusinessPayBill", "DisburseFundsToBusiness", "BusinessToBusinessTransfer")
+		Example("BusinessBuyGoods")
 	})
 	Attribute("currencyCode", String, func() {
 		Description("3-digit ISO format currency code")
 		Example("KES")
 	})
-	Attribute("amount", String, func() {
+	Attribute("amount", Float64, func() {
 		Description("Amount client is expected to confirm.")
+		Example(3000)
 	})
 	Attribute("destinationChannel", String, func() {
+
+		// E.g the Mobile Provider’s PayBill or Buy Goods number that belongs to your organization.
 		Description("Name or number of the channel receiving payment by the provider.")
+		Example("Buy Goods Number")
 	})
 	Attribute("destinationAccount", String, func() {
 		Description("Account name used by the business to receive money on the provided destinationChannel.")
+		Example("Account Name")
 	})
-	Attribute("metadata", String, func() {
+	Attribute("metadata", MapOf(String, String), func() {
 		Description("A map of any metadata associated with the request.")
+		Key(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+		})
+		Value(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+		})
 	})
 })
 
@@ -172,53 +243,9 @@ var MobileB2BResponse = ResultType("MobileB2BResponse", func() {
 		})
 		Attribute("errorMessage", String, func() {
 			Description("A more descriptive error message for the status of this transaction.")
+			Example("error")
 		})
 		Required("status")
-	})
-})
-
-var MobileB2CPayload = Type("MobileB2CPayload", func() {
-	Description("Initiate Mobile B2C HTTP request.")
-
-	Attribute("username", String, func() {
-		Description("Africa’s Talking application username.")
-	})
-	Attribute("productName", String, func() {
-		Description("Africa’s Talking Payment Product to initiate this transaction.")
-	})
-
-	// Please note: You can currently pass a maximum of 10 recipient elements.
-	// Recipient is a Map of a mobile subscribers account that will receive the B2C transaction.
-	Attribute("recipients", ArrayOf(MobileRecipients), func() {
-		Description("A list of B2C Mobile Recipients")
-	})
-	Required("username", "productName", "recipients")
-})
-
-var MobileB2CResponse = ResultType("MobileB2CResponse", func() {
-	Description("Mobile B2C HTTP response.")
-	TypeName("MobileB2CResponse")
-	ContentType("application/json")
-
-	Attributes(func() {
-		Attribute("numQueued", Int, func() {
-			Description("Number of B2C transactions that were successfully queued.")
-			Example(1)
-		})
-		Attribute("totalValue", String, func() {
-			Description("Total value of all the transactions that were successfully queued.")
-			Example("KES 100000")
-		})
-		Attribute("totalTransactionFee", String, func() {
-			Description("Total transaction fee charged for all the transactions that were successfully queued. ")
-			Example("KES 2.00")
-		})
-		Attribute("entries", ArrayOf(B2CEntry), func() {
-			Description("A list of B2C entries")
-		})
-		Attribute("errorMessage", String, func() {
-			Description("Error message if the ENTIRE request was rejected by the API")
-		})
 	})
 })
 
@@ -292,21 +319,26 @@ var MobileRecipients = Type("MobileRecipients", func() {
 
 	Attribute("name", String, func() {
 		Description("Name of the B2C transaction recipient.")
+		Example("name")
 	})
 	Attribute("phoneNumber", String, func() {
 		Description("Phone number of the B2C transaction recipient.")
+		Example("+254711XXXYYY")
 	})
 	Attribute("currencyCode", String, func() {
 		Description("3-digit ISO format currency code.")
+		Example("KES")
 	})
-	Attribute("amount", String, func() {
+	Attribute("amount", Float64, func() {
 		Description("Amount that the client is expected to confirm.")
+		Example(100.50)
 	})
 
 	// The payment channel must be mapped to your Africa’s Talking payment product.
 	// If not specified, a default provider channel will be used.
 	Attribute("providerChannel", String, func() {
 		Description("Channel payment will be made from.")
+		Example("myProviderChannel")
 	})
 	Attribute("reason", String, func() {
 		Description("Purpose of the payment.")
@@ -317,11 +349,18 @@ var MobileRecipients = Type("MobileRecipients", func() {
 			"PromotionPayment",
 		)
 	})
+	Example("SalaryPayment")
 
 	// Use this field to send data that will map notifications to B2C requests.
 	// It will be included in the notification we send once the B2C request is complete.
 	Attribute("metadata", MapOf(String, String), func() {
 		Description("Map of metadata associated with the request.")
+		Key(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+		})
+		Value(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+		})
 	})
 	Required("phoneNumber", "currencyCode", "amount")
 })

@@ -7,18 +7,18 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// Find Transaction
-// Live: https://payments.africastalking.com/query/transaction/find
-// Sandbox: https://payments.sandbox.africastalking.com/query/transaction/find
 var FindTransactionPayload = Type("FindTransactionPayload", func() {
 	Description("Find Transaction Query HTTP request.")
 
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
+		Example("MyAppUserName")
 	})
 	Attribute("transactionId", String, func() {
 		Description("ID of the transaction you would like to find.")
+		Example("394828XXXV")
 	})
+
 	Required("username", "transactionId")
 })
 
@@ -31,12 +31,14 @@ var FindTransactionResponse = ResultType("FindTransactionResponse", func() {
 		Attribute("status", String, func() {
 			Description("Status of the request")
 			Enum("Success", "Failed")
+			Example("Success")
 		})
 		Attribute("data", TransactionResponse, func() {
 			Description("Details of the transaction.")
 		})
 		Attribute("errorMessage", String, func() {
 			Description("A message detailing what happened with a failed request.")
+			Example("Error")
 		})
 	})
 
@@ -53,22 +55,28 @@ var ProductTransactionsPayload = Type("ProductTransactionsPayload", func() {
 
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
+		Example("MyAppUserName")
 	})
 	Attribute("productName", String, func() {
 		Description("Name of the payment product to fetch.")
+		Example("MyProductName")
 	})
-	Attribute("pageNumber", String, func() {
+	Attribute("pageNumber", Int, func() {
 		Description("Number of the page you’d like to read results from.")
+		Minimum(1) // This STARTS from 1 and NOT 0
 	})
-	Attribute("count", String, func() {
+	Attribute("count", Int, func() {
 		Description("Number of transaction results you would like for this query.")
+		Minimum(1) // Must be > 1 and < 1,000
+		Maximum(1000)
 	})
 	Attribute("startDate", String, func() {
 		Description("Transaction start date; in the format YYYY-MM-DD")
-		Format(FormatDate)
+		Format(FormatDate) // Format YYYY-MM-DD
 	})
 	Attribute("endDate", String, func() {
 		Description("Transaction end date; in the format YYYY-MM-DD")
+		Format(FormatDate) // Format YYYY-MM-DD
 	})
 	Attribute("category", String, func() {
 		Description("Transaction category you would like to consider.")
@@ -81,23 +89,27 @@ var ProductTransactionsPayload = Type("ProductTransactionsPayload", func() {
 			"BankTransfer",
 			"WalletTransfer",
 			"UserStashTopup",
-			)
+		)
 	})
 	Attribute("provider", String, func() {
 		Description("Transaction provider you would like to consider.")
 		Enum("Mpesa", "Segovia", "Flutterwave", "Admin", "Athena")
+		Example("Athena")
 	})
 	Attribute("status", String, func() {
 		Description("Transaction status you would like to consider")
 		Enum("Success", "Failed")
+		Example("Success")
 	})
 	Attribute("source", String, func() {
 		Description("Transaction source you would like to consider.")
 		Enum("phoneNumber", "BankAccount", "Card", "Wallet")
+		Example("phoneNumber")
 	})
 	Attribute("destination", String, func() {
 		Description("Transaction destination you would like to consider.")
 		Enum("PhoneNumber", "BankAccount", "Card", "Wallet")
+		Example("BankAccount")
 	})
 
 	// This could, for example, be the Mobile Provider’s Paybill
@@ -105,6 +117,7 @@ var ProductTransactionsPayload = Type("ProductTransactionsPayload", func() {
 	Attribute("providerChannel", String, func() {
 		Description("Transaction provider channel you would like to consider.")
 	})
+
 	Required("username", "productName", "pageNumber", "count")
 })
 
@@ -130,25 +143,29 @@ var ProductTransactionsResponse = ResultType("ProductTransactionsResponse", func
 	})
 })
 
-// Fetch Wallet Transactions
 var WalletTransactionsPayload = Type("WalletTransactionsPayload", func() {
 	Description("Wallet Transaction HTTP request.")
 
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
+		Example("MyAppUserName")
 	})
-	Attribute("pageNumber", String, func() {
+	Attribute("pageNumber", Int, func() {
 		Description("Number of the page you’d like to read results from.")
+		Minimum(1) // This STARTS from 1 and NOT 0
 	})
-	Attribute("count", String, func() {
+	Attribute("count", Int, func() {
 		Description("Number of transaction results you would like for this query.")
+		Minimum(1) // Must be > 1 and < 1,000
+		Maximum(1000)
 	})
 	Attribute("startDate", String, func() {
 		Description("Transaction start date; in the format YYYY-MM-DD")
-		Format(FormatDate)
+		Format(FormatDate) // Format YYYY-MM-DD
 	})
 	Attribute("endDate", String, func() {
 		Description("Transaction end date; in the format YYYY-MM-DD")
+		Format(FormatDate) // Format YYYY-MM-DD
 	})
 	Attribute("categories", String, func() {
 		Description("List of transaction categories you would like to consider.")
@@ -161,10 +178,10 @@ var WalletTransactionsPayload = Type("WalletTransactionsPayload", func() {
 			"BankTransfer",
 			"WalletTransfer",
 			"UserStashTopup",
-			)
+		)
 	})
-	Required("username", "pageNumber", "count")
 
+	Required("username", "pageNumber", "count")
 })
 
 var WalletTransactionsResponse = ResultType("WalletTransactionsResponse", func() {
@@ -185,6 +202,7 @@ var WalletTransactionsResponse = ResultType("WalletTransactionsResponse", func()
 			Description("A message detailing what happened with a failed request.")
 		})
 	})
+
 	View("default", func() {
 		Attribute("status")
 		Attribute("responses")
@@ -192,13 +210,15 @@ var WalletTransactionsResponse = ResultType("WalletTransactionsResponse", func()
 	})
 })
 
-// Fetch Wallet Balance
 var WalletBalancePayload = Type("WalletBalancePayload", func() {
 	Description("Wallet Balance HTTP request.")
 
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username")
+		Example("MyAppUserName")
 	})
+
+	Required("username")
 })
 
 var WalletBalanceResponse = ResultType("WalletBalanceResponse", func() {
@@ -229,6 +249,7 @@ var WalletBalanceResponse = ResultType("WalletBalanceResponse", func() {
 })
 
 var WalletEntry = Type("WalletEntry", func() {
+
 	Attribute("description", String, func() {
 		Description("Detailed description of this transaction")
 		Example("MobileB2C Payment Request to +254708663158")
@@ -239,7 +260,16 @@ var WalletEntry = Type("WalletEntry", func() {
 	})
 	Attribute("category", String, func() {
 		Description("Category of the payment")
-		Enum("BankCheckout", "CardCheckout", "MobileCheckout", "MobileC2B", "MobileB2C", "MobileB2B", "BankTransfer", "WalletTransfer", "UserStashTopup")
+		Enum("BankCheckout",
+			"CardCheckout",
+			"MobileCheckout",
+			"MobileC2B",
+			"MobileB2C",
+			"MobileB2B",
+			"BankTransfer",
+			"WalletTransfer",
+			"UserStashTopup",
+		)
 	})
 	Attribute("transactionData", CollectionOf(FindTransactionResponse), func() {
 		Description("Contains details of the specific transaction")
@@ -255,27 +285,44 @@ var WalletEntry = Type("WalletEntry", func() {
 })
 
 var TransactionResponse = Type("TransactionResponse", func() {
+
 	Attribute("requestMetadata", MapOf(String, String), func() {
 		Description("Metadata sent by your application when it initiated this transaction.")
+		Key(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+			Example("Foo")
+		})
+		Value(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+			Example("Bar")
+		})
 	})
 	Attribute("sourceType", String, func() {
 		Description("Type of party providing funds for this transaction (the Debit Party).")
 		Enum(
 
-			// Indicates that the funds are being provided by
-			// a mobile subscriber through their mobile device.
+			// Indicates that the funds
+			// are being provided by
+			// a mobile subscriber through
+			// their mobile device.
 			"PhoneNumber",
 
-			// Indicates that the funds are being provided by
-			// a customer through their Bank Account.
+			// Indicates that the funds
+			// are being provided by
+			// a customer through their
+			// Bank Account.
 			"BankAccount",
 
-			// Indicates that the funds are being provided by
-			// a customer through their Debit or Credit Card.
+			// Indicates that the funds
+			// are being provided by
+			// a customer through their
+			// Debit or Credit Card.
 			"Card",
 
-			// Indicates that the funds are being provided by
-			// your Africa’s Talking Wallet through one of your products.
+			// Indicates that the funds
+			// are being provided by
+			// your Africa’s Talking Wallet
+			// through one of your products.
 			"Wallet",
 		)
 		Example("Wallet")
@@ -292,20 +339,30 @@ var TransactionResponse = Type("TransactionResponse", func() {
 		Description("Payment provider that facilitated this transaction")
 		Enum(
 
-			// This identifies payments facilitated by Safaricom’s M-PESA’s APIs.
+			// This identifies payments
+			// facilitated by Safaricom’s
+			// M-PESA’s APIs.
 			"Mpesa",
 
-			// This identifies payments facilitated by Segovia’s APIs.
+			// This identifies payments
+			// facilitated by Segovia’s APIs.
 			"Segovia",
 
-			// This identifies payments facilitated by Flutterwaves’s APIs.
+			// This identifies payments
+			// facilitated by
+			// Flutterwaves’s APIs.
 			"Flutterwave",
 
-			// This identifies payments facilitated by our administrative APIs.
+			// This identifies payments
+			// facilitated by our
+			// administrative APIs.
 			"Admin",
 
-			// This identifies payments facilitated by our Developer Sandbox.
-			// This is not available on our production systems.
+			// This identifies payments
+			// facilitated by our
+			// Developer Sandbox.
+			// This is not available on
+			// our production systems.
 			"Athena",
 		)
 		Example("Mpesa")
@@ -314,20 +371,27 @@ var TransactionResponse = Type("TransactionResponse", func() {
 		Description("Identifies party receiving funds in this transaction (the Credit Party)")
 		Enum(
 
-			// Indicates that the funds are being
+			// Indicates that the
+			// funds are being
 			// sent to a mobile subscriber.
 			"phoneNumber",
 
-			// Indicates that the funds are being
-			// sent to a customers Bank Account.
+			// Indicates that the
+			// funds are being
+			// sent to a customers
+			// Bank Account.
 			"BankAccount",
 
-			// Indicates that the funds are being sent
-			// to a customers Debit or Credit Card.
+			// Indicates that the
+			// funds are being sent
+			// to a customers Debit
+			// or Credit Card.
 			"Card",
 
-			// Indicates that the funds are being sent
-			// to your Africa’s Talking Wallet through
+			// Indicates that the
+			// funds are being sent
+			// to your Africa’s Talking
+			// Wallet through
 			// one of your products.
 			"Wallet",
 		)
@@ -335,8 +399,8 @@ var TransactionResponse = Type("TransactionResponse", func() {
 	})
 	Attribute("description", String, func() {
 
-		//  including a more detailed failure reason in the case of failures
-		Description("Contains a detailed description of this transaction.")
+		//  Including a more detailed failure reason in the case of failures
+		Description("Contains a detailed description of this transaction .")
 		Example("The service request is processed successfully.")
 	})
 	Attribute("providerChannel", String, func() {
@@ -361,6 +425,14 @@ var TransactionResponse = Type("TransactionResponse", func() {
 	})
 	Attribute("providerMetadata", MapOf(String, String), func() {
 		Description("Map of any additional data received from a payment provider.")
+		Key(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+			Example("Foo")
+		})
+		Value(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+			Example("Bar")
+		})
 	})
 	Attribute("status", String, func() {
 		Description("Final status of this transaction.")
@@ -374,41 +446,59 @@ var TransactionResponse = Type("TransactionResponse", func() {
 	Attribute("category", String, func() {
 		Description("Category of the payment")
 		Enum(
-			// For Consumer to Business payments initiated by
-			// your application through our Bank Checkout APIs
+			// For Consumer to Business
+			// payments initiated by
+			// your application through
+			// our Bank Checkout APIs
 			"BankCheckout",
 
-			// For Consumer to Business payments initiated by
-			// your application through our Card Checkout APIs
+			// For Consumer to Business
+			// payments initiated by
+			// your application through
+			// our Card Checkout APIs
 			"CardCheckout",
 
-			// For Consumer to Business payments initiated by
-			// your application through our Mobile Checkout APIs
+			// For Consumer to Business
+			// payments initiated by
+			// your application through
+			// our Mobile Checkout APIs
 			"MobileCheckout",
 
-			// For Consumer to Business payments initiated by
-			// a mobile subscriber through their device
+			// For Consumer to Business
+			// payments initiated by
+			// a mobile subscriber through
+			// their device
 			// (e.g using a paybill number)
 			"MobileC2B",
 
-			// For Business to Consumer payments initiated by
-			// your application through our B2C APIs
+			// For Business to Consumer
+			// payments initiated by
+			// your application through
+			// our B2C APIs
 			"MobileB2C",
 
-			// For Business to Business payments initiated by
-			// your application through our B2B APIs
+			// For Business to Business
+			// payments initiated by
+			// your application through
+			// our B2B APIs
 			"MobileB2B",
 
-			// For Business to Business payments initiated by
-			// your application through our Bank Transfer APIs
+			// For Business to Business
+			// payments initiated by
+			// your application through
+			// our Bank Transfer APIs
 			"BankTransfer",
 
-			// For Wallet to Wallet payments initiated by your
-			// application through our Wallet Transfer APIs
+			// For Wallet to Wallet
+			// payments initiated by
+			// your application through
+			// our Wallet Transfer APIs
 			"WalletTransfer",
 
-			// For Wallet to application stash payments initiated by
-			// your application through our User Stash Topup APIs
+			// For Wallet to application
+			// stash payments initiated by
+			// your application through our
+			// User Stash Topup APIs
 			"UserStashTopup",
 		)
 		Example("MobileB2C")
@@ -429,7 +519,7 @@ var TransactionResponse = Type("TransactionResponse", func() {
 		Example("+254708663158")
 	})
 
-	// he format of this string is: (3-digit Currency Code)(space)(Decimal Value) e.g KES 1.50
+	// The format of this string is: (3-digit Currency Code)(space)(Decimal Value) e.g KES 1.50
 	Attribute("value", String, func() {
 		Description("Value being exchanged in this transaction.")
 		Example("KES 2900.0000")

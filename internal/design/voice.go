@@ -7,14 +7,9 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// Sends a HTTP POST request to Africa'sTalking Voice API.
-// Content-Type: application/x-www-form-urlencoded or multipart/form-data
-// Live: https://voice.africastalking.com/call
-// Sandbox: https://voice.sandbox.africastalking.com/call
-
-// Make an outbound call
 var MakeCallPayload = Type("MakeCallPayload", func() {
 	Description("Makes an outbound call.")
+
 	Attribute("username", String, func() {
 		Description("Africa’s Talking Username")
 	})
@@ -29,22 +24,25 @@ var MakeCallPayload = Type("MakeCallPayload", func() {
 	Attribute("clientRequestId", String, func() {
 		Description("Variable sent to Events Callback URL used to tag the call")
 	})
+
 	Required("username", "from", "to")
 })
 
 var MakeCallResponse = ResultType("MakeCallResponse", func() {
 	Description("Outbound call HTTP response.")
 	TypeName("MakeCallResponse")
-	ContentType("application/xml")
+	ContentType("application/json")
 
-	// A list with multiple Entry each corresponding
-	// to an individual phone number and their status.
-	// Entry is a Map with details of queued numbers.
-	Attribute("entries", ArrayOf(VoiceEntry))
-	Attribute("errorMessage", String, func() {
-		Description("Error message if ENTIRE request was rejected by the API.")
+	Attributes(func() {
+		// A list with multiple Entry each corresponding
+		// to an individual phone number and their status.
+		// Entry is a Map with details of queued numbers.
+		Attribute("entries", ArrayOf(VoiceEntry))
+		Attribute("errorMessage", String, func() {
+			Description("Error message if ENTIRE request was rejected by the API.")
+		})
+
 	})
-
 	View("default", func() {
 		Attribute("entries")
 		Attribute("errorMessage")
@@ -83,6 +81,7 @@ var VoiceEntry = Type("VoiceEntry", func() {
 // Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 var CallTransferPayload = Type("CallTransferPayload", func() {
 	Description("Transfer calls to another number")
+
 	Attribute("sessionId", String, func() {
 		Description("Session Id of the ongoing call, it must have two legs")
 	})
@@ -97,33 +96,56 @@ var CallTransferPayload = Type("CallTransferPayload", func() {
 	Attribute("holdMusicUrl", String, func() {
 		Description("The url of the media file to be played when the user is on hold.") // Don’t forget to start with http://
 	})
+
 	Required("sessionId", "phoneNumber")
 })
 
 var CallTransferResponse = ResultType("CallTransferResponse", func() {
-	Attribute("status", String, func() {
-		Description("can be either Success or Aborted")
-		Enum("Success", "Aborted")
-	})
-	Attribute("errorMessage", String, "Why the transfer ws aborted None is successful")
-})
+	Description("Call Transfer HTTP response.")
+	TypeName("CallTransferResponse")
+	ContentType("application/json")
 
-// Sends a HTTP POST request to Africa'sTalking Voice API.
-// Live: https://voice.africastalking.com/queueStatus
-// Sandbox: https://voice.sandbox.africastalking.com/queueStatus
+	Attributes(func() {
+		Attribute("status", String, func() {
+			Description("can be either Success or Aborted")
+			Enum("Success", "Aborted")
+		})
+		Attribute("errorMessage", String, func() {
+			Description("Why the transfer ws aborted None is successful")
+		})
+	})
+})
 
 var QueuedCallsPayload = Type("QueuedCallsPayload", func() {
 	Description("Handles more calls than you can handle at one time")
-	Attribute("username", String, "Your Africa’s Talking application username.")
-	Attribute("phoneNumbers", String, "List of one or more numbers mapped to your Africa’s Talking account.")
+
+	Attribute("username", String, func() {
+		Description("Your Africa’s Talking application username.")
+	})
+	Attribute("phoneNumbers", String, func() {
+		Description("List of one or more numbers mapped to your Africa’s Talking account.")
+	})
+
 	Required("username", "phoneNumbers")
 })
 
 // Queue status response for a successful request:
 var QueuedStatusResult = ResultType("QueuedStatusResult", func() {
-	Attribute("Entries", ArrayOf(QueuedStatusEntry))
-	Attribute("errorMessage", String, "Error Message")
+	Description("Queued Status HTTP response result.")
+	TypeName("QueuedStatusResult")
+	ContentType("application/json")
 
+	Attributes(func() {
+		Attribute("Entries", ArrayOf(QueuedStatusEntry))
+		Attribute("errorMessage", String, func() {
+			Description("Error Message")
+		})
+	})
+
+	View("default", func() {
+		Attribute("Entries")
+		Attribute("errorMessage")
+	})
 })
 
 var QueuedStatusEntry = Type("QueuedStatusEntry", func() {
@@ -132,13 +154,9 @@ var QueuedStatusEntry = Type("QueuedStatusEntry", func() {
 	Attribute("numCalls", String)
 })
 
-// Sends a HTTP POST request to Africa'sTalking Voice API.
-// Live: https://voice.africastalking.com/mediaUpload
-// Sandbox: https://voice.sandbox.africastalking.com/mediaUpload
-// Any response code other than 201 (Created) indicates that the call was not initiated.
 var UploadMediaFile = Type("UploadMediaFile", func() {
-	// With the extension .mp3 or .wav only
 	Description("Uploads media or audio files to Africa'sTalking servers")
+
 	Attribute("username", String, func() {
 		Description("Your Africa’s Talking application username.")
 	})

@@ -7,6 +7,15 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
+var UserData = Type("UserData", func() {
+
+	// The format of this string is: (3-digit Currency Code)(space)(Decimal Value)
+	Attribute("balance", String, func() {
+		Description("Your Africa’s Talking application balance.")
+		Example("KES 1785.50")
+	})
+})
+
 var UserResponse = ResultType("UserResponse", func() {
 	Description("A User HTTP response.")
 	TypeName("UserResponse")
@@ -17,14 +26,5 @@ var UserResponse = ResultType("UserResponse", func() {
 	})
 	View("default", func() {
 		Attribute("UserData")
-	})
-})
-
-var UserData = Type("UserData", func() {
-
-	// The format of this string is: (3-digit Currency Code)(space)(Decimal Value)
-	Attribute("balance", String, func() {
-		Description("Your Africa’s Talking application balance.")
-		Example("KES 1785.50")
 	})
 })

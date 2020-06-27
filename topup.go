@@ -12,6 +12,7 @@ const (
 )
 
 // Move money from a Payment Product to an application stash.
+// An application stash is the wallet that funds your service usage expenses.
 func (c *Client) topupStash(ctx context.Context, p *africastalking.TopupStashPayload) (res *africastalking.TopupStashResponse, err error) {
 
 	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/topup/stash", p)

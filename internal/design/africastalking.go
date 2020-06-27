@@ -15,473 +15,425 @@ var _ = Service("africastalking", func() {
 
 	// ****************************************   1. SMS   ***********************************************
 
+	// Send Bulk SMS
 	Method("SendBulkSMS", func() {
 		Description("Send Bulk SMS")
 		Payload(BulkPayload)
 		Result(BulkResponse)
 		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/messaging
-			// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
 			POST("version1/messaging")
 			Response(StatusCreated)
 		})
 	})
 
+	// Send Premium SMS
 	Method("SendPremiumSMS", func() {
 		Description("Send Premium SMS")
 		Payload(PremiumPayload)
 		Result(PremiumResponse)
 		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/messaging
-			// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
 			POST("version1/messaging")
 			Response(StatusCreated)
 		})
 	})
 
+	// Incrementally fetch messages from application inbox.
 	Method("FetchSMS", func() {
 		Description("Incrementally fetch messages from application inbox.")
 		Payload(FetchMsgPayload)
 		Result(FetchMsgResponse)
 		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/messaging
-			// Sandbox: https://api.sandbox.africastalking.com/version1/messaging
-			GET("version1/messaging?{username}&{lastReceivedId}")
-			Params(func() {
-				Param("username:username", String, "Africa’s Talking application username.")
-				Param("lastReceivedId:lastReceivedId", String, "ID of the message last processed.")
-				Required("username")
-			})
+			GET("version1/messaging")
 			Response(StatusOK)
 		})
 	})
 
+	// Generate a checkout token
 	Method("NewCheckoutToken", func() {
 		Description("Generate a checkout token")
 		Payload(CheckoutTokenPayload)
 		Result(CheckoutTokenResponse)
 		HTTP(func() {
-
-			// Live: https://api.africastalking.com/checkout/token/create
-			// Sandbox: https://api.sandbox.africastalking.com/checkout/token/create
 			POST("checkout/token/create")
 			Response(StatusCreated)
 		})
 	})
 
+	// Subscribe a phone number
 	Method("NewPremiumSubscription", func() {
 		Description("Subscribe a phone number")
 		Payload(NewSubPayload)
 		Result(NewSubResponse)
 		HTTP(func() {
-
-			// Live: https://content.africastalking.com/version1/subscription/create
-			// Sandbox: https://api.sandbox.africastalking.com/version1/subscription/create
 			POST("version1/subscription/create")
 			Response(StatusCreated)
 		})
 	})
 
+	// Incrementally fetch your premium sms subscriptions.
 	Method("FetchPremiumSubscription", func() {
 		Description("Incrementally fetch your premium sms subscriptions.")
 		Payload(FetchSubPayload)
 		Result(FetchSubResponse)
 		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/subscription
-			// Sandbox: https://api.sandbox.africastalking.com/version1/subscription
-			GET("version1/subscription?username={username}&shortCode={shortCode}&keyword={keyword}&lastReceivedId={lastReceivedId}")
-			Params(func() {
-				Param("username:username", String, "Africa’s Talking application username.")
-				Param("shortCode:shortCode", String, "Premium short code mapped to your account")
-				Param("keyword:keyword", String, "Premium keyword under short code mapped to your account.")
-				Param("lastReceivedId:lastReceivedId", String, "ID of the message last processed.")
-				Required("username", "shortCode", "keyword")
-			})
+			GET("version1/subscription")
 			Response(StatusOK)
 		})
 	})
 
+	// Delete a Premium SMS Subscription
 	Method("PurgePremiumSubscription", func() {
 		Description("Delete a Premium SMS Subscription")
 		Payload(PurgeSubPayload)
 		Result(PurgeSubResponse)
 		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/subscription/delete
-			// Sandbox: https://api.sandbox.africastalking.com/version1/subscription/delete
 			POST("version1/subscription/delete")
 			Response(StatusCreated)
 		})
 	})
 
 	// ****************************************   3. VOICE   ***********************************************
+
+	// Makes outbound calls.
 	Method("MakeCall", func() {
 		Description("Makes outbound calls.")
 		Payload(MakeCallPayload)
 		Result(MakeCallResponse)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/call
-			// Sandbox: https://voice.sandbox.africastalking.com/call
 			POST("call")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Transfers call to another number.
 	Method("TransferCall", func() {
 		Description("Transfers call to another number.")
 		Payload(CallTransferPayload)
 		Result(CallTransferResponse)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Set a text to be read out to the caller.
 	Method("Say", func() {
 		Description("Set a text to be read out to the caller.")
 		Payload(Say)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Play back an audio file located anywhere on the web.
 	Method("Play", func() {
 		Description("Play back an audio file located anywhere on the web.")
 		Payload(Play)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Get digits a user enters on their phone in response to a prompt from application
 	Method("GetDigits", func() {
 		Description("Get digits a user enters on their phone in response to a prompt from application")
 		Payload(GetDigits)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
+			Response(StatusCreated)
 		})
 	})
 
+	// Connect the user who called your phone number to an external phone number.
 	Method("Dial", func() {
 		Description("Connect the user who called your phone number to an external phone number.")
 		Payload(Dial)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Record a call session into an mp3 file.
 	Method("Record", func() {
 		Description("Record a call session into an mp3 file.")
 		Payload(Record)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Pass an incoming call to a queue to be handled later.
 	Method("Enqueue", func() {
 		Description("Pass an incoming call to a queue to be handled later.")
 		Payload(Enqueue)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Pass the calls enqueued to a separate number to be handled.
 	Method("Dequeue", func() {
 		Description("Pass the calls enqueued to a separate number to be handled.") // e.g by an agent.
 		Payload(Dequeue)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Transfer control of the call to the script whose URL is passed in
 	Method("Redirect", func() {
 		Description("Transfer control of the call to the script whose URL is passed in.")
 		Payload(Redirect)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Reject an incoming call without incurring any usage charges.
 	Method("Reject", func() {
 		Description("Reject an incoming call without incurring any usage charges.")
 		Payload(Reject)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/callTransfer
-			// Sandbox: https://voice.sandbox.africastalking.com/callTransfer
 			POST("callTransfer")
-			Headers(func() {})
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
 
+	// Used when you have more calls than you can handle at one time
 	Method("Queue", func() {
 		Description("Used when you have more calls than you can handle at one time")
 		Payload(QueuedCallsPayload)
 		Result(QueuedStatusResult)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/queueStatus
-			// Sandbox: https://voice.sandbox.africastalking.com/queueStatus
 			POST("queueStatus")
-			Headers(func() {})
 			Response(StatusCreated)
 		})
 	})
 
+	// Uploads media or audio files to Africa'sTalking servers with the extension .mp3 or .wav
 	Method("UploadMedia", func() {
 		Description("Uploads media or audio files to Africa'sTalking servers with the extension .mp3 or .wav")
 		Payload(UploadMediaFile)
 		Result(String)
 		HTTP(func() {
-
-			// Live: https://voice.africastalking.com/mediaUpload
-			// Sandbox: https://voice.sandbox.africastalking.com/mediaUpload
 			POST("mediaUpload")
-			Headers(func() {})
 			Response(StatusCreated)
 		})
 	})
 
 	// ****************************************   4. PAYMENTS   ***********************************************
 
+	// Initiate Mobile C2B payments on a mobile subscriber’s device.
 	Method("MobileCheckout", func() {
 		Description("Initiate Mobile C2B payments on a mobile subscriber’s device.")
 		Payload(MobileCheckoutPayload)
 		Result(MobileCheckoutResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/mobile/checkout/request
-			// Sandbox: https://payments.sandbox.africastalking.com/mobile/checkout/request
 			POST("mobile/checkout/request")
 			Response(StatusCreated)
 		})
 	})
 
+	// Initiate Mobile B2C request
 	Method("MobileB2C", func() {
 		Description("Initiate Mobile B2C request")
 		Payload(MobileB2CPayload)
 		Result(MobileB2CResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/mobile/b2c/request
-			// Sandbox: https://payments.sandbox.africastalking.com/mobile/b2c/request
 			POST("mobile/b2c/request")
 			Response(StatusCreated)
 		})
 	})
 
+	// Initiate Mobile B2B request
 	Method("MobileB2B", func() {
 		Description("Initiate Mobile B2B request")
 		Payload(MobileB2BPayload)
 		Result(MobileB2BResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/mobile/b2b/request
-			// Sandbox: https://payments.sandbox.africastalking.com/mobile/b2b/request
 			POST("mobile/b2b/request")
 			Response(StatusCreated)
 		})
 	})
 
+	// Collect money into your payment wallet.
 	Method("Bank Checkout", func() {
 		Description("Collect money into your payment wallet.")
 		Payload(BankCheckoutPayload)
 		Result(BankCheckoutResponse)
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/bank/checkout/charge
-			// Sandbox: https://payments.sandbox.africastalking.com/bank/checkout/charge
 			POST("bank/checkout/charge")
 			Response(StatusCreated)
 		})
 	})
 
+	// Validate a bank checkout charge request
 	Method("BankCheckoutValidate", func() {
 		Description("Validate a bank checkout charge request")
 		Payload(BankCheckoutValidatePayload)
 		Result(BankCheckoutValidateResponse)
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/bank/checkout/validate
-			// Sandbox: https://payments.sandbox.africastalking.com/bank/checkout/validate
 			POST("bank/checkout/validate")
 			Response(StatusCreated)
 		})
 	})
 
+	// Initiate a bank transfer request.
 	Method("BankTransfer", func() {
 		Description("Initiate a bank transfer request.")
 		Payload(BankTransferPayload)
 		Result(BankTransferResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/bank/transfer
-			// Sandbox: https://payments.sandbox.africastalking.com/bank/transfer
 			POST("bank/transfer")
 			Response(StatusCreated)
 		})
 	})
 
+	// Collect money into your Payment Wallet by initiating transactions that deduct
+	// money from a customers Debit or Credit Card.
 	Method("CardCheckout", func() {
-		Description("Collect money into your Payment Wallet")
+		Description("Collect money into your Payment Wallet by initiating transactions that deduct money from a customers Debit or Credit Card.")
 		Payload(CardCheckoutPayload)
 		Result(CardCheckoutResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/card/checkout/charge
-			// Sandbox: https://payments.sandbox.africastalking.com/card/checkout/charge
 			POST("card/checkout/charge")
 			Response(StatusCreated)
 		})
 	})
 
+	// Allows your application to validate card checkout charge requests.
 	Method("CardCheckoutValidate", func() {
 		Description("Validate card checkout charge requests")
 		Payload(CardCheckoutValidatePayload)
 		Result(CardCheckoutValidateResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/card/checkout/validate
-			// Sandbox: https://payments.sandbox.africastalking.com/card/checkout/validate
 			POST("card/checkout/validate")
 			Response(StatusCreated)
 		})
 	})
 
+	// Transfer money from one Payment Product to another Payment Product hosted on Africa’s Talking.
 	Method("WalletTransfer", func() {
-		Description("Transfer money from one product to another.")
+		Description("Transfer money from one Payment Product to another Payment Product hosted on Africa’s Talking.")
 		Payload(WalletTransferPayload)
 		Result(WalletTransferResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/transfer/wallet
-			// Sandbox: https://payments.sandbox.fricastalking.com/transfer/wallet
 			POST("transfer/wallet")
 			Response(StatusCreated)
 		})
 	})
 
+	// Move money from a Payment Product to an Africa’s Talking application stash.
 	Method("TopupStash", func() {
-		Description("Move money from a Payment Product to an application stash.")
+		Description("Move money from a Payment Product to an Africa’s Talking application stash.")
 		Payload(TopupStashPayload)
 		Result(TopupStashResponse)
-
 		HTTP(func() {
-
-			// Live: https://payments.africastalking.com/topup/stash
-			// Sandbox: https://payments.sandbox.africastalking.com/topup/stash
 			POST("topup/stash")
 			Response(StatusCreated)
 		})
 	})
 
+	// Fetch transactions of a particular payment product.
+	Method("FindTransaction", func() {
+		Description("Fetch transactions of a particular payment product.")
+		Payload(FindTransactionPayload)
+		Result(FindTransactionResponse)
+		HTTP(func() {
+			GET("query/transaction/find")
+			Response(StatusOK)
+		})
+	})
+
+	// Fetch transactions of a particular payment product.
+	Method("FetchProductTransactions", func() {
+		Description("Fetch transactions of a particular payment product.")
+		Payload(ProductTransactionsPayload)
+		Result(ProductTransactionsResponse)
+		HTTP(func() {
+			GET("query/transaction/fetch")
+			Response(StatusOK)
+		})
+	})
+
+	// Fetch your wallet transactions.
+	Method("FetchWalletTransactions", func() {
+		Description("Fetch your wallet transactions")
+		Payload(WalletTransactionsPayload)
+		Result(WalletTransactionsResponse)
+		HTTP(func() {
+			GET("query/wallet/fetch")
+			Response(StatusOK)
+		})
+	})
+
+	// Fetch your wallet balance
+	Method("FetchWalletBalance", func() {
+		Description("Fetch your wallet balance")
+		Payload(WalletBalancePayload)
+		Result(WalletBalanceResponse)
+		HTTP(func() {
+			GET("query/wallet/balance")
+			Response(StatusOK)
+		})
+	})
+
 	// ****************************************   5. AIRTIME   ***********************************************
+
+	// Send Airtime.
 	Method("SendAirtime", func() {
 		Description("Send Airtime.")
 		Payload(AirtimePayload)
 		Result(AirtimeResponse)
 		HTTP(func() {
-
-			// Live: https://api.africastalking.com/version1/airtime/send
-			//Sandbox: https://api.sandbox.africastalking.com/version1/airtime/send
 			POST("version1/airtime/send")
 			Response(StatusOK)
 		})
 	})
 
 	// ****************************************   6. IOT   ***********************************************
+
+	// Publishes messages to remote devices.
 	Method("PublishIoT", func() {
 		Description("Publishes messages to remote devices.")
 		Payload(IoTPayload)
 		Result(IoTResponse)
 		HTTP(func() {
-
-			// POST request to https://iot.africastalking.com/data/publish
 			POST("data/publish")
 			Response(StatusOK)
 		})
 	})
 
 	// ****************************************   7. USER   ***********************************************
+
+	// Initiate an application data request.
 	Method("InitiateAppData", func() {
 		Description("Initiate an application data request.")
 		Payload(String)
 		Result(UserResponse)
 		HTTP(func() {
-
-			// Initiate an application data request by making a HTTP GET request to the following endpoint:
-			// Live: https://api.africastalking.com/version1/user
-			// Sandbox: https://api.sandbox.africastalking.com/version1/user
 			GET("version1/user")
 			Response(StatusOK)
 		})
 	})
 
+	// Generates a valid auth token
 	Method("Generate", func() {
 		Description("Generates a valid auth token")
 		Payload(func() {
@@ -496,14 +448,9 @@ var _ = Service("africastalking", func() {
 			Required("username", "apiKey")
 		})
 		Result(AccessTokenResponse)
-
 		HTTP(func() {
-
-			// POST creates a route using the POST HTTP method.
-			// POST request to https://api.africastalking.com/auth-token/generate
 			POST("/auth-token/generate")
-			Response(StatusOK)
+			Response(StatusCreated)
 		})
 	})
-
 })

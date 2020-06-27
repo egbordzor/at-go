@@ -7,31 +7,29 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// Supported Banks:
-// FCMB Nigeria	234001
-// Zenith Nigeria	234002
-// Access Nigeria	234003
-// Providus Nigeria	234007
-// Sterling Nigeria	234010
 var BankCheckoutPayload = Type("BankCheckoutPayload", func() {
 	Description("Bank Checkout HTTP request.")
 
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
+		Example("MyAppUserName")
 	})
 	Attribute("productName", String, func() {
 		Description("Africa’s Talking Payment Product to initiate this transaction.")
+		Example("myPaymentProductName")
 	})
 	Attribute("bankAccount", BankAccount)
 	Attribute("currencyCode", String, func() {
 		Description("3-digit ISO format currency code.")
-		Example("KES")
+		Example("NGN")
 	})
 	Attribute("amount", Float64, func() {
 		Description("Amount client is expected to confirm.")
+		Example(39393)
 	})
 	Attribute("narration", String, func() {
 		Description("Short description of the transaction displayed on the clients statement.")
+		Example("payment for airtime")
 	})
 
 	// Use this field to send data that will map notifications
@@ -40,6 +38,12 @@ var BankCheckoutPayload = Type("BankCheckoutPayload", func() {
 	// client completes the bank checkout request.
 	Attribute("metadata", MapOf(String, String), func() {
 		Description("A map of any metadata that you would like us to associate with the request.")
+		Key(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+		})
+		Value(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+		})
 	})
 	Required("username", "productName", "bankAccount", "currencyCode", "amount", "narration")
 })
@@ -125,29 +129,6 @@ var BankCheckoutValidateResponse = ResultType("BankCheckoutValidateResponse", fu
 	})
 })
 
-// Supported Banks:
-// FCMB Nigeria	    234001
-// Zenith Nigeria	234002
-// Access Nigeria	234003
-// GTBank Nigeria	234004
-// Ecobank Nigeria	234005
-// Diamond Nigeria	234006
-// Providus Nigeria	234007
-// Unity Nigeria	234008
-// Stanbic Nigeria	234009
-// Sterling Nigeria	234010
-// Parkway Nigeria	234011
-// Afribank Nigeria	234012
-// Enterprise Nigeria	234013
-// Fidelity Nigeria	    234014
-// Heritage Nigeria	    234015
-// Keystone Nigeria  	234016
-// Skye Nigeria      	234017
-// Stanchart Nigeria	234018
-// Union Nigeria	    234019
-// UBA Nigeria	        234020
-// Wema Nigeria	        234021
-// First Nigeria	    234022
 var BankTransferPayload = Type("BankTransferPayload", func() {
 	Description("Bank Transfer HTTP request.")
 
@@ -266,12 +247,25 @@ var TransferEntries = Type("TransferEntries", func() {
 })
 
 var BankAccount = Type("BankAccount", func() {
-	Attribute("accountName", String, "Bank account name.")
-	Attribute("accountNumber", String, "Bank account number.")
-	Attribute("bankCode", Int, "6-Digit Integer code for the bank that we allocate.")
+
+	Attribute("accountName", String, func() {
+		Description("Bank account name.")
+		Example("Test Bank Account")
+	})
+	Attribute("accountNumber", String, func() {
+		Description("Bank account number.")
+		Example("1234567890")
+	})
+	Attribute("bankCode", Int, func() {
+		Description("6-Digit Integer code for the bank that we allocate.")
+		Example(234001)
+	})
 	Attribute("dateOfBirth", String, func() {
-		Description("Date of birth of the account owner.") // Required for Zenith Nigeria.
+
+		// Required for Zenith Nigeria.
+		Description("Date of birth of the account owner.")
 		Format(FormatDate)
 	})
+
 	Required("accountName", "accountNumber", "bankCode", "dateOfBirth")
 })

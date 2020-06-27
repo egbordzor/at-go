@@ -14,7 +14,9 @@ const (
 	CardCheckoutValidateSandboxURL = "https://payments.sandbox.africastalking.com/card/checkout/validate"
 )
 
-// Collect money into your Payment Wallet
+// Collect money into your Payment Wallet by initiating transactions that deduct
+// money from a customers Debit or Credit Card.
+// These APIs are currently only available in Nigeria on MasterCard and Verve cards.
 func (c *Client) cardCheckout(ctx context.Context, p *africastalking.CardCheckoutPayload) (res *africastalking.CardCheckoutResponse, err error) {
 
 	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/card/checkout/charge", p)
@@ -35,7 +37,7 @@ func (c *Client) cardCheckout(ctx context.Context, p *africastalking.CardCheckou
 	return res, nil
 }
 
-// Validate card checkout charge requests
+// Allows your application to validate card checkout charge requests.
 func (c *Client) cardCheckoutValidate(ctx context.Context, p *africastalking.CardCheckoutValidatePayload) (res *africastalking.CardCheckoutValidateResponse, err error) {
 
 	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/card/checkout/validate", p)

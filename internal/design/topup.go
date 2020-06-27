@@ -7,28 +7,43 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// Topup Stash
-// Topup stash APIs allow you to move money from a Payment Product to an Africa’s Talking application stash.
-// An application stash is the wallet that funds your service usage expenses.
 var TopupStashPayload = Type("TopupStashPayload", func() {
 	Description("Topup Stash HTTP request.")
 
 	Attribute("username", String, func() {
 		Description("Africa’s Talking application username.")
+		Example("MyUserName")
 	})
 	Attribute("productName", String, func() {
 		Description("Africa’s Talking Payment product initiating transaction.")
+		Example("myProductName")
 	})
 	Attribute("currencyCode", String, func() {
 		Description("3-digit ISO format currency code.")
+		Example("KES")
 	})
 	Attribute("amount", Float64, func() {
 		Description("Amount application will be topped up with.")
+		Example(2000)
 	})
 	Attribute("metadata", MapOf(String, String), func() {
 		Description("Metadata associated with the request.")
+		Key(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+			Example("Foo")
+		})
+		Value(func() {
+			Pattern("[a-zA-Z]+") // Validates values of the map
+			Example("Bar")
+		})
 	})
-	Required("username", "productName", "currencyCode", "amount", "metadata")
+
+	Required("username",
+		"productName",
+		"currencyCode",
+		"amount",
+		"metadata",
+	)
 })
 
 var TopupStashResponse = ResultType("TopupStashResponse", func() {
@@ -40,11 +55,15 @@ var TopupStashResponse = ResultType("TopupStashResponse", func() {
 		Attribute("status", String, "Corresponds to the status of the request", func() {
 			Enum(
 
-				// The request has been accepted and your application stash has been topped up.
+				// The request has been accepted
+				// and your application stash
+				// has been topped up.
 				"Success",
 
-				// The request failed for some other reason.
-				// The description field will contain more information.
+				// The request failed for some
+				// other reason.
+				// The description field will
+				// contain more information.
 				"Failed",
 			)
 			Example("Success")
@@ -57,6 +76,8 @@ var TopupStashResponse = ResultType("TopupStashResponse", func() {
 			Description("Unique ID for successful requests.")
 			Example("ATPid_SampleTxnId123")
 		})
+
+		Required("status", "description")
 	})
 
 	View("default", func() {

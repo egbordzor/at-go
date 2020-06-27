@@ -7,7 +7,6 @@ import (
 	_ "goa.design/plugins/v3/zaplogger" // Enables ZapLogger Plugin
 )
 
-// API describes the global properties of the API server.
 var _ = API("at", func() {
 	Title("AfricasTalking API")
 	Description("HTTP service for interacting with all AfricasTalking API.")

@@ -23,7 +23,13 @@ var IoTPayload = Type("IoTPayload", func() {
 	Attribute("payload", String, func() {
 		Description("Message packet to be sent to the subscribed devices")
 	})
-	Required("username", "deviceGroup", "topic", "payload")
+
+	Required(
+		"username",
+		"deviceGroup",
+		"topic",
+		"payload",
+	)
 })
 
 var IoTResponse = ResultType("IoTResponse", func() {

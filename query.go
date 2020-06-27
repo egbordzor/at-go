@@ -13,3 +13,4 @@ const (
 	FetchWalletBalanceLiveURL    = "https://payments.africastalking.com/query/wallet/balance"
 	FetchWalletBalanceSandboxURL = "https://payments.sandbox.africastalking.com/query/wallet/balance"
 )
+

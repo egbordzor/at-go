@@ -14,6 +14,7 @@ var AirtimePayload = Type("AirtimePayload", func() {
 		Description("Africa’s Talking application username.")
 	})
 	Attribute("recipients", ArrayOf(AirtimeRecipients))
+
 	Required("username", "recipients")
 })
 

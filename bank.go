@@ -7,6 +7,8 @@ import (
 )
 
 const (
+
+	// Base URLs:
 	BankCheckoutLiveURL    = "https://payments.africastalking.com/bank/checkout/charge"
 	BankCheckoutSandboxURL = "https://payments.sandbox.africastalking.com/bank/checkout/charge"
 
@@ -15,6 +17,30 @@ const (
 
 	BankTransferLiveURL    = "https://payments.africastalking.com/bank/transfer"
 	BankTransferSandboxURL = "https://payments.sandbox.africastalking.com/bank/transfer"
+
+	// Supported Banks:
+	FCMBNigeria       = 234001
+	ZenithNigeria     = 234002
+	AccessNigeria     = 234003
+	GTBankNigeria     = 234004
+	EcobankNigeria    = 234005
+	DiamondNigeria    = 234006
+	ProvidusNigeria   = 234007
+	UnityNigeria      = 234008
+	StanbicNigeria    = 234009
+	SterlingNigeria   = 234010
+	ParkwayNigeria    = 234011
+	AfribankNigeria   = 234012
+	EnterpriseNigeria = 234013
+	FidelityNigeria   = 234014
+	HeritageNigeria   = 234015
+	KeystoneNigeria   = 234016
+	SkyeNigeria       = 234017
+	StanchartNigeria  = 234018
+	UnionNigeria      = 234019
+	UBANigeria        = 234020
+	WemaNigeria       = 234021
+	FirstNigeria      = 234022
 )
 
 // Collect money into your payment wallet.
