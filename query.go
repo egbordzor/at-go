@@ -3,7 +3,7 @@ package atgo
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
+	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 const (
@@ -20,8 +20,23 @@ const (
 	FetchWalletBalanceSandboxURL = "https://payments.sandbox.africastalking.com/query/wallet/balance"
 )
 
+type (
+	PaymentQueries interface {
+
+		// Fetch transactions of a particular payment product.
+		findTransaction(ctx context.Context, p *at.FindTransactionPayload) (res *at.FindTransactionResponse, err error)
+		// Fetch transactions of a particular payment product.
+		fetchProductTransactions(ctx context.Context, p *at.ProductTransactionsPayload) (res *at.ProductTransactionsResponse, err error)
+
+		// Fetch your wallet transactions
+		fetchWalletTransactions(ctx context.Context, p *at.WalletTransactionsPayload) (res *at.WalletTransactionsResponse, err error)
+		// Fetch your wallet balance
+		fetchWalletBalance(ctx context.Context, p *at.WalletBalancePayload) (res *at.WalletBalanceResponse, err error)
+	}
+)
+
 // Fetch transactions of a particular payment product.
-func (c *Client) FindTransaction(ctx context.Context, p *africastalking.FindTransactionPayload) (res *africastalking.FindTransactionResponse, err error) {
+func (c *Client) findTransaction(ctx context.Context, p *at.FindTransactionPayload) (res *at.FindTransactionResponse, err error) {
 
 	req, err := c.NewRequest("GET", "https://payments.sandbox.africastalking.com/query/transaction/find", p)
 	if err != nil {
@@ -33,7 +48,7 @@ func (c *Client) FindTransaction(ctx context.Context, p *africastalking.FindTran
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
-	res = &africastalking.FindTransactionResponse{}
+	res = &at.FindTransactionResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -42,7 +57,7 @@ func (c *Client) FindTransaction(ctx context.Context, p *africastalking.FindTran
 }
 
 // Fetch transactions of a particular payment product.
-func (c *Client) FetchProductTransactions(ctx context.Context, p *africastalking.ProductTransactionsPayload) (res *africastalking.ProductTransactionsResponse, err error) {
+func (c *Client) fetchProductTransactions(ctx context.Context, p *at.ProductTransactionsPayload) (res *at.ProductTransactionsResponse, err error) {
 
 	req, err := c.NewRequest("GET", "https://payments.sandbox.africastalking.com/query/transaction/fetch", p)
 	if err != nil {
@@ -54,7 +69,7 @@ func (c *Client) FetchProductTransactions(ctx context.Context, p *africastalking
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
-	res = &africastalking.ProductTransactionsResponse{}
+	res = &at.ProductTransactionsResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -63,7 +78,7 @@ func (c *Client) FetchProductTransactions(ctx context.Context, p *africastalking
 }
 
 // Fetch your wallet transactions
-func (c *Client) FetchWalletTransactions(ctx context.Context, p *africastalking.WalletTransactionsPayload) (res *africastalking.WalletTransactionsResponse, err error) {
+func (c *Client) fetchWalletTransactions(ctx context.Context, p *at.WalletTransactionsPayload) (res *at.WalletTransactionsResponse, err error) {
 
 	req, err := c.NewRequest("GET", "https://payments.sandbox.africastalking.com/query/wallet/fetch", p)
 	if err != nil {
@@ -75,7 +90,7 @@ func (c *Client) FetchWalletTransactions(ctx context.Context, p *africastalking.
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
-	res = &africastalking.WalletTransactionsResponse{}
+	res = &at.WalletTransactionsResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -84,7 +99,7 @@ func (c *Client) FetchWalletTransactions(ctx context.Context, p *africastalking.
 }
 
 // Fetch your wallet balance
-func (c *Client) FetchWalletBalance(ctx context.Context, p *africastalking.WalletBalancePayload) (res *africastalking.WalletBalanceResponse, err error) {
+func (c *Client) fetchWalletBalance(ctx context.Context, p *at.WalletBalancePayload) (res *at.WalletBalanceResponse, err error) {
 
 	req, err := c.NewRequest("GET", "https://payments.sandbox.africastalking.com/query/wallet/balance", p)
 	if err != nil {
@@ -96,7 +111,7 @@ func (c *Client) FetchWalletBalance(ctx context.Context, p *africastalking.Walle
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
-	res = &africastalking.WalletBalanceResponse{}
+	res = &at.WalletBalanceResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

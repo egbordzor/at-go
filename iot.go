@@ -3,15 +3,22 @@ package atgo
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
+	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 const (
 	IoTLiveURL = "https://iot.africastalking.com/data/publish"
 )
 
+type (
+	IoT interface {
+		// Publishes messages to remote devices.
+		publishIoT(ctx context.Context, p *at.IoTPayload) (res *at.IoTResponse, err error)
+	}
+)
+
 // Publishes messages to remote devices.
-func (c *Client) publishIoT(ctx context.Context, p *africastalking.IoTPayload) (res *africastalking.IoTResponse, err error) {
+func (c *Client) publishIoT(ctx context.Context, p *at.IoTPayload) (res *at.IoTResponse, err error) {
 
 	// Set Header Parameters
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s", "https://iot.africastalking.com/data/publish"), p)
@@ -24,7 +31,7 @@ func (c *Client) publishIoT(ctx context.Context, p *africastalking.IoTPayload) (
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
-	res = &africastalking.IoTResponse{}
+	res = &at.IoTResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

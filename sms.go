@@ -3,7 +3,7 @@ package atgo
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
+	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 //	SMSLiveURL    = "https://api.africastalking.com/version1/messaging"
@@ -15,8 +15,33 @@ const SMSLiveURL = "https://api.africastalking.com"
 // Production Endpoints
 const SMSSandboxURL = "https://api.sandbox.africastalking.com"
 
+type (
+	SMS interface {
+
+		// Send Bulk SMS
+		sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.BulkResponse, err error)
+
+		// Incrementally fetch messages from application inbox.
+		fetchSMS(ctx context.Context, p *at.FetchMsgPayload) (res *at.FetchMsgResponse, err error)
+
+		// Send Premium SMS
+		sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res *at.PremiumSMSResponse, err error)
+
+		// Generate a checkout token
+		newCheckoutToken(ctx context.Context, p *at.CheckoutTokenPayload) (res *at.CheckoutTokenResponse, err error)
+
+		// Subscribe a phone number
+		newPremiumSubscription(ctx context.Context, p *at.NewSubPayload) (res *at.NewSubResponse, err error)
+
+		// Incrementally fetch your premium sms subscriptions.
+		fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPayload) (res *at.FetchSubResponse, err error)
+		// Delete a Premium SMS Subscription
+		purgePremiumSubscription(ctx context.Context, p *at.PurgeSubPayload) (res *at.PurgeSubResponse, err error)
+	}
+)
+
 // Send Bulk SMS
-func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload) (res *africastalking.BulkResponse, err error) {
+func (c *Client) sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.BulkResponse, err error) {
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
 	if err != nil {
@@ -28,7 +53,7 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
-	res = &africastalking.BulkResponse{}
+	res = &at.BulkResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -37,7 +62,7 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload)
 }
 
 // Incrementally fetch messages from application inbox.
-func (c *Client) fetchSMS(ctx context.Context, p *africastalking.FetchMsgPayload) (res *africastalking.FetchMsgResponse, err error) {
+func (c *Client) fetchSMS(ctx context.Context, p *at.FetchMsgPayload) (res *at.FetchMsgResponse, err error) {
 
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
 	if err != nil {
@@ -48,7 +73,7 @@ func (c *Client) fetchSMS(ctx context.Context, p *africastalking.FetchMsgPayload
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
-	res = &africastalking.FetchMsgResponse{}
+	res = &at.FetchMsgResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -57,7 +82,7 @@ func (c *Client) fetchSMS(ctx context.Context, p *africastalking.FetchMsgPayload
 }
 
 // Send Premium SMS
-func (c *Client) sendPremiumSMS(ctx context.Context, p *africastalking.PremiumPayload) (res *africastalking.PremiumSMSResponse, err error) {
+func (c *Client) sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res *at.PremiumSMSResponse, err error) {
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
 	if err != nil {
@@ -69,7 +94,7 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *africastalking.PremiumPa
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
-	res = &africastalking.PremiumSMSResponse{}
+	res = &at.PremiumSMSResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -78,7 +103,7 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *africastalking.PremiumPa
 }
 
 // Generate a checkout token
-func (c *Client) newCheckoutToken(ctx context.Context, p *africastalking.CheckoutTokenPayload) (res *africastalking.CheckoutTokenResponse, err error) {
+func (c *Client) newCheckoutToken(ctx context.Context, p *at.CheckoutTokenPayload) (res *at.CheckoutTokenResponse, err error) {
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/checkout/token/create"), p)
 	if err != nil {
@@ -89,7 +114,7 @@ func (c *Client) newCheckoutToken(ctx context.Context, p *africastalking.Checkou
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-	res = &africastalking.CheckoutTokenResponse{}
+	res = &at.CheckoutTokenResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -98,7 +123,7 @@ func (c *Client) newCheckoutToken(ctx context.Context, p *africastalking.Checkou
 }
 
 // Subscribe a phone number
-func (c *Client) newPremiumSubscription(ctx context.Context, p *africastalking.NewSubPayload) (res *africastalking.NewSubResponse, err error) {
+func (c *Client) newPremiumSubscription(ctx context.Context, p *at.NewSubPayload) (res *at.NewSubResponse, err error) {
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription/create"), p)
 	if err != nil {
@@ -110,7 +135,7 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *africastalking.N
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
-	res = &africastalking.NewSubResponse{}
+	res = &at.NewSubResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -119,7 +144,7 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *africastalking.N
 }
 
 // Incrementally fetch your premium sms subscriptions.
-func (c *Client) fetchPremiumSubscription(ctx context.Context, p *africastalking.FetchSubPayload) (res *africastalking.FetchSubResponse, err error) {
+func (c *Client) fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPayload) (res *at.FetchSubResponse, err error) {
 
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription"), p)
 	if err != nil {
@@ -130,7 +155,7 @@ func (c *Client) fetchPremiumSubscription(ctx context.Context, p *africastalking
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
-	res = &africastalking.FetchSubResponse{}
+	res = &at.FetchSubResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -139,7 +164,7 @@ func (c *Client) fetchPremiumSubscription(ctx context.Context, p *africastalking
 }
 
 // Delete a Premium SMS Subscription
-func (c *Client) purgePremiumSubscription(ctx context.Context, p *africastalking.PurgeSubPayload) (res *africastalking.PurgeSubResponse, err error) {
+func (c *Client) purgePremiumSubscription(ctx context.Context, p *at.PurgeSubPayload) (res *at.PurgeSubResponse, err error) {
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription/delete"), p)
 	if err != nil {
@@ -151,7 +176,7 @@ func (c *Client) purgePremiumSubscription(ctx context.Context, p *africastalking
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", "MyAppApiKey")
 
-	res = &africastalking.PurgeSubResponse{}
+	res = &at.PurgeSubResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

@@ -11,20 +11,20 @@ import (
 	"net/http"
 )
 
-
-
-type Client struct {
-	username         string
-	smsEndpoint      string
-	voiceEndpoint    string
-	paymentsEndpoint string
-	airtimeEndpoint  string
-	iotEndpoint      string
-	userEndpoint     string
-	apiKey           string
-	HTTPClient       *http.Client
-	logger           log.Logger // log the requests.
-}
+type (
+	Client struct {
+		username         string
+		smsEndpoint      string
+		voiceEndpoint    string
+		paymentsEndpoint string
+		airtimeEndpoint  string
+		iotEndpoint      string
+		userEndpoint     string
+		apiKey           string
+		HTTPClient       *http.Client
+		logger           log.Logger // log the requests.
+	}
+)
 
 // NewClient returns new Production Client struct
 func NewClient(Username, APIKey string) (*Client, error) {

@@ -3,7 +3,7 @@ package atgo
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
+	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 const (
@@ -43,8 +43,20 @@ const (
 	FirstNigeria      = 234022
 )
 
+type (
+	Bank interface {
+		// Collect money into your payment wallet.
+		bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error)
+		// Validate a bank checkout charge request
+		bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error)
+
+		// Initiate a bank transfer request.
+		bankTransfer(ctx context.Context, p *at.BankTransferPayload) (res *at.BankTransferResponse, err error)
+	}
+)
+
 // Collect money into your payment wallet.
-func (c *Client) bankCheckout(ctx context.Context, p *africastalking.BankCheckoutPayload) (res *africastalking.BankCheckoutResponse, err error) {
+func (c *Client) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error) {
 
 	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/bank/checkout/charge", p)
 	if err != nil {
@@ -55,7 +67,7 @@ func (c *Client) bankCheckout(ctx context.Context, p *africastalking.BankCheckou
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppAPIKey")
-	res = &africastalking.BankCheckoutResponse{}
+	res = &at.BankCheckoutResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -64,7 +76,7 @@ func (c *Client) bankCheckout(ctx context.Context, p *africastalking.BankCheckou
 }
 
 // Validate a bank checkout charge request
-func (c *Client) bankCheckoutValidate(ctx context.Context, p *africastalking.BankCheckoutValidatePayload) (res *africastalking.BankCheckoutValidateResponse, err error) {
+func (c *Client) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error) {
 
 	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/bank/checkout/validate", p)
 	if err != nil {
@@ -76,7 +88,7 @@ func (c *Client) bankCheckoutValidate(ctx context.Context, p *africastalking.Ban
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
-	res = &africastalking.BankCheckoutValidateResponse{}
+	res = &at.BankCheckoutValidateResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
@@ -85,7 +97,7 @@ func (c *Client) bankCheckoutValidate(ctx context.Context, p *africastalking.Ban
 }
 
 // Initiate a bank transfer request.
-func (c *Client) bankTransfer(ctx context.Context, p *africastalking.BankTransferPayload) (res *africastalking.BankTransferResponse, err error) {
+func (c *Client) bankTransfer(ctx context.Context, p *at.BankTransferPayload) (res *at.BankTransferResponse, err error) {
 
 	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/bank/transfer", p)
 	if err != nil {
@@ -97,7 +109,7 @@ func (c *Client) bankTransfer(ctx context.Context, p *africastalking.BankTransfe
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", "MyAppAPIKey")
 
-	res = &africastalking.BankTransferResponse{}
+	res = &at.BankTransferResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

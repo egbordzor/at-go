@@ -3,7 +3,7 @@ package atgo
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
+	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 const (
@@ -11,8 +11,15 @@ const (
 	AirtimeSandboxURL = "https://api.sandbox.africastalking.com/version1/airtime/send"
 )
 
+type (
+	Airtime interface {
+		// Send Airtime.
+		sendAirtime(ctx context.Context, p *at.AirtimePayload) (res *at.AirtimeResponse, err error)
+	}
+)
+
 // Send Airtime.
-func (c *Client) sendAirtime(ctx context.Context, p *africastalking.AirtimePayload) (res *africastalking.AirtimeResponse, err error) {
+func (c *Client) sendAirtime(ctx context.Context, p *at.AirtimePayload) (res *at.AirtimeResponse, err error) {
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", "", "/version1/airtime/send"), p)
 	if err != nil {
@@ -24,7 +31,7 @@ func (c *Client) sendAirtime(ctx context.Context, p *africastalking.AirtimePaylo
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Apikey", c.apiKey)
 
-	res = &africastalking.AirtimeResponse{}
+	res = &at.AirtimeResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}
