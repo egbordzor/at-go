@@ -292,7 +292,7 @@ var TransactionResponse = Type("TransactionResponse", func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 			Example("Foo")
 		})
-		Value(func() {
+		Elem(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 			Example("Bar")
 		})
@@ -429,7 +429,7 @@ var TransactionResponse = Type("TransactionResponse", func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 			Example("Foo")
 		})
-		Value(func() {
+		Elem(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 			Example("Bar")
 		})

@@ -32,7 +32,7 @@ var TopupStashPayload = Type("TopupStashPayload", func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 			Example("Foo")
 		})
-		Value(func() {
+		Elem(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 			Example("Bar")
 		})

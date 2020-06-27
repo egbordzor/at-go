@@ -194,7 +194,7 @@ var MobileB2BPayload = Type("MobileB2BPayload", func() {
 		Key(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 		})
-		Value(func() {
+		Elem(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 		})
 	})
@@ -342,14 +342,15 @@ var MobileRecipients = Type("MobileRecipients", func() {
 	})
 	Attribute("reason", String, func() {
 		Description("Purpose of the payment.")
-		Enum("SalaryPayment",
+		Enum(
+			"SalaryPayment",
 			"SalaryPaymentWithWithdrawalChargePaid",
 			"BusinessPayment",
 			"BusinessPaymentWithWithdrawalChargePaid",
 			"PromotionPayment",
 		)
+		Example("SalaryPayment")
 	})
-	Example("SalaryPayment")
 
 	// Use this field to send data that will map notifications to B2C requests.
 	// It will be included in the notification we send once the B2C request is complete.
@@ -358,7 +359,7 @@ var MobileRecipients = Type("MobileRecipients", func() {
 		Key(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 		})
-		Value(func() {
+		Elem(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 		})
 	})

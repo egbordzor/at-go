@@ -41,7 +41,7 @@ var BankCheckoutPayload = Type("BankCheckoutPayload", func() {
 		Key(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 		})
-		Value(func() {
+		Elem(func() {
 			Pattern("[a-zA-Z]+") // Validates values of the map
 		})
 	})
