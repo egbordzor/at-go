@@ -24,16 +24,6 @@ type Endpoints struct {
 	PurgePremiumSubscription endpoint.Endpoint
 	MakeCall                 endpoint.Endpoint
 	TransferCall             endpoint.Endpoint
-	Say                      endpoint.Endpoint
-	Play                     endpoint.Endpoint
-	GetDigits                endpoint.Endpoint
-	Dial                     endpoint.Endpoint
-	Record                   endpoint.Endpoint
-	Enqueue                  endpoint.Endpoint
-	Dequeue                  endpoint.Endpoint
-	Redirect                 endpoint.Endpoint
-	Reject                   endpoint.Endpoint
-	Queue                    endpoint.Endpoint
 	UploadMedia              endpoint.Endpoint
 	MobileCheckout           endpoint.Endpoint
 	MobileB2C                endpoint.Endpoint
@@ -68,16 +58,6 @@ func NewEndpoints(s Service) *Endpoints {
 		PurgePremiumSubscription: NewPurgePremiumSubscriptionEndpoint(s),
 		MakeCall:                 NewMakeCallEndpoint(s),
 		TransferCall:             NewTransferCallEndpoint(s),
-		Say:                      NewSayEndpoint(s),
-		Play:                     NewPlayEndpoint(s),
-		GetDigits:                NewGetDigitsEndpoint(s),
-		Dial:                     NewDialEndpoint(s),
-		Record:                   NewRecordEndpoint(s),
-		Enqueue:                  NewEnqueueEndpoint(s),
-		Dequeue:                  NewDequeueEndpoint(s),
-		Redirect:                 NewRedirectEndpoint(s),
-		Reject:                   NewRejectEndpoint(s),
-		Queue:                    NewQueueEndpoint(s),
 		UploadMedia:              NewUploadMediaEndpoint(s),
 		MobileCheckout:           NewMobileCheckoutEndpoint(s),
 		MobileB2C:                NewMobileB2CEndpoint(s),
@@ -112,16 +92,6 @@ func (e *Endpoints) Use(m func(endpoint.Endpoint) endpoint.Endpoint) {
 	e.PurgePremiumSubscription = m(e.PurgePremiumSubscription)
 	e.MakeCall = m(e.MakeCall)
 	e.TransferCall = m(e.TransferCall)
-	e.Say = m(e.Say)
-	e.Play = m(e.Play)
-	e.GetDigits = m(e.GetDigits)
-	e.Dial = m(e.Dial)
-	e.Record = m(e.Record)
-	e.Enqueue = m(e.Enqueue)
-	e.Dequeue = m(e.Dequeue)
-	e.Redirect = m(e.Redirect)
-	e.Reject = m(e.Reject)
-	e.Queue = m(e.Queue)
 	e.UploadMedia = m(e.UploadMedia)
 	e.MobileCheckout = m(e.MobileCheckout)
 	e.MobileB2C = m(e.MobileB2C)
@@ -265,101 +235,6 @@ func NewTransferCallEndpoint(s Service) endpoint.Endpoint {
 			return nil, err
 		}
 		vres := NewViewedCallTransferResponse(res, "default")
-		return vres, nil
-	}
-}
-
-// NewSayEndpoint returns an endpoint function that calls the method "Say" of
-// service "africastalking".
-func NewSayEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Say1)
-		return s.Say(ctx, p)
-	}
-}
-
-// NewPlayEndpoint returns an endpoint function that calls the method "Play" of
-// service "africastalking".
-func NewPlayEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Play1)
-		return s.Play(ctx, p)
-	}
-}
-
-// NewGetDigitsEndpoint returns an endpoint function that calls the method
-// "GetDigits" of service "africastalking".
-func NewGetDigitsEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*GetDigits1)
-		return s.GetDigits(ctx, p)
-	}
-}
-
-// NewDialEndpoint returns an endpoint function that calls the method "Dial" of
-// service "africastalking".
-func NewDialEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Dial1)
-		return s.Dial(ctx, p)
-	}
-}
-
-// NewRecordEndpoint returns an endpoint function that calls the method
-// "Record" of service "africastalking".
-func NewRecordEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Record1)
-		return s.Record(ctx, p)
-	}
-}
-
-// NewEnqueueEndpoint returns an endpoint function that calls the method
-// "Enqueue" of service "africastalking".
-func NewEnqueueEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Enqueue1)
-		return s.Enqueue(ctx, p)
-	}
-}
-
-// NewDequeueEndpoint returns an endpoint function that calls the method
-// "Dequeue" of service "africastalking".
-func NewDequeueEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Dequeue1)
-		return s.Dequeue(ctx, p)
-	}
-}
-
-// NewRedirectEndpoint returns an endpoint function that calls the method
-// "Redirect" of service "africastalking".
-func NewRedirectEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Redirect1)
-		return s.Redirect(ctx, p)
-	}
-}
-
-// NewRejectEndpoint returns an endpoint function that calls the method
-// "Reject" of service "africastalking".
-func NewRejectEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*Reject1)
-		return s.Reject(ctx, p)
-	}
-}
-
-// NewQueueEndpoint returns an endpoint function that calls the method "Queue"
-// of service "africastalking".
-func NewQueueEndpoint(s Service) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		p := req.(*QueuedCallsPayload)
-		res, err := s.Queue(ctx, p)
-		if err != nil {
-			return nil, err
-		}
-		vres := NewViewedQueuedStatusResult(res, "default")
 		return vres, nil
 	}
 }

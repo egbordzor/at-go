@@ -23,7 +23,7 @@ func BuildSendBulkSMSPayload(africastalkingSendBulkSMSBody string) (*africastalk
 	{
 		err = json.Unmarshal([]byte(africastalkingSendBulkSMSBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"bulkSMSMode\": 8873484351855826778,\n      \"enqueue\": 1,\n      \"from\": \"Reprehenderit blanditiis.\",\n      \"keyword\": \"Est inventore consequatur ut quo.\",\n      \"linkId\": \"Omnis maxime provident nihil quidem.\",\n      \"message\": \"Eum a ut qui voluptatem consectetur.\",\n      \"retryDurationInHours\": \"Fuga qui repellat quidem.\",\n      \"to\": \"Vel ut ut assumenda quaerat.\",\n      \"username\": \"Et non rem.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"bulkSMSMode\": 8384610134235997494,\n      \"enqueue\": 0,\n      \"from\": \"Quis et vero odit.\",\n      \"keyword\": \"Ea unde nisi et.\",\n      \"linkId\": \"Sint est itaque.\",\n      \"message\": \"Asperiores qui est est dolorem repellendus.\",\n      \"retryDurationInHours\": \"Quis atque et est.\",\n      \"to\": \"Odit voluptatem totam reiciendis recusandae est.\",\n      \"username\": \"Itaque porro ipsa saepe molestias inventore.\"\n   }'")
 		}
 		if !(body.Enqueue == 0 || body.Enqueue == 1) {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.enqueue", body.Enqueue, []interface{}{0, 1}))
@@ -55,7 +55,7 @@ func BuildSendPremiumSMSPayload(africastalkingSendPremiumSMSBody string) (*afric
 	{
 		err = json.Unmarshal([]byte(africastalkingSendPremiumSMSBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"bulkSMSMode\": 382502157578571911,\n      \"enqueue\": 1,\n      \"from\": \"Magnam velit sunt itaque vel excepturi sit.\",\n      \"keyword\": \"Ea tenetur nihil.\",\n      \"linkId\": \"Quia consequatur a odio labore error.\",\n      \"message\": \"Commodi modi.\",\n      \"retryDurationInHours\": \"Magni provident ratione.\",\n      \"to\": \"Vero rerum porro nisi non tempore.\",\n      \"username\": \"Distinctio quis et ex sit soluta et.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"bulkSMSMode\": 2952784659881196971,\n      \"enqueue\": 1,\n      \"from\": \"Odio dolor architecto hic non vel eos.\",\n      \"keyword\": \"Voluptatem et magni.\",\n      \"linkId\": \"Aliquid reiciendis est iusto non ut deserunt.\",\n      \"message\": \"Eos ratione quisquam reiciendis.\",\n      \"retryDurationInHours\": \"Quasi nostrum id libero consequuntur velit ut.\",\n      \"to\": \"Omnis aut magni est inventore excepturi harum.\",\n      \"username\": \"Maxime rem.\"\n   }'")
 		}
 		if !(body.Enqueue == 0 || body.Enqueue == 1) {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.enqueue", body.Enqueue, []interface{}{0, 1}))
@@ -87,7 +87,7 @@ func BuildFetchSMSPayload(africastalkingFetchSMSBody string) (*africastalking.Fe
 	{
 		err = json.Unmarshal([]byte(africastalkingFetchSMSBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"lastReceivedId\": \"Ut sunt rerum at.\",\n      \"username\": \"Et sunt.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"lastReceivedId\": \"Nobis velit ea.\",\n      \"username\": \"Mollitia esse id similique.\"\n   }'")
 		}
 	}
 	v := &africastalking.FetchMsgPayload{
@@ -106,7 +106,7 @@ func BuildNewCheckoutTokenPayload(africastalkingNewCheckoutTokenBody string) (*a
 	{
 		err = json.Unmarshal([]byte(africastalkingNewCheckoutTokenBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"phoneNumber\": \"Ratione nihil earum atque autem ut.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"phoneNumber\": \"Est est omnis ab placeat sint.\"\n   }'")
 		}
 	}
 	v := &africastalking.CheckoutTokenPayload{
@@ -124,7 +124,7 @@ func BuildNewPremiumSubscriptionPayload(africastalkingNewPremiumSubscriptionBody
 	{
 		err = json.Unmarshal([]byte(africastalkingNewPremiumSubscriptionBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"checkoutToken\": \"\",\n      \"keyword\": \"\",\n      \"phoneNumber\": \"\",\n      \"shortCode\": \"\",\n      \"username\": \"Quia dolor illum ut modi sit.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"checkoutToken\": \"\",\n      \"keyword\": \"\",\n      \"phoneNumber\": \"\",\n      \"shortCode\": \"\",\n      \"username\": \"Sed eveniet aut non.\"\n   }'")
 		}
 	}
 	v := &africastalking.NewSubPayload{
@@ -146,7 +146,7 @@ func BuildFetchPremiumSubscriptionPayload(africastalkingFetchPremiumSubscription
 	{
 		err = json.Unmarshal([]byte(africastalkingFetchPremiumSubscriptionBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"keyword\": \"\",\n      \"lastReceivedId\": \"Sed qui dolores nihil.\",\n      \"shortCode\": \"\",\n      \"username\": \"Eum dolores iure molestiae eligendi laudantium est.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"keyword\": \"\",\n      \"lastReceivedId\": \"Alias vero eligendi.\",\n      \"shortCode\": \"\",\n      \"username\": \"Ipsa veritatis eveniet sapiente velit quia.\"\n   }'")
 		}
 	}
 	v := &africastalking.FetchSubPayload{
@@ -167,7 +167,7 @@ func BuildPurgePremiumSubscriptionPayload(africastalkingPurgePremiumSubscription
 	{
 		err = json.Unmarshal([]byte(africastalkingPurgePremiumSubscriptionBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"keyword\": \"\",\n      \"phoneNumber\": \"\",\n      \"shortCode\": \"\",\n      \"username\": \"Quia voluptatem et voluptatem necessitatibus quia minus.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"keyword\": \"\",\n      \"phoneNumber\": \"\",\n      \"shortCode\": \"\",\n      \"username\": \"Quia voluptatem aperiam et et illo.\"\n   }'")
 		}
 	}
 	v := &africastalking.PurgeSubPayload{
@@ -188,7 +188,7 @@ func BuildMakeCallPayload(africastalkingMakeCallBody string) (*africastalking.Ma
 	{
 		err = json.Unmarshal([]byte(africastalkingMakeCallBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"clientRequestId\": \"Ab qui ut consequatur exercitationem sed.\",\n      \"from\": \"Ut quas error fuga dolorem ea.\",\n      \"to\": \"Quis dolorum iure ut perferendis quidem facilis.\",\n      \"username\": \"Molestias natus rem tempora quos facere.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"clientRequestId\": \"Blanditiis impedit minima.\",\n      \"from\": \"Et aut.\",\n      \"to\": \"Et et non quos.\",\n      \"username\": \"Quis numquam deserunt.\"\n   }'")
 		}
 	}
 	v := &africastalking.MakeCallPayload{
@@ -209,7 +209,7 @@ func BuildTransferCallPayload(africastalkingTransferCallBody string) (*africasta
 	{
 		err = json.Unmarshal([]byte(africastalkingTransferCallBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"callLeg\": \"callee\",\n      \"holdMusicUrl\": \"Qui maiores.\",\n      \"phoneNumber\": \"Expedita quis nulla.\",\n      \"sessionId\": \"Consequatur maiores.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"callLeg\": \"caller\",\n      \"holdMusicUrl\": \"Eius sed.\",\n      \"phoneNumber\": \"Quidem voluptas commodi et consequatur ut.\",\n      \"sessionId\": \"Voluptates labore.\"\n   }'")
 		}
 		if !(body.CallLeg == "caller" || body.CallLeg == "callee") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError("body.callLeg", body.CallLeg, []interface{}{"caller", "callee"}))
@@ -228,203 +228,6 @@ func BuildTransferCallPayload(africastalkingTransferCallBody string) (*africasta
 	return v, nil
 }
 
-// BuildSayPayload builds the payload for the africastalking Say endpoint from
-// CLI flags.
-func BuildSayPayload(africastalkingSayBody string) (*africastalking.Say1, error) {
-	var err error
-	var body SayRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingSayBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"playBeep\": true,\n      \"voice\": \"woman\"\n   }'")
-		}
-	}
-	v := &africastalking.Say1{
-		Voice:    body.Voice,
-		PlayBeep: body.PlayBeep,
-	}
-
-	return v, nil
-}
-
-// BuildPlayPayload builds the payload for the africastalking Play endpoint
-// from CLI flags.
-func BuildPlayPayload(africastalkingPlayBody string) (*africastalking.Play1, error) {
-	var err error
-	var body PlayRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingPlayBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"url\": \"Sed id incidunt praesentium dolorem accusantium qui.\"\n   }'")
-		}
-	}
-	v := &africastalking.Play1{
-		URL: body.URL,
-	}
-
-	return v, nil
-}
-
-// BuildGetDigitsPayload builds the payload for the africastalking GetDigits
-// endpoint from CLI flags.
-func BuildGetDigitsPayload(africastalkingGetDigitsBody string) (*africastalking.GetDigits1, error) {
-	var err error
-	var body GetDigitsRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingGetDigitsBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"callbackUrl\": \"Dolor dicta omnis repellat cupiditate voluptas est.\",\n      \"finishOnKey\": \"Repellat porro et id dolor sit laboriosam.\",\n      \"numDigits\": \"Eaque quibusdam omnis vel dolorem.\",\n      \"timeout\": \"Est sunt tempora sint.\"\n   }'")
-		}
-	}
-	v := &africastalking.GetDigits1{
-		CallbackURL: body.CallbackURL,
-		NumDigits:   body.NumDigits,
-		Timeout:     body.Timeout,
-		FinishOnKey: body.FinishOnKey,
-	}
-
-	return v, nil
-}
-
-// BuildDialPayload builds the payload for the africastalking Dial endpoint
-// from CLI flags.
-func BuildDialPayload(africastalkingDialBody string) (*africastalking.Dial1, error) {
-	var err error
-	var body DialRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingDialBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"callerId\": \"Aliquam dolorem.\",\n      \"maxDuration\": \"Ad voluptas dolor.\",\n      \"phoneNumbers\": \"Iste aut dolores.\",\n      \"record\": \"Omnis repellat.\",\n      \"ringBackTone\": \"Et optio ut quod est.\",\n      \"sequential\": \"Sequi vel odit nobis aut natus ut.\"\n   }'")
-		}
-	}
-	v := &africastalking.Dial1{
-		PhoneNumbers: body.PhoneNumbers,
-		Record:       body.Record,
-		Sequential:   body.Sequential,
-		CallerID:     body.CallerID,
-		RingBackTone: body.RingBackTone,
-		MaxDuration:  body.MaxDuration,
-	}
-
-	return v, nil
-}
-
-// BuildRecordPayload builds the payload for the africastalking Record endpoint
-// from CLI flags.
-func BuildRecordPayload(africastalkingRecordBody string) (*africastalking.Record1, error) {
-	var err error
-	var body RecordRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingRecordBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"callbackUrl\": \"Natus placeat nam provident.\",\n      \"finishOnKey\": \"Illum neque itaque quibusdam perspiciatis dolorem corporis.\",\n      \"maxLength\": \"Velit qui accusantium.\",\n      \"playBeep\": \"Possimus quibusdam.\",\n      \"timeout\": \"Ratione sint.\",\n      \"trimSilence\": \"Esse dolore et enim et nihil excepturi.\"\n   }'")
-		}
-	}
-	v := &africastalking.Record1{
-		FinishOnKey: body.FinishOnKey,
-		MaxLength:   body.MaxLength,
-		Timeout:     body.Timeout,
-		TrimSilence: body.TrimSilence,
-		PlayBeep:    body.PlayBeep,
-		CallbackURL: body.CallbackURL,
-	}
-
-	return v, nil
-}
-
-// BuildEnqueuePayload builds the payload for the africastalking Enqueue
-// endpoint from CLI flags.
-func BuildEnqueuePayload(africastalkingEnqueueBody string) (*africastalking.Enqueue1, error) {
-	var err error
-	var body EnqueueRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingEnqueueBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"holdMusic\": \"Animi nesciunt eveniet.\",\n      \"name\": \"Quisquam reprehenderit provident et et dolor.\"\n   }'")
-		}
-	}
-	v := &africastalking.Enqueue1{
-		HoldMusic: body.HoldMusic,
-		Name:      body.Name,
-	}
-
-	return v, nil
-}
-
-// BuildDequeuePayload builds the payload for the africastalking Dequeue
-// endpoint from CLI flags.
-func BuildDequeuePayload(africastalkingDequeueBody string) (*africastalking.Dequeue1, error) {
-	var err error
-	var body DequeueRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingDequeueBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"name\": \"Necessitatibus porro error in.\",\n      \"phoneNumber\": \"Ea fuga repellendus asperiores iusto nulla repudiandae.\"\n   }'")
-		}
-	}
-	v := &africastalking.Dequeue1{
-		PhoneNumber: body.PhoneNumber,
-		Name:        body.Name,
-	}
-
-	return v, nil
-}
-
-// BuildRedirectPayload builds the payload for the africastalking Redirect
-// endpoint from CLI flags.
-func BuildRedirectPayload(africastalkingRedirectBody string) (*africastalking.Redirect1, error) {
-	var err error
-	var body RedirectRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingRedirectBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"Reject\": \"Est consequatur delectus dolore architecto ratione.\"\n   }'")
-		}
-	}
-	v := &africastalking.Redirect1{
-		Reject: body.Reject,
-	}
-
-	return v, nil
-}
-
-// BuildRejectPayload builds the payload for the africastalking Reject endpoint
-// from CLI flags.
-func BuildRejectPayload(africastalkingRejectBody string) (*africastalking.Reject1, error) {
-	var err error
-	var body RejectRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingRejectBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"Redirect\": \"Dolorem exercitationem maiores nemo ea.\"\n   }'")
-		}
-	}
-	v := &africastalking.Reject1{
-		Redirect: body.Redirect,
-	}
-
-	return v, nil
-}
-
-// BuildQueuePayload builds the payload for the africastalking Queue endpoint
-// from CLI flags.
-func BuildQueuePayload(africastalkingQueueBody string) (*africastalking.QueuedCallsPayload, error) {
-	var err error
-	var body QueueRequestBody
-	{
-		err = json.Unmarshal([]byte(africastalkingQueueBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"phoneNumbers\": \"Vero consequatur aliquid.\",\n      \"username\": \"Molestiae enim laudantium iure veniam qui.\"\n   }'")
-		}
-	}
-	v := &africastalking.QueuedCallsPayload{
-		Username:     body.Username,
-		PhoneNumbers: body.PhoneNumbers,
-	}
-
-	return v, nil
-}
-
 // BuildUploadMediaPayload builds the payload for the africastalking
 // UploadMedia endpoint from CLI flags.
 func BuildUploadMediaPayload(africastalkingUploadMediaBody string) (*africastalking.UploadMediaFile, error) {
@@ -433,7 +236,7 @@ func BuildUploadMediaPayload(africastalkingUploadMediaBody string) (*africastalk
 	{
 		err = json.Unmarshal([]byte(africastalkingUploadMediaBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"url\": \"Odit pariatur.\",\n      \"username\": \"Quasi animi omnis.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"url\": \"Vel ut ut assumenda quaerat.\",\n      \"username\": \"Et non rem.\"\n   }'")
 		}
 	}
 	v := &africastalking.UploadMediaFile{
@@ -452,7 +255,7 @@ func BuildMobileCheckoutPayload(africastalkingMobileCheckoutBody string) (*afric
 	{
 		err = json.Unmarshal([]byte(africastalkingMobileCheckoutBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"amount\": 3000,\n      \"currencyCode\": \"KES\",\n      \"metadata\": {\n         \"Delectus nihil.\": \"Iure sit est nihil placeat.\",\n         \"Facilis similique labore quo dolorem mollitia.\": \"Omnis ratione quod ut magni.\",\n         \"Unde perferendis.\": \"Sed sunt ea.\"\n      },\n      \"phoneNumber\": \"+254711XXXYYY\",\n      \"productName\": \"myProductName\",\n      \"providerChannel\": \"myProviderChannel\",\n      \"username\": \"MyAppUserName\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"amount\": 3000,\n      \"currencyCode\": \"KES\",\n      \"metadata\": {\n         \"Fuga qui repellat quidem.\": \"Quis distinctio quis et ex.\",\n         \"Nulla est inventore consequatur ut quo.\": \"Omnis maxime provident nihil quidem.\",\n         \"Soluta et ipsa.\": \"Rerum porro.\"\n      },\n      \"phoneNumber\": \"+254711XXXYYY\",\n      \"productName\": \"myProductName\",\n      \"providerChannel\": \"myProviderChannel\",\n      \"username\": \"MyAppUserName\"\n   }'")
 		}
 	}
 	v := &africastalking.MobileCheckoutPayload{
@@ -483,7 +286,7 @@ func BuildMobileB2CPayload(africastalkingMobileB2CBody string) (*africastalking.
 	{
 		err = json.Unmarshal([]byte(africastalkingMobileB2CBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"productName\": \"myProductName\",\n      \"recipients\": [\n         {\n            \"amount\": 100.5,\n            \"currencyCode\": \"KES\",\n            \"metadata\": {\n               \"OwCW\": \"OutQ\"\n            },\n            \"name\": \"name\",\n            \"phoneNumber\": \"+254711XXXYYY\",\n            \"providerChannel\": \"myProviderChannel\",\n            \"reason\": \"SalaryPayment\"\n         },\n         {\n            \"amount\": 100.5,\n            \"currencyCode\": \"KES\",\n            \"metadata\": {\n               \"OwCW\": \"OutQ\"\n            },\n            \"name\": \"name\",\n            \"phoneNumber\": \"+254711XXXYYY\",\n            \"providerChannel\": \"myProviderChannel\",\n            \"reason\": \"SalaryPayment\"\n         },\n         {\n            \"amount\": 100.5,\n            \"currencyCode\": \"KES\",\n            \"metadata\": {\n               \"OwCW\": \"OutQ\"\n            },\n            \"name\": \"name\",\n            \"phoneNumber\": \"+254711XXXYYY\",\n            \"providerChannel\": \"myProviderChannel\",\n            \"reason\": \"SalaryPayment\"\n         }\n      ],\n      \"username\": \"MyAppUserName\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"productName\": \"myProductName\",\n      \"recipients\": [\n         {\n            \"amount\": 100.5,\n            \"currencyCode\": \"KES\",\n            \"metadata\": {\n               \"OqkdMh\": \"RwMfHN\",\n               \"QawIGK\": \"mr\"\n            },\n            \"name\": \"name\",\n            \"phoneNumber\": \"+254711XXXYYY\",\n            \"providerChannel\": \"myProviderChannel\",\n            \"reason\": \"SalaryPayment\"\n         },\n         {\n            \"amount\": 100.5,\n            \"currencyCode\": \"KES\",\n            \"metadata\": {\n               \"OqkdMh\": \"RwMfHN\",\n               \"QawIGK\": \"mr\"\n            },\n            \"name\": \"name\",\n            \"phoneNumber\": \"+254711XXXYYY\",\n            \"providerChannel\": \"myProviderChannel\",\n            \"reason\": \"SalaryPayment\"\n         },\n         {\n            \"amount\": 100.5,\n            \"currencyCode\": \"KES\",\n            \"metadata\": {\n               \"OqkdMh\": \"RwMfHN\",\n               \"QawIGK\": \"mr\"\n            },\n            \"name\": \"name\",\n            \"phoneNumber\": \"+254711XXXYYY\",\n            \"providerChannel\": \"myProviderChannel\",\n            \"reason\": \"SalaryPayment\"\n         }\n      ],\n      \"username\": \"MyAppUserName\"\n   }'")
 		}
 		if body.Recipients == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("recipients", "body"))
@@ -527,7 +330,7 @@ func BuildMobileB2BPayload(africastalkingMobileB2BBody string) (*africastalking.
 	{
 		err = json.Unmarshal([]byte(africastalkingMobileB2BBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"amount\": 3000,\n      \"currencyCode\": \"KES\",\n      \"destinationAccount\": \"Account Name\",\n      \"destinationChannel\": \"Buy Goods Number\",\n      \"metadata\": {\n         \"OqkdMh\": \"RwMfHN\",\n         \"QawIGK\": \"mr\",\n         \"lB\": \"ExdMn\"\n      },\n      \"productName\": \"myProductName\",\n      \"provider\": \"Mpesa\",\n      \"transferType\": \"BusinessBuyGoods\",\n      \"username\": \"MyAppUserName\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"amount\": 3000,\n      \"currencyCode\": \"KES\",\n      \"destinationAccount\": \"Account Name\",\n      \"destinationChannel\": \"Buy Goods Number\",\n      \"metadata\": {\n         \"FwOA\": \"EbHFN\",\n         \"lB\": \"ExdMn\",\n         \"wSLs\": \"RF\"\n      },\n      \"productName\": \"myProductName\",\n      \"provider\": \"Mpesa\",\n      \"transferType\": \"BusinessBuyGoods\",\n      \"username\": \"MyAppUserName\"\n   }'")
 		}
 	}
 	v := &africastalking.MobileB2BPayload{
@@ -560,7 +363,7 @@ func BuildBankCheckoutPayload(africastalkingBankCheckoutBody string) (*africasta
 	{
 		err = json.Unmarshal([]byte(africastalkingBankCheckoutBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"amount\": 39393,\n      \"bankAccount\": {\n         \"accountName\": \"Test Bank Account\",\n         \"accountNumber\": \"1234567890\",\n         \"bankCode\": 234001,\n         \"dateOfBirth\": \"1982-11-11\"\n      },\n      \"currencyCode\": \"NGN\",\n      \"metadata\": {\n         \"FwOA\": \"EbHFN\"\n      },\n      \"narration\": \"payment for airtime\",\n      \"productName\": \"myPaymentProductName\",\n      \"username\": \"MyAppUserName\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"amount\": 39393,\n      \"bankAccount\": {\n         \"accountName\": \"Test Bank Account\",\n         \"accountNumber\": \"1234567890\",\n         \"bankCode\": 234001,\n         \"dateOfBirth\": \"1976-09-20\"\n      },\n      \"currencyCode\": \"NGN\",\n      \"metadata\": {\n         \"NPgWJ\": \"kdE\",\n         \"UzgPjL\": \"s\"\n      },\n      \"narration\": \"payment for airtime\",\n      \"productName\": \"myPaymentProductName\",\n      \"username\": \"MyAppUserName\"\n   }'")
 		}
 		if body.BankAccount == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("bankAccount", "body"))
@@ -608,7 +411,7 @@ func BuildBankCheckoutValidatePayload(africastalkingBankCheckoutValidateBody str
 	{
 		err = json.Unmarshal([]byte(africastalkingBankCheckoutValidateBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"otp\": \"Voluptatum dicta saepe voluptatibus.\",\n      \"transactionId\": \"Quae voluptatem dolor ut iure et.\",\n      \"username\": \"Sed modi consequatur architecto et.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"otp\": \"Quia tempora quia voluptatem et voluptatem.\",\n      \"transactionId\": \"Sed qui dolores nihil.\",\n      \"username\": \"Iure molestiae eligendi laudantium est.\"\n   }'")
 		}
 	}
 	v := &africastalking.BankCheckoutValidatePayload{
@@ -628,7 +431,7 @@ func BuildBankTransferPayload(africastalkingBankTransferBody string) (*africasta
 	{
 		err = json.Unmarshal([]byte(africastalkingBankTransferBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"productName\": \"Repellat ut.\",\n      \"recipients\": [\n         {\n            \"accountName\": \"Unde aut similique eveniet occaecati in.\",\n            \"accountNumber\": \"Dignissimos dolores.\",\n            \"amount\": \"Libero quo voluptatibus blanditiis.\",\n            \"bankAccount\": \"Blanditiis et architecto ut velit perferendis ea.\",\n            \"bankCode\": \"Id voluptatem.\",\n            \"currencyCode\": \"Voluptatem dolor ullam.\",\n            \"dateOfBirth\": \"Non sequi odio dignissimos assumenda a.\",\n            \"metadata\": {\n               \"Esse veniam quod sunt facere.\": \"Sed quibusdam molestiae ea.\",\n               \"Quasi praesentium voluptas voluptas doloremque distinctio.\": \"Cum ullam rerum.\",\n               \"Sint possimus vel.\": \"Illo ea.\"\n            },\n            \"narration\": \"Numquam doloribus.\"\n         },\n         {\n            \"accountName\": \"Unde aut similique eveniet occaecati in.\",\n            \"accountNumber\": \"Dignissimos dolores.\",\n            \"amount\": \"Libero quo voluptatibus blanditiis.\",\n            \"bankAccount\": \"Blanditiis et architecto ut velit perferendis ea.\",\n            \"bankCode\": \"Id voluptatem.\",\n            \"currencyCode\": \"Voluptatem dolor ullam.\",\n            \"dateOfBirth\": \"Non sequi odio dignissimos assumenda a.\",\n            \"metadata\": {\n               \"Esse veniam quod sunt facere.\": \"Sed quibusdam molestiae ea.\",\n               \"Quasi praesentium voluptas voluptas doloremque distinctio.\": \"Cum ullam rerum.\",\n               \"Sint possimus vel.\": \"Illo ea.\"\n            },\n            \"narration\": \"Numquam doloribus.\"\n         },\n         {\n            \"accountName\": \"Unde aut similique eveniet occaecati in.\",\n            \"accountNumber\": \"Dignissimos dolores.\",\n            \"amount\": \"Libero quo voluptatibus blanditiis.\",\n            \"bankAccount\": \"Blanditiis et architecto ut velit perferendis ea.\",\n            \"bankCode\": \"Id voluptatem.\",\n            \"currencyCode\": \"Voluptatem dolor ullam.\",\n            \"dateOfBirth\": \"Non sequi odio dignissimos assumenda a.\",\n            \"metadata\": {\n               \"Esse veniam quod sunt facere.\": \"Sed quibusdam molestiae ea.\",\n               \"Quasi praesentium voluptas voluptas doloremque distinctio.\": \"Cum ullam rerum.\",\n               \"Sint possimus vel.\": \"Illo ea.\"\n            },\n            \"narration\": \"Numquam doloribus.\"\n         }\n      ],\n      \"username\": \"Vel reiciendis.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"productName\": \"Rem tempora quos facere voluptatem ut.\",\n      \"recipients\": [\n         {\n            \"accountName\": \"Dolorum iure ut perferendis quidem facilis velit.\",\n            \"accountNumber\": \"Qui ut.\",\n            \"amount\": \"Quia adipisci laudantium similique tenetur.\",\n            \"bankAccount\": \"Fuga dolorem ea quidem.\",\n            \"bankCode\": \"Exercitationem sed repellat.\",\n            \"currencyCode\": \"Dolores nisi consequatur et quibusdam.\",\n            \"dateOfBirth\": \"Fugit maiores minus.\",\n            \"metadata\": {\n               \"Est qui velit voluptatem.\": \"Consequatur maiores.\"\n            },\n            \"narration\": \"Et alias commodi laudantium vel quibusdam.\"\n         },\n         {\n            \"accountName\": \"Dolorum iure ut perferendis quidem facilis velit.\",\n            \"accountNumber\": \"Qui ut.\",\n            \"amount\": \"Quia adipisci laudantium similique tenetur.\",\n            \"bankAccount\": \"Fuga dolorem ea quidem.\",\n            \"bankCode\": \"Exercitationem sed repellat.\",\n            \"currencyCode\": \"Dolores nisi consequatur et quibusdam.\",\n            \"dateOfBirth\": \"Fugit maiores minus.\",\n            \"metadata\": {\n               \"Est qui velit voluptatem.\": \"Consequatur maiores.\"\n            },\n            \"narration\": \"Et alias commodi laudantium vel quibusdam.\"\n         },\n         {\n            \"accountName\": \"Dolorum iure ut perferendis quidem facilis velit.\",\n            \"accountNumber\": \"Qui ut.\",\n            \"amount\": \"Quia adipisci laudantium similique tenetur.\",\n            \"bankAccount\": \"Fuga dolorem ea quidem.\",\n            \"bankCode\": \"Exercitationem sed repellat.\",\n            \"currencyCode\": \"Dolores nisi consequatur et quibusdam.\",\n            \"dateOfBirth\": \"Fugit maiores minus.\",\n            \"metadata\": {\n               \"Est qui velit voluptatem.\": \"Consequatur maiores.\"\n            },\n            \"narration\": \"Et alias commodi laudantium vel quibusdam.\"\n         }\n      ],\n      \"username\": \"Quia minus modi molestias.\"\n   }'")
 		}
 		if body.Recipients == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("recipients", "body"))
@@ -708,7 +511,7 @@ func BuildCardCheckoutValidatePayload(africastalkingCardCheckoutValidateBody str
 	{
 		err = json.Unmarshal([]byte(africastalkingCardCheckoutValidateBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"otp\": \"Possimus atque consequuntur ex enim.\",\n      \"transactionId\": \"Impedit ut in aut.\",\n      \"username\": \"Quos laboriosam aliquam aut neque voluptas.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"otp\": \"Molestiae vel.\",\n      \"transactionId\": \"Eveniet et magnam maxime porro.\",\n      \"username\": \"Veritatis qui maiores.\"\n   }'")
 		}
 	}
 	v := &africastalking.CardCheckoutValidatePayload{
@@ -826,7 +629,7 @@ func BuildFetchProductTransactionsPayload(africastalkingFetchProductTransactions
 	{
 		err = json.Unmarshal([]byte(africastalkingFetchProductTransactionsBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"category\": \"UserStashTopup\",\n      \"count\": 811,\n      \"destination\": \"BankAccount\",\n      \"endDate\": \"2011-04-10\",\n      \"pageNumber\": 7211156821635237590,\n      \"productName\": \"MyProductName\",\n      \"provider\": \"Athena\",\n      \"providerChannel\": \"Ullam libero velit.\",\n      \"source\": \"phoneNumber\",\n      \"startDate\": \"1991-10-20\",\n      \"status\": \"Success\",\n      \"username\": \"MyAppUserName\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"category\": \"UserStashTopup\",\n      \"count\": 740,\n      \"destination\": \"BankAccount\",\n      \"endDate\": \"2015-02-12\",\n      \"pageNumber\": 2369339247652617210,\n      \"productName\": \"MyProductName\",\n      \"provider\": \"Athena\",\n      \"providerChannel\": \"Dolor minima quidem harum dicta unde sit.\",\n      \"source\": \"phoneNumber\",\n      \"startDate\": \"1990-01-03\",\n      \"status\": \"Success\",\n      \"username\": \"MyAppUserName\"\n   }'")
 		}
 		if body.PageNumber < 1 {
 			err = goa.MergeErrors(err, goa.InvalidRangeError("body.pageNumber", body.PageNumber, 1, true))
@@ -898,7 +701,7 @@ func BuildFetchWalletTransactionsPayload(africastalkingFetchWalletTransactionsBo
 	{
 		err = json.Unmarshal([]byte(africastalkingFetchWalletTransactionsBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"categories\": \"MobileB2C\",\n      \"count\": 242,\n      \"endDate\": \"2003-12-12\",\n      \"pageNumber\": 937507102661436005,\n      \"startDate\": \"1991-01-30\",\n      \"username\": \"MyAppUserName\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"categories\": \"MobileCheckout\",\n      \"count\": 364,\n      \"endDate\": \"1986-04-03\",\n      \"pageNumber\": 979655238485343378,\n      \"startDate\": \"1990-07-03\",\n      \"username\": \"MyAppUserName\"\n   }'")
 		}
 		if body.PageNumber < 1 {
 			err = goa.MergeErrors(err, goa.InvalidRangeError("body.pageNumber", body.PageNumber, 1, true))
@@ -962,7 +765,7 @@ func BuildSendAirtimePayload(africastalkingSendAirtimeBody string) (*africastalk
 	{
 		err = json.Unmarshal([]byte(africastalkingSendAirtimeBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"recipients\": [\n         {\n            \"amount \": \"KES 100.50\",\n            \"phoneNumber\": \"+234811222333\"\n         },\n         {\n            \"amount \": \"KES 100.50\",\n            \"phoneNumber\": \"+234811222333\"\n         }\n      ],\n      \"username\": \"Quisquam in tempora sequi.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"recipients\": [\n         {\n            \"amount \": \"KES 100.50\",\n            \"phoneNumber\": \"+234811222333\"\n         },\n         {\n            \"amount \": \"KES 100.50\",\n            \"phoneNumber\": \"+234811222333\"\n         },\n         {\n            \"amount \": \"KES 100.50\",\n            \"phoneNumber\": \"+234811222333\"\n         },\n         {\n            \"amount \": \"KES 100.50\",\n            \"phoneNumber\": \"+234811222333\"\n         }\n      ],\n      \"username\": \"Enim laudantium iure veniam.\"\n   }'")
 		}
 		if body.Recipients == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("recipients", "body"))
@@ -992,7 +795,7 @@ func BuildPublishIoTPayload(africastalkingPublishIoTBody string) (*africastalkin
 	{
 		err = json.Unmarshal([]byte(africastalkingPublishIoTBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"deviceGroup\": \"Quia molestiae est neque cum.\",\n      \"payload\": \"Consequuntur nesciunt.\",\n      \"topic\": \"\\u003cusername\\u003e/\\u003cdevice-group\\u003e/\\u003cthe-topic\\u003e\",\n      \"username\": \"Voluptatem aliquam ut perferendis sunt ipsam.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"deviceGroup\": \"Nisi amet et at.\",\n      \"payload\": \"Ducimus eligendi.\",\n      \"topic\": \"\\u003cusername\\u003e/\\u003cdevice-group\\u003e/\\u003cthe-topic\\u003e\",\n      \"username\": \"Eaque nostrum cum.\"\n   }'")
 		}
 	}
 	v := &africastalking.IoTPayload{
@@ -1013,7 +816,7 @@ func BuildGeneratePayload(africastalkingGenerateBody string) (*africastalking.Ge
 	{
 		err = json.Unmarshal([]byte(africastalkingGenerateBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"apiKey\": \"Aut sed inventore consectetur mollitia.\",\n      \"username\": \"sandbox\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"apiKey\": \"Quasi animi omnis.\",\n      \"username\": \"sandbox\"\n   }'")
 		}
 	}
 	v := &africastalking.GeneratePayload{

@@ -24,16 +24,6 @@ type Client struct {
 	PurgePremiumSubscriptionEndpoint endpoint.Endpoint
 	MakeCallEndpoint                 endpoint.Endpoint
 	TransferCallEndpoint             endpoint.Endpoint
-	SayEndpoint                      endpoint.Endpoint
-	PlayEndpoint                     endpoint.Endpoint
-	GetDigitsEndpoint                endpoint.Endpoint
-	DialEndpoint                     endpoint.Endpoint
-	RecordEndpoint                   endpoint.Endpoint
-	EnqueueEndpoint                  endpoint.Endpoint
-	DequeueEndpoint                  endpoint.Endpoint
-	RedirectEndpoint                 endpoint.Endpoint
-	RejectEndpoint                   endpoint.Endpoint
-	QueueEndpoint                    endpoint.Endpoint
 	UploadMediaEndpoint              endpoint.Endpoint
 	MobileCheckoutEndpoint           endpoint.Endpoint
 	MobileB2CEndpoint                endpoint.Endpoint
@@ -56,7 +46,7 @@ type Client struct {
 }
 
 // NewClient initializes a "africastalking" service client given the endpoints.
-func NewClient(sendBulkSMS, sendPremiumSMS, fetchSMS, newCheckoutToken, newPremiumSubscription, fetchPremiumSubscription, purgePremiumSubscription, makeCall, transferCall, say, play, getDigits, dial, record, enqueue, dequeue, redirect, reject, queue, uploadMedia, mobileCheckout, mobileB2C, mobileB2B, bankCheckout, bankCheckoutValidate, bankTransfer, cardCheckout, cardCheckoutValidate, walletTransfer, topupStash, findTransaction, fetchProductTransactions, fetchWalletTransactions, fetchWalletBalance, sendAirtime, publishIoT, initiateAppData, generate endpoint.Endpoint) *Client {
+func NewClient(sendBulkSMS, sendPremiumSMS, fetchSMS, newCheckoutToken, newPremiumSubscription, fetchPremiumSubscription, purgePremiumSubscription, makeCall, transferCall, uploadMedia, mobileCheckout, mobileB2C, mobileB2B, bankCheckout, bankCheckoutValidate, bankTransfer, cardCheckout, cardCheckoutValidate, walletTransfer, topupStash, findTransaction, fetchProductTransactions, fetchWalletTransactions, fetchWalletBalance, sendAirtime, publishIoT, initiateAppData, generate endpoint.Endpoint) *Client {
 	return &Client{
 		SendBulkSMSEndpoint:              sendBulkSMS,
 		SendPremiumSMSEndpoint:           sendPremiumSMS,
@@ -67,16 +57,6 @@ func NewClient(sendBulkSMS, sendPremiumSMS, fetchSMS, newCheckoutToken, newPremi
 		PurgePremiumSubscriptionEndpoint: purgePremiumSubscription,
 		MakeCallEndpoint:                 makeCall,
 		TransferCallEndpoint:             transferCall,
-		SayEndpoint:                      say,
-		PlayEndpoint:                     play,
-		GetDigitsEndpoint:                getDigits,
-		DialEndpoint:                     dial,
-		RecordEndpoint:                   record,
-		EnqueueEndpoint:                  enqueue,
-		DequeueEndpoint:                  dequeue,
-		RedirectEndpoint:                 redirect,
-		RejectEndpoint:                   reject,
-		QueueEndpoint:                    queue,
 		UploadMediaEndpoint:              uploadMedia,
 		MobileCheckoutEndpoint:           mobileCheckout,
 		MobileB2CEndpoint:                mobileB2C,
@@ -193,106 +173,6 @@ func (c *Client) TransferCall(ctx context.Context, p *CallTransferPayload) (res 
 		return
 	}
 	return ires.(*CallTransferResponse), nil
-}
-
-// Say calls the "Say" endpoint of the "africastalking" service.
-func (c *Client) Say(ctx context.Context, p *Say1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.SayEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Play calls the "Play" endpoint of the "africastalking" service.
-func (c *Client) Play(ctx context.Context, p *Play1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.PlayEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// GetDigits calls the "GetDigits" endpoint of the "africastalking" service.
-func (c *Client) GetDigits(ctx context.Context, p *GetDigits1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.GetDigitsEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Dial calls the "Dial" endpoint of the "africastalking" service.
-func (c *Client) Dial(ctx context.Context, p *Dial1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.DialEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Record calls the "Record" endpoint of the "africastalking" service.
-func (c *Client) Record(ctx context.Context, p *Record1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.RecordEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Enqueue calls the "Enqueue" endpoint of the "africastalking" service.
-func (c *Client) Enqueue(ctx context.Context, p *Enqueue1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.EnqueueEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Dequeue calls the "Dequeue" endpoint of the "africastalking" service.
-func (c *Client) Dequeue(ctx context.Context, p *Dequeue1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.DequeueEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Redirect calls the "Redirect" endpoint of the "africastalking" service.
-func (c *Client) Redirect(ctx context.Context, p *Redirect1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.RedirectEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Reject calls the "Reject" endpoint of the "africastalking" service.
-func (c *Client) Reject(ctx context.Context, p *Reject1) (res string, err error) {
-	var ires interface{}
-	ires, err = c.RejectEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(string), nil
-}
-
-// Queue calls the "Queue" endpoint of the "africastalking" service.
-func (c *Client) Queue(ctx context.Context, p *QueuedCallsPayload) (res *QueuedStatusResult, err error) {
-	var ires interface{}
-	ires, err = c.QueueEndpoint(ctx, p)
-	if err != nil {
-		return
-	}
-	return ires.(*QueuedStatusResult), nil
 }
 
 // UploadMedia calls the "UploadMedia" endpoint of the "africastalking" service.

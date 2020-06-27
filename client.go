@@ -11,19 +11,50 @@ import (
 	"net/http"
 )
 
+
+
 type Client struct {
-	BaseURL    string
-	apiKey     string
-	HTTPClient *http.Client
-	logger     log.Logger // log the requests.
+	username         string
+	smsEndpoint      string
+	voiceEndpoint    string
+	paymentsEndpoint string
+	airtimeEndpoint  string
+	iotEndpoint      string
+	userEndpoint     string
+	apiKey           string
+	HTTPClient       *http.Client
+	logger           log.Logger // log the requests.
 }
 
-// NewClient returns new Client struct
-func NewClient(appKey string, baseURL string) (*Client, error) {
+// NewClient returns new Production Client struct
+func NewClient(Username, APIKey string) (*Client, error) {
 	return &Client{
-		BaseURL:    baseURL,
-		apiKey:     appKey,
-		HTTPClient: &http.Client{},
+		username:         Username,
+		smsEndpoint:      "",
+		voiceEndpoint:    "",
+		paymentsEndpoint: "",
+		airtimeEndpoint:  "",
+		iotEndpoint:      "",
+		userEndpoint:     "",
+		apiKey:           "",
+		HTTPClient:       &http.Client{},
+		logger:           nil,
+	}, nil
+}
+
+// NewSandboxClient returns new Sandbox Client struct
+func NewSandboxClient(APIKey string) (*Client, error) {
+	return &Client{
+		username:         "sandbox",
+		smsEndpoint:      "",
+		voiceEndpoint:    "",
+		paymentsEndpoint: "",
+		airtimeEndpoint:  "",
+		iotEndpoint:      "",
+		userEndpoint:     "",
+		apiKey:           APIKey,
+		HTTPClient:       &http.Client{},
+		logger:           nil,
 	}, nil
 }
 

@@ -23,22 +23,22 @@ import (
 //    command (subcommand1|subcommand2|...)
 //
 func UsageCommands() string {
-	return `africastalking (send-bulk-sms|send-premium-sms|fetch-sms|new-checkout-token|new-premium-subscription|fetch-premium-subscription|purge-premium-subscription|make-call|transfer-call|say|play|get-digits|dial|record|enqueue|dequeue|redirect|reject|queue|upload-media|mobile-checkout|mobile-b2-c|mobile-b2-b|bank- -checkout|bank-checkout-validate|bank-transfer|card-checkout|card-checkout-validate|wallet-transfer|topup-stash|find-transaction|fetch-product-transactions|fetch-wallet-transactions|fetch-wallet-balance|send-airtime|publish-io-t|initiate-app-data|generate)
+	return `africastalking (send-bulk-sms|send-premium-sms|fetch-sms|new-checkout-token|new-premium-subscription|fetch-premium-subscription|purge-premium-subscription|make-call|transfer-call|upload-media|mobile-checkout|mobile-b2-c|mobile-b2-b|bank- -checkout|bank-checkout-validate|bank-transfer|card-checkout|card-checkout-validate|wallet-transfer|topup-stash|find-transaction|fetch-product-transactions|fetch-wallet-transactions|fetch-wallet-balance|send-airtime|publish-io-t|initiate-app-data|generate)
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` africastalking send-bulk-sms --body '{
-      "bulkSMSMode": 8873484351855826778,
-      "enqueue": 1,
-      "from": "Reprehenderit blanditiis.",
-      "keyword": "Est inventore consequatur ut quo.",
-      "linkId": "Omnis maxime provident nihil quidem.",
-      "message": "Eum a ut qui voluptatem consectetur.",
-      "retryDurationInHours": "Fuga qui repellat quidem.",
-      "to": "Vel ut ut assumenda quaerat.",
-      "username": "Et non rem."
+      "bulkSMSMode": 8384610134235997494,
+      "enqueue": 0,
+      "from": "Quis et vero odit.",
+      "keyword": "Ea unde nisi et.",
+      "linkId": "Sint est itaque.",
+      "message": "Asperiores qui est est dolorem repellendus.",
+      "retryDurationInHours": "Quis atque et est.",
+      "to": "Odit voluptatem totam reiciendis recusandae est.",
+      "username": "Itaque porro ipsa saepe molestias inventore."
    }'` + "\n" +
 		""
 }
@@ -81,36 +81,6 @@ func ParseEndpoint(
 
 		africastalkingTransferCallFlags    = flag.NewFlagSet("transfer-call", flag.ExitOnError)
 		africastalkingTransferCallBodyFlag = africastalkingTransferCallFlags.String("body", "REQUIRED", "")
-
-		africastalkingSayFlags    = flag.NewFlagSet("say", flag.ExitOnError)
-		africastalkingSayBodyFlag = africastalkingSayFlags.String("body", "REQUIRED", "")
-
-		africastalkingPlayFlags    = flag.NewFlagSet("play", flag.ExitOnError)
-		africastalkingPlayBodyFlag = africastalkingPlayFlags.String("body", "REQUIRED", "")
-
-		africastalkingGetDigitsFlags    = flag.NewFlagSet("get-digits", flag.ExitOnError)
-		africastalkingGetDigitsBodyFlag = africastalkingGetDigitsFlags.String("body", "REQUIRED", "")
-
-		africastalkingDialFlags    = flag.NewFlagSet("dial", flag.ExitOnError)
-		africastalkingDialBodyFlag = africastalkingDialFlags.String("body", "REQUIRED", "")
-
-		africastalkingRecordFlags    = flag.NewFlagSet("record", flag.ExitOnError)
-		africastalkingRecordBodyFlag = africastalkingRecordFlags.String("body", "REQUIRED", "")
-
-		africastalkingEnqueueFlags    = flag.NewFlagSet("enqueue", flag.ExitOnError)
-		africastalkingEnqueueBodyFlag = africastalkingEnqueueFlags.String("body", "REQUIRED", "")
-
-		africastalkingDequeueFlags    = flag.NewFlagSet("dequeue", flag.ExitOnError)
-		africastalkingDequeueBodyFlag = africastalkingDequeueFlags.String("body", "REQUIRED", "")
-
-		africastalkingRedirectFlags    = flag.NewFlagSet("redirect", flag.ExitOnError)
-		africastalkingRedirectBodyFlag = africastalkingRedirectFlags.String("body", "REQUIRED", "")
-
-		africastalkingRejectFlags    = flag.NewFlagSet("reject", flag.ExitOnError)
-		africastalkingRejectBodyFlag = africastalkingRejectFlags.String("body", "REQUIRED", "")
-
-		africastalkingQueueFlags    = flag.NewFlagSet("queue", flag.ExitOnError)
-		africastalkingQueueBodyFlag = africastalkingQueueFlags.String("body", "REQUIRED", "")
 
 		africastalkingUploadMediaFlags    = flag.NewFlagSet("upload-media", flag.ExitOnError)
 		africastalkingUploadMediaBodyFlag = africastalkingUploadMediaFlags.String("body", "REQUIRED", "")
@@ -179,16 +149,6 @@ func ParseEndpoint(
 	africastalkingPurgePremiumSubscriptionFlags.Usage = africastalkingPurgePremiumSubscriptionUsage
 	africastalkingMakeCallFlags.Usage = africastalkingMakeCallUsage
 	africastalkingTransferCallFlags.Usage = africastalkingTransferCallUsage
-	africastalkingSayFlags.Usage = africastalkingSayUsage
-	africastalkingPlayFlags.Usage = africastalkingPlayUsage
-	africastalkingGetDigitsFlags.Usage = africastalkingGetDigitsUsage
-	africastalkingDialFlags.Usage = africastalkingDialUsage
-	africastalkingRecordFlags.Usage = africastalkingRecordUsage
-	africastalkingEnqueueFlags.Usage = africastalkingEnqueueUsage
-	africastalkingDequeueFlags.Usage = africastalkingDequeueUsage
-	africastalkingRedirectFlags.Usage = africastalkingRedirectUsage
-	africastalkingRejectFlags.Usage = africastalkingRejectUsage
-	africastalkingQueueFlags.Usage = africastalkingQueueUsage
 	africastalkingUploadMediaFlags.Usage = africastalkingUploadMediaUsage
 	africastalkingMobileCheckoutFlags.Usage = africastalkingMobileCheckoutUsage
 	africastalkingMobileB2CFlags.Usage = africastalkingMobileB2CUsage
@@ -269,36 +229,6 @@ func ParseEndpoint(
 
 			case "transfer-call":
 				epf = africastalkingTransferCallFlags
-
-			case "say":
-				epf = africastalkingSayFlags
-
-			case "play":
-				epf = africastalkingPlayFlags
-
-			case "get-digits":
-				epf = africastalkingGetDigitsFlags
-
-			case "dial":
-				epf = africastalkingDialFlags
-
-			case "record":
-				epf = africastalkingRecordFlags
-
-			case "enqueue":
-				epf = africastalkingEnqueueFlags
-
-			case "dequeue":
-				epf = africastalkingDequeueFlags
-
-			case "redirect":
-				epf = africastalkingRedirectFlags
-
-			case "reject":
-				epf = africastalkingRejectFlags
-
-			case "queue":
-				epf = africastalkingQueueFlags
 
 			case "upload-media":
 				epf = africastalkingUploadMediaFlags
@@ -409,36 +339,6 @@ func ParseEndpoint(
 			case "transfer-call":
 				endpoint = c.TransferCall()
 				data, err = africastalkingc.BuildTransferCallPayload(*africastalkingTransferCallBodyFlag)
-			case "say":
-				endpoint = c.Say()
-				data, err = africastalkingc.BuildSayPayload(*africastalkingSayBodyFlag)
-			case "play":
-				endpoint = c.Play()
-				data, err = africastalkingc.BuildPlayPayload(*africastalkingPlayBodyFlag)
-			case "get-digits":
-				endpoint = c.GetDigits()
-				data, err = africastalkingc.BuildGetDigitsPayload(*africastalkingGetDigitsBodyFlag)
-			case "dial":
-				endpoint = c.Dial()
-				data, err = africastalkingc.BuildDialPayload(*africastalkingDialBodyFlag)
-			case "record":
-				endpoint = c.Record()
-				data, err = africastalkingc.BuildRecordPayload(*africastalkingRecordBodyFlag)
-			case "enqueue":
-				endpoint = c.Enqueue()
-				data, err = africastalkingc.BuildEnqueuePayload(*africastalkingEnqueueBodyFlag)
-			case "dequeue":
-				endpoint = c.Dequeue()
-				data, err = africastalkingc.BuildDequeuePayload(*africastalkingDequeueBodyFlag)
-			case "redirect":
-				endpoint = c.Redirect()
-				data, err = africastalkingc.BuildRedirectPayload(*africastalkingRedirectBodyFlag)
-			case "reject":
-				endpoint = c.Reject()
-				data, err = africastalkingc.BuildRejectPayload(*africastalkingRejectBodyFlag)
-			case "queue":
-				endpoint = c.Queue()
-				data, err = africastalkingc.BuildQueuePayload(*africastalkingQueueBodyFlag)
 			case "upload-media":
 				endpoint = c.UploadMedia()
 				data, err = africastalkingc.BuildUploadMediaPayload(*africastalkingUploadMediaBodyFlag)
@@ -523,16 +423,6 @@ COMMAND:
     purge-premium-subscription: Delete a Premium SMS Subscription
     make-call: Makes outbound calls.
     transfer-call: Transfers call to another number.
-    say: Set a text to be read out to the caller.
-    play: Play back an audio file located anywhere on the web.
-    get-digits: Get digits a user enters on their phone in response to a prompt from application
-    dial: Connect the user who called your phone number to an external phone number.
-    record: Record a call session into an mp3 file.
-    enqueue: Pass an incoming call to a queue to be handled later.
-    dequeue: Pass the calls enqueued to a separate number to be handled.
-    redirect: Transfer control of the call to the script whose URL is passed in.
-    reject: Reject an incoming call without incurring any usage charges.
-    queue: Used when you have more calls than you can handle at one time
     upload-media: Uploads media or audio files to Africa'sTalking servers with the extension .mp3 or .wav
     mobile-checkout: Initiate Mobile C2B payments on a mobile subscriber’s device.
     mobile-b2-c: Initiate Mobile B2C request
@@ -565,15 +455,15 @@ Send Bulk SMS
 
 Example:
     `+os.Args[0]+` africastalking send-bulk-sms --body '{
-      "bulkSMSMode": 8873484351855826778,
-      "enqueue": 1,
-      "from": "Reprehenderit blanditiis.",
-      "keyword": "Est inventore consequatur ut quo.",
-      "linkId": "Omnis maxime provident nihil quidem.",
-      "message": "Eum a ut qui voluptatem consectetur.",
-      "retryDurationInHours": "Fuga qui repellat quidem.",
-      "to": "Vel ut ut assumenda quaerat.",
-      "username": "Et non rem."
+      "bulkSMSMode": 8384610134235997494,
+      "enqueue": 0,
+      "from": "Quis et vero odit.",
+      "keyword": "Ea unde nisi et.",
+      "linkId": "Sint est itaque.",
+      "message": "Asperiores qui est est dolorem repellendus.",
+      "retryDurationInHours": "Quis atque et est.",
+      "to": "Odit voluptatem totam reiciendis recusandae est.",
+      "username": "Itaque porro ipsa saepe molestias inventore."
    }'
 `, os.Args[0])
 }
@@ -586,15 +476,15 @@ Send Premium SMS
 
 Example:
     `+os.Args[0]+` africastalking send-premium-sms --body '{
-      "bulkSMSMode": 382502157578571911,
+      "bulkSMSMode": 2952784659881196971,
       "enqueue": 1,
-      "from": "Magnam velit sunt itaque vel excepturi sit.",
-      "keyword": "Ea tenetur nihil.",
-      "linkId": "Quia consequatur a odio labore error.",
-      "message": "Commodi modi.",
-      "retryDurationInHours": "Magni provident ratione.",
-      "to": "Vero rerum porro nisi non tempore.",
-      "username": "Distinctio quis et ex sit soluta et."
+      "from": "Odio dolor architecto hic non vel eos.",
+      "keyword": "Voluptatem et magni.",
+      "linkId": "Aliquid reiciendis est iusto non ut deserunt.",
+      "message": "Eos ratione quisquam reiciendis.",
+      "retryDurationInHours": "Quasi nostrum id libero consequuntur velit ut.",
+      "to": "Omnis aut magni est inventore excepturi harum.",
+      "username": "Maxime rem."
    }'
 `, os.Args[0])
 }
@@ -607,8 +497,8 @@ Incrementally fetch messages from application inbox.
 
 Example:
     `+os.Args[0]+` africastalking fetch-sms --body '{
-      "lastReceivedId": "Ut sunt rerum at.",
-      "username": "Et sunt."
+      "lastReceivedId": "Nobis velit ea.",
+      "username": "Mollitia esse id similique."
    }'
 `, os.Args[0])
 }
@@ -621,7 +511,7 @@ Generate a checkout token
 
 Example:
     `+os.Args[0]+` africastalking new-checkout-token --body '{
-      "phoneNumber": "Ratione nihil earum atque autem ut."
+      "phoneNumber": "Est est omnis ab placeat sint."
    }'
 `, os.Args[0])
 }
@@ -638,7 +528,7 @@ Example:
       "keyword": "",
       "phoneNumber": "",
       "shortCode": "",
-      "username": "Quia dolor illum ut modi sit."
+      "username": "Sed eveniet aut non."
    }'
 `, os.Args[0])
 }
@@ -652,9 +542,9 @@ Incrementally fetch your premium sms subscriptions.
 Example:
     `+os.Args[0]+` africastalking fetch-premium-subscription --body '{
       "keyword": "",
-      "lastReceivedId": "Sed qui dolores nihil.",
+      "lastReceivedId": "Alias vero eligendi.",
       "shortCode": "",
-      "username": "Eum dolores iure molestiae eligendi laudantium est."
+      "username": "Ipsa veritatis eveniet sapiente velit quia."
    }'
 `, os.Args[0])
 }
@@ -670,7 +560,7 @@ Example:
       "keyword": "",
       "phoneNumber": "",
       "shortCode": "",
-      "username": "Quia voluptatem et voluptatem necessitatibus quia minus."
+      "username": "Quia voluptatem aperiam et et illo."
    }'
 `, os.Args[0])
 }
@@ -683,10 +573,10 @@ Makes outbound calls.
 
 Example:
     `+os.Args[0]+` africastalking make-call --body '{
-      "clientRequestId": "Ab qui ut consequatur exercitationem sed.",
-      "from": "Ut quas error fuga dolorem ea.",
-      "to": "Quis dolorum iure ut perferendis quidem facilis.",
-      "username": "Molestias natus rem tempora quos facere."
+      "clientRequestId": "Blanditiis impedit minima.",
+      "from": "Et aut.",
+      "to": "Et et non quos.",
+      "username": "Quis numquam deserunt."
    }'
 `, os.Args[0])
 }
@@ -699,157 +589,10 @@ Transfers call to another number.
 
 Example:
     `+os.Args[0]+` africastalking transfer-call --body '{
-      "callLeg": "callee",
-      "holdMusicUrl": "Qui maiores.",
-      "phoneNumber": "Expedita quis nulla.",
-      "sessionId": "Consequatur maiores."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingSayUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking say -body JSON
-
-Set a text to be read out to the caller.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking say --body '{
-      "playBeep": true,
-      "voice": "woman"
-   }'
-`, os.Args[0])
-}
-
-func africastalkingPlayUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking play -body JSON
-
-Play back an audio file located anywhere on the web.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking play --body '{
-      "url": "Sed id incidunt praesentium dolorem accusantium qui."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingGetDigitsUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking get-digits -body JSON
-
-Get digits a user enters on their phone in response to a prompt from application
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking get-digits --body '{
-      "callbackUrl": "Dolor dicta omnis repellat cupiditate voluptas est.",
-      "finishOnKey": "Repellat porro et id dolor sit laboriosam.",
-      "numDigits": "Eaque quibusdam omnis vel dolorem.",
-      "timeout": "Est sunt tempora sint."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingDialUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking dial -body JSON
-
-Connect the user who called your phone number to an external phone number.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking dial --body '{
-      "callerId": "Aliquam dolorem.",
-      "maxDuration": "Ad voluptas dolor.",
-      "phoneNumbers": "Iste aut dolores.",
-      "record": "Omnis repellat.",
-      "ringBackTone": "Et optio ut quod est.",
-      "sequential": "Sequi vel odit nobis aut natus ut."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingRecordUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking record -body JSON
-
-Record a call session into an mp3 file.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking record --body '{
-      "callbackUrl": "Natus placeat nam provident.",
-      "finishOnKey": "Illum neque itaque quibusdam perspiciatis dolorem corporis.",
-      "maxLength": "Velit qui accusantium.",
-      "playBeep": "Possimus quibusdam.",
-      "timeout": "Ratione sint.",
-      "trimSilence": "Esse dolore et enim et nihil excepturi."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingEnqueueUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking enqueue -body JSON
-
-Pass an incoming call to a queue to be handled later.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking enqueue --body '{
-      "holdMusic": "Animi nesciunt eveniet.",
-      "name": "Quisquam reprehenderit provident et et dolor."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingDequeueUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking dequeue -body JSON
-
-Pass the calls enqueued to a separate number to be handled.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking dequeue --body '{
-      "name": "Necessitatibus porro error in.",
-      "phoneNumber": "Ea fuga repellendus asperiores iusto nulla repudiandae."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingRedirectUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking redirect -body JSON
-
-Transfer control of the call to the script whose URL is passed in.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking redirect --body '{
-      "Reject": "Est consequatur delectus dolore architecto ratione."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingRejectUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking reject -body JSON
-
-Reject an incoming call without incurring any usage charges.
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking reject --body '{
-      "Redirect": "Dolorem exercitationem maiores nemo ea."
-   }'
-`, os.Args[0])
-}
-
-func africastalkingQueueUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] africastalking queue -body JSON
-
-Used when you have more calls than you can handle at one time
-    -body JSON: 
-
-Example:
-    `+os.Args[0]+` africastalking queue --body '{
-      "phoneNumbers": "Vero consequatur aliquid.",
-      "username": "Molestiae enim laudantium iure veniam qui."
+      "callLeg": "caller",
+      "holdMusicUrl": "Eius sed.",
+      "phoneNumber": "Quidem voluptas commodi et consequatur ut.",
+      "sessionId": "Voluptates labore."
    }'
 `, os.Args[0])
 }
@@ -862,8 +605,8 @@ Uploads media or audio files to Africa'sTalking servers with the extension .mp3 
 
 Example:
     `+os.Args[0]+` africastalking upload-media --body '{
-      "url": "Odit pariatur.",
-      "username": "Quasi animi omnis."
+      "url": "Vel ut ut assumenda quaerat.",
+      "username": "Et non rem."
    }'
 `, os.Args[0])
 }
@@ -879,9 +622,9 @@ Example:
       "amount": 3000,
       "currencyCode": "KES",
       "metadata": {
-         "Delectus nihil.": "Iure sit est nihil placeat.",
-         "Facilis similique labore quo dolorem mollitia.": "Omnis ratione quod ut magni.",
-         "Unde perferendis.": "Sed sunt ea."
+         "Fuga qui repellat quidem.": "Quis distinctio quis et ex.",
+         "Nulla est inventore consequatur ut quo.": "Omnis maxime provident nihil quidem.",
+         "Soluta et ipsa.": "Rerum porro."
       },
       "phoneNumber": "+254711XXXYYY",
       "productName": "myProductName",
@@ -905,7 +648,8 @@ Example:
             "amount": 100.5,
             "currencyCode": "KES",
             "metadata": {
-               "OwCW": "OutQ"
+               "OqkdMh": "RwMfHN",
+               "QawIGK": "mr"
             },
             "name": "name",
             "phoneNumber": "+254711XXXYYY",
@@ -916,7 +660,8 @@ Example:
             "amount": 100.5,
             "currencyCode": "KES",
             "metadata": {
-               "OwCW": "OutQ"
+               "OqkdMh": "RwMfHN",
+               "QawIGK": "mr"
             },
             "name": "name",
             "phoneNumber": "+254711XXXYYY",
@@ -927,7 +672,8 @@ Example:
             "amount": 100.5,
             "currencyCode": "KES",
             "metadata": {
-               "OwCW": "OutQ"
+               "OqkdMh": "RwMfHN",
+               "QawIGK": "mr"
             },
             "name": "name",
             "phoneNumber": "+254711XXXYYY",
@@ -953,9 +699,9 @@ Example:
       "destinationAccount": "Account Name",
       "destinationChannel": "Buy Goods Number",
       "metadata": {
-         "OqkdMh": "RwMfHN",
-         "QawIGK": "mr",
-         "lB": "ExdMn"
+         "FwOA": "EbHFN",
+         "lB": "ExdMn",
+         "wSLs": "RF"
       },
       "productName": "myProductName",
       "provider": "Mpesa",
@@ -978,11 +724,12 @@ Example:
          "accountName": "Test Bank Account",
          "accountNumber": "1234567890",
          "bankCode": 234001,
-         "dateOfBirth": "1982-11-11"
+         "dateOfBirth": "1976-09-20"
       },
       "currencyCode": "NGN",
       "metadata": {
-         "FwOA": "EbHFN"
+         "NPgWJ": "kdE",
+         "UzgPjL": "s"
       },
       "narration": "payment for airtime",
       "productName": "myPaymentProductName",
@@ -999,9 +746,9 @@ Validate a bank checkout charge request
 
 Example:
     `+os.Args[0]+` africastalking bank-checkout-validate --body '{
-      "otp": "Voluptatum dicta saepe voluptatibus.",
-      "transactionId": "Quae voluptatem dolor ut iure et.",
-      "username": "Sed modi consequatur architecto et."
+      "otp": "Quia tempora quia voluptatem et voluptatem.",
+      "transactionId": "Sed qui dolores nihil.",
+      "username": "Iure molestiae eligendi laudantium est."
    }'
 `, os.Args[0])
 }
@@ -1014,55 +761,49 @@ Initiate a bank transfer request.
 
 Example:
     `+os.Args[0]+` africastalking bank-transfer --body '{
-      "productName": "Repellat ut.",
+      "productName": "Rem tempora quos facere voluptatem ut.",
       "recipients": [
          {
-            "accountName": "Unde aut similique eveniet occaecati in.",
-            "accountNumber": "Dignissimos dolores.",
-            "amount": "Libero quo voluptatibus blanditiis.",
-            "bankAccount": "Blanditiis et architecto ut velit perferendis ea.",
-            "bankCode": "Id voluptatem.",
-            "currencyCode": "Voluptatem dolor ullam.",
-            "dateOfBirth": "Non sequi odio dignissimos assumenda a.",
+            "accountName": "Dolorum iure ut perferendis quidem facilis velit.",
+            "accountNumber": "Qui ut.",
+            "amount": "Quia adipisci laudantium similique tenetur.",
+            "bankAccount": "Fuga dolorem ea quidem.",
+            "bankCode": "Exercitationem sed repellat.",
+            "currencyCode": "Dolores nisi consequatur et quibusdam.",
+            "dateOfBirth": "Fugit maiores minus.",
             "metadata": {
-               "Esse veniam quod sunt facere.": "Sed quibusdam molestiae ea.",
-               "Quasi praesentium voluptas voluptas doloremque distinctio.": "Cum ullam rerum.",
-               "Sint possimus vel.": "Illo ea."
+               "Est qui velit voluptatem.": "Consequatur maiores."
             },
-            "narration": "Numquam doloribus."
+            "narration": "Et alias commodi laudantium vel quibusdam."
          },
          {
-            "accountName": "Unde aut similique eveniet occaecati in.",
-            "accountNumber": "Dignissimos dolores.",
-            "amount": "Libero quo voluptatibus blanditiis.",
-            "bankAccount": "Blanditiis et architecto ut velit perferendis ea.",
-            "bankCode": "Id voluptatem.",
-            "currencyCode": "Voluptatem dolor ullam.",
-            "dateOfBirth": "Non sequi odio dignissimos assumenda a.",
+            "accountName": "Dolorum iure ut perferendis quidem facilis velit.",
+            "accountNumber": "Qui ut.",
+            "amount": "Quia adipisci laudantium similique tenetur.",
+            "bankAccount": "Fuga dolorem ea quidem.",
+            "bankCode": "Exercitationem sed repellat.",
+            "currencyCode": "Dolores nisi consequatur et quibusdam.",
+            "dateOfBirth": "Fugit maiores minus.",
             "metadata": {
-               "Esse veniam quod sunt facere.": "Sed quibusdam molestiae ea.",
-               "Quasi praesentium voluptas voluptas doloremque distinctio.": "Cum ullam rerum.",
-               "Sint possimus vel.": "Illo ea."
+               "Est qui velit voluptatem.": "Consequatur maiores."
             },
-            "narration": "Numquam doloribus."
+            "narration": "Et alias commodi laudantium vel quibusdam."
          },
          {
-            "accountName": "Unde aut similique eveniet occaecati in.",
-            "accountNumber": "Dignissimos dolores.",
-            "amount": "Libero quo voluptatibus blanditiis.",
-            "bankAccount": "Blanditiis et architecto ut velit perferendis ea.",
-            "bankCode": "Id voluptatem.",
-            "currencyCode": "Voluptatem dolor ullam.",
-            "dateOfBirth": "Non sequi odio dignissimos assumenda a.",
+            "accountName": "Dolorum iure ut perferendis quidem facilis velit.",
+            "accountNumber": "Qui ut.",
+            "amount": "Quia adipisci laudantium similique tenetur.",
+            "bankAccount": "Fuga dolorem ea quidem.",
+            "bankCode": "Exercitationem sed repellat.",
+            "currencyCode": "Dolores nisi consequatur et quibusdam.",
+            "dateOfBirth": "Fugit maiores minus.",
             "metadata": {
-               "Esse veniam quod sunt facere.": "Sed quibusdam molestiae ea.",
-               "Quasi praesentium voluptas voluptas doloremque distinctio.": "Cum ullam rerum.",
-               "Sint possimus vel.": "Illo ea."
+               "Est qui velit voluptatem.": "Consequatur maiores."
             },
-            "narration": "Numquam doloribus."
+            "narration": "Et alias commodi laudantium vel quibusdam."
          }
       ],
-      "username": "Vel reiciendis."
+      "username": "Quia minus modi molestias."
    }'
 `, os.Args[0])
 }
@@ -1104,9 +845,9 @@ Validate card checkout charge requests
 
 Example:
     `+os.Args[0]+` africastalking card-checkout-validate --body '{
-      "otp": "Possimus atque consequuntur ex enim.",
-      "transactionId": "Impedit ut in aut.",
-      "username": "Quos laboriosam aliquam aut neque voluptas."
+      "otp": "Molestiae vel.",
+      "transactionId": "Eveniet et magnam maxime porro.",
+      "username": "Veritatis qui maiores."
    }'
 `, os.Args[0])
 }
@@ -1173,15 +914,15 @@ Fetch transactions of a particular payment product.
 Example:
     `+os.Args[0]+` africastalking fetch-product-transactions --body '{
       "category": "UserStashTopup",
-      "count": 811,
+      "count": 740,
       "destination": "BankAccount",
-      "endDate": "2011-04-10",
-      "pageNumber": 7211156821635237590,
+      "endDate": "2015-02-12",
+      "pageNumber": 2369339247652617210,
       "productName": "MyProductName",
       "provider": "Athena",
-      "providerChannel": "Ullam libero velit.",
+      "providerChannel": "Dolor minima quidem harum dicta unde sit.",
       "source": "phoneNumber",
-      "startDate": "1991-10-20",
+      "startDate": "1990-01-03",
       "status": "Success",
       "username": "MyAppUserName"
    }'
@@ -1196,11 +937,11 @@ Fetch your wallet transactions
 
 Example:
     `+os.Args[0]+` africastalking fetch-wallet-transactions --body '{
-      "categories": "MobileB2C",
-      "count": 242,
-      "endDate": "2003-12-12",
-      "pageNumber": 937507102661436005,
-      "startDate": "1991-01-30",
+      "categories": "MobileCheckout",
+      "count": 364,
+      "endDate": "1986-04-03",
+      "pageNumber": 979655238485343378,
+      "startDate": "1990-07-03",
       "username": "MyAppUserName"
    }'
 `, os.Args[0])
@@ -1235,9 +976,17 @@ Example:
          {
             "amount ": "KES 100.50",
             "phoneNumber": "+234811222333"
+         },
+         {
+            "amount ": "KES 100.50",
+            "phoneNumber": "+234811222333"
+         },
+         {
+            "amount ": "KES 100.50",
+            "phoneNumber": "+234811222333"
          }
       ],
-      "username": "Quisquam in tempora sequi."
+      "username": "Enim laudantium iure veniam."
    }'
 `, os.Args[0])
 }
@@ -1250,10 +999,10 @@ Publishes messages to remote devices.
 
 Example:
     `+os.Args[0]+` africastalking publish-io-t --body '{
-      "deviceGroup": "Quia molestiae est neque cum.",
-      "payload": "Consequuntur nesciunt.",
+      "deviceGroup": "Nisi amet et at.",
+      "payload": "Ducimus eligendi.",
       "topic": "\u003cusername\u003e/\u003cdevice-group\u003e/\u003cthe-topic\u003e",
-      "username": "Voluptatem aliquam ut perferendis sunt ipsam."
+      "username": "Eaque nostrum cum."
    }'
 `, os.Args[0])
 }
@@ -1265,7 +1014,7 @@ Initiate an application data request.
     -p STRING: string is the payload type of the africastalking service InitiateAppData method.
 
 Example:
-    `+os.Args[0]+` africastalking initiate-app-data --p "Quasi perspiciatis omnis ipsum nostrum nisi omnis."
+    `+os.Args[0]+` africastalking initiate-app-data --p "Iusto necessitatibus dolor et facilis fugiat."
 `, os.Args[0])
 }
 
@@ -1277,7 +1026,7 @@ Generates a valid auth token
 
 Example:
     `+os.Args[0]+` africastalking generate --body '{
-      "apiKey": "Aut sed inventore consectetur mollitia.",
+      "apiKey": "Quasi animi omnis.",
       "username": "sandbox"
    }'
 `, os.Args[0])

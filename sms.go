@@ -6,15 +6,19 @@ import (
 	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
-const (
-	SMSLiveURL    = "https://api.africastalking.com/version1/messaging"
-	SMSSandboxURL = "https://api.sandbox.africastalking.com/version1/messaging"
-)
+//	SMSLiveURL    = "https://api.africastalking.com/version1/messaging"
+//	SMSSandboxURL = "https://api.sandbox.africastalking.com/version1/messaging"
+
+// Sandbox Endpoints
+const SMSLiveURL = "https://api.africastalking.com"
+
+// Production Endpoints
+const SMSSandboxURL = "https://api.sandbox.africastalking.com"
 
 // Send Bulk SMS
 func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload) (res *africastalking.BulkResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://api.sandbox.africastalking.com/version1/messaging", p)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -35,7 +39,7 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *africastalking.BulkPayload)
 // Incrementally fetch messages from application inbox.
 func (c *Client) fetchSMS(ctx context.Context, p *africastalking.FetchMsgPayload) (res *africastalking.FetchMsgResponse, err error) {
 
-	req, err := c.NewRequest("GET", "https://api.sandbox.africastalking.com/version1/messaging?username=MyAppUsername&lastReceivedId=0", p)
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -55,7 +59,7 @@ func (c *Client) fetchSMS(ctx context.Context, p *africastalking.FetchMsgPayload
 // Send Premium SMS
 func (c *Client) sendPremiumSMS(ctx context.Context, p *africastalking.PremiumPayload) (res *africastalking.PremiumSMSResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://api.sandbox.africastalking.com/version1/messaging", p)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -76,7 +80,7 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *africastalking.PremiumPa
 // Generate a checkout token
 func (c *Client) newCheckoutToken(ctx context.Context, p *africastalking.CheckoutTokenPayload) (res *africastalking.CheckoutTokenResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://api.sandbox.africastalking.com/checkout/token/create", p)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/checkout/token/create"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -96,7 +100,7 @@ func (c *Client) newCheckoutToken(ctx context.Context, p *africastalking.Checkou
 // Subscribe a phone number
 func (c *Client) newPremiumSubscription(ctx context.Context, p *africastalking.NewSubPayload) (res *africastalking.NewSubResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://api.sandbox.africastalking.com/version1/subscription/create", p)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription/create"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -117,7 +121,7 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *africastalking.N
 // Incrementally fetch your premium sms subscriptions.
 func (c *Client) fetchPremiumSubscription(ctx context.Context, p *africastalking.FetchSubPayload) (res *africastalking.FetchSubResponse, err error) {
 
-	req, err := c.NewRequest("GET", "https://api.sandbox.africastalking.com/version1/subscription?username=MyAppUsername&shortCode=myPremiumShortCode&keyword=myPremiumKeyword&lastReceivedId=0", p)
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -137,7 +141,7 @@ func (c *Client) fetchPremiumSubscription(ctx context.Context, p *africastalking
 // Delete a Premium SMS Subscription
 func (c *Client) purgePremiumSubscription(ctx context.Context, p *africastalking.PurgeSubPayload) (res *africastalking.PurgeSubResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://api.sandbox.africastalking.com/version1/subscription/delete", p)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription/delete"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}

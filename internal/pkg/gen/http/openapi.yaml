@@ -157,20 +157,25 @@ paths:
     post:
       tags:
       - africastalking
-      summary: Reject africastalking
-      description: Reject an incoming call without incurring any usage charges.
-      operationId: africastalking#Reject
+      summary: TransferCall africastalking
+      description: Transfers call to another number.
+      operationId: africastalking#TransferCall
+      produces:
+      - application/json
       parameters:
-      - name: RejectRequestBody
+      - name: TransferCallRequestBody
         in: body
         required: true
         schema:
-          $ref: '#/definitions/AfricastalkingRejectRequestBody'
+          $ref: '#/definitions/AfricastalkingTransferCallRequestBody'
+          required:
+          - sessionId
+          - phoneNumber
       responses:
         "201":
           description: Created response.
           schema:
-            type: string
+            $ref: '#/definitions/AfricastalkingTransferCallResponseBody'
       schemes:
       - https
   /card/checkout/charge:
@@ -476,31 +481,6 @@ paths:
             $ref: '#/definitions/AfricastalkingFetchWalletTransactionsResponseBody'
       schemes:
       - https
-  /queueStatus:
-    post:
-      tags:
-      - africastalking
-      summary: Queue africastalking
-      description: Used when you have more calls than you can handle at one time
-      operationId: africastalking#Queue
-      produces:
-      - application/json
-      parameters:
-      - name: QueueRequestBody
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/AfricastalkingQueueRequestBody'
-          required:
-          - username
-          - phoneNumbers
-      responses:
-        "201":
-          description: Created response.
-          schema:
-            $ref: '#/definitions/AfricastalkingQueueResponseBody'
-      schemes:
-      - https
   /topup/stash:
     post:
       tags:
@@ -755,7 +735,7 @@ definitions:
         type: object
         description: A map of any metadata that you would like us to associate with the request.
         example:
-          UyGrtd: YNMed
+          e: ig
         additionalProperties: true
       narration:
         type: string
@@ -775,12 +755,10 @@ definitions:
         accountName: Test Bank Account
         accountNumber: "1234567890"
         bankCode: 234001
-        dateOfBirth: "1982-11-11"
+        dateOfBirth: "1976-09-20"
       currencyCode: NGN
       metadata:
-        bb: jVHaE
-        e: ig
-        osUQ: S
+        Hzm: zuL
       narration: payment for airtime
       productName: myPaymentProductName
       username: MyAppUserName
@@ -824,19 +802,19 @@ definitions:
       otp:
         type: string
         description: One Time Password bank sent to the client.
-        example: Est ex qui.
+        example: Doloribus fugiat eos distinctio.
       transactionId:
         type: string
         description: The ID of the transaction to be validated.
-        example: Atque tempora voluptas earum laborum.
+        example: Placeat dolorum magnam quod.
       username:
         type: string
         description: Africa’s Talking application Username.
-        example: Aut rerum eum.
+        example: Eaque sint consequatur quis praesentium.
     example:
-      otp: Cum consequatur ut consequatur fugiat.
-      transactionId: Nemo dicta consectetur.
-      username: Enim quod optio officiis.
+      otp: Tempore non iste error aut.
+      transactionId: Et debitis numquam.
+      username: Nam ad adipisci voluptates ut.
     required:
     - username
     - transactionId
@@ -867,70 +845,82 @@ definitions:
       productName:
         type: string
         description: Africa’s Talking Payment product to initiate this transaction.
-        example: Velit porro omnis aliquam.
+        example: Deleniti repellat quia quas dolorum.
       recipients:
         type: array
         items:
           $ref: '#/definitions/TransferRecipientsRequestBody'
         description: Transfer Recipients
         example:
-        - accountName: Unde aut similique eveniet occaecati in.
-          accountNumber: Dignissimos dolores.
-          amount: Libero quo voluptatibus blanditiis.
-          bankAccount: Blanditiis et architecto ut velit perferendis ea.
-          bankCode: Id voluptatem.
-          currencyCode: Voluptatem dolor ullam.
-          dateOfBirth: Non sequi odio dignissimos assumenda a.
+        - accountName: Dolorum iure ut perferendis quidem facilis velit.
+          accountNumber: Qui ut.
+          amount: Quia adipisci laudantium similique tenetur.
+          bankAccount: Fuga dolorem ea quidem.
+          bankCode: Exercitationem sed repellat.
+          currencyCode: Dolores nisi consequatur et quibusdam.
+          dateOfBirth: Fugit maiores minus.
           metadata:
-            Esse veniam quod sunt facere.: Sed quibusdam molestiae ea.
-            Quasi praesentium voluptas voluptas doloremque distinctio.: Cum ullam rerum.
-            Sint possimus vel.: Illo ea.
-          narration: Numquam doloribus.
-        - accountName: Unde aut similique eveniet occaecati in.
-          accountNumber: Dignissimos dolores.
-          amount: Libero quo voluptatibus blanditiis.
-          bankAccount: Blanditiis et architecto ut velit perferendis ea.
-          bankCode: Id voluptatem.
-          currencyCode: Voluptatem dolor ullam.
-          dateOfBirth: Non sequi odio dignissimos assumenda a.
+            Est qui velit voluptatem.: Consequatur maiores.
+          narration: Et alias commodi laudantium vel quibusdam.
+        - accountName: Dolorum iure ut perferendis quidem facilis velit.
+          accountNumber: Qui ut.
+          amount: Quia adipisci laudantium similique tenetur.
+          bankAccount: Fuga dolorem ea quidem.
+          bankCode: Exercitationem sed repellat.
+          currencyCode: Dolores nisi consequatur et quibusdam.
+          dateOfBirth: Fugit maiores minus.
           metadata:
-            Esse veniam quod sunt facere.: Sed quibusdam molestiae ea.
-            Quasi praesentium voluptas voluptas doloremque distinctio.: Cum ullam rerum.
-            Sint possimus vel.: Illo ea.
-          narration: Numquam doloribus.
+            Est qui velit voluptatem.: Consequatur maiores.
+          narration: Et alias commodi laudantium vel quibusdam.
+        - accountName: Dolorum iure ut perferendis quidem facilis velit.
+          accountNumber: Qui ut.
+          amount: Quia adipisci laudantium similique tenetur.
+          bankAccount: Fuga dolorem ea quidem.
+          bankCode: Exercitationem sed repellat.
+          currencyCode: Dolores nisi consequatur et quibusdam.
+          dateOfBirth: Fugit maiores minus.
+          metadata:
+            Est qui velit voluptatem.: Consequatur maiores.
+          narration: Et alias commodi laudantium vel quibusdam.
         minItems: 1
       username:
         type: string
         description: Africa’s Talking application username.
-        example: Laboriosam ea.
+        example: Porro quo.
     example:
-      productName: Officia ullam enim sed tenetur ut.
+      productName: Harum rerum.
       recipients:
-      - accountName: Unde aut similique eveniet occaecati in.
-        accountNumber: Dignissimos dolores.
-        amount: Libero quo voluptatibus blanditiis.
-        bankAccount: Blanditiis et architecto ut velit perferendis ea.
-        bankCode: Id voluptatem.
-        currencyCode: Voluptatem dolor ullam.
-        dateOfBirth: Non sequi odio dignissimos assumenda a.
+      - accountName: Dolorum iure ut perferendis quidem facilis velit.
+        accountNumber: Qui ut.
+        amount: Quia adipisci laudantium similique tenetur.
+        bankAccount: Fuga dolorem ea quidem.
+        bankCode: Exercitationem sed repellat.
+        currencyCode: Dolores nisi consequatur et quibusdam.
+        dateOfBirth: Fugit maiores minus.
         metadata:
-          Esse veniam quod sunt facere.: Sed quibusdam molestiae ea.
-          Quasi praesentium voluptas voluptas doloremque distinctio.: Cum ullam rerum.
-          Sint possimus vel.: Illo ea.
-        narration: Numquam doloribus.
-      - accountName: Unde aut similique eveniet occaecati in.
-        accountNumber: Dignissimos dolores.
-        amount: Libero quo voluptatibus blanditiis.
-        bankAccount: Blanditiis et architecto ut velit perferendis ea.
-        bankCode: Id voluptatem.
-        currencyCode: Voluptatem dolor ullam.
-        dateOfBirth: Non sequi odio dignissimos assumenda a.
+          Est qui velit voluptatem.: Consequatur maiores.
+        narration: Et alias commodi laudantium vel quibusdam.
+      - accountName: Dolorum iure ut perferendis quidem facilis velit.
+        accountNumber: Qui ut.
+        amount: Quia adipisci laudantium similique tenetur.
+        bankAccount: Fuga dolorem ea quidem.
+        bankCode: Exercitationem sed repellat.
+        currencyCode: Dolores nisi consequatur et quibusdam.
+        dateOfBirth: Fugit maiores minus.
         metadata:
-          Esse veniam quod sunt facere.: Sed quibusdam molestiae ea.
-          Quasi praesentium voluptas voluptas doloremque distinctio.: Cum ullam rerum.
-          Sint possimus vel.: Illo ea.
-        narration: Numquam doloribus.
-      username: Et sunt similique.
+          Est qui velit voluptatem.: Consequatur maiores.
+        narration: Et alias commodi laudantium vel quibusdam.
+      - accountName: Dolorum iure ut perferendis quidem facilis velit.
+        accountNumber: Qui ut.
+        amount: Quia adipisci laudantium similique tenetur.
+        bankAccount: Fuga dolorem ea quidem.
+        bankCode: Exercitationem sed repellat.
+        currencyCode: Dolores nisi consequatur et quibusdam.
+        dateOfBirth: Fugit maiores minus.
+        metadata:
+          Est qui velit voluptatem.: Consequatur maiores.
+        narration: Et alias commodi laudantium vel quibusdam.
+      username: Necessitatibus ut.
     required:
     - username
     - productName
@@ -950,6 +940,11 @@ definitions:
           status: Queued
           transactionFee: NGN 50.00
           transactionId: ATPid_SampleTxnId
+        - accountNumber: "1234567890"
+          errorMessage: Insufficient Credit
+          status: Queued
+          transactionFee: NGN 50.00
+          transactionId: ATPid_SampleTxnId
         minItems: 1
       errorMessage:
         type: string
@@ -958,11 +953,6 @@ definitions:
     description: BankTransferResponseBody result type (default view)
     example:
       entries:
-      - accountNumber: "1234567890"
-        errorMessage: Insufficient Credit
-        status: Queued
-        transactionFee: NGN 50.00
-        transactionId: ATPid_SampleTxnId
       - accountNumber: "1234567890"
         errorMessage: Insufficient Credit
         status: Queued
@@ -1065,19 +1055,19 @@ definitions:
       otp:
         type: string
         description: One Time Password card provider sent to the client.
-        example: Cumque quod officia.
+        example: Vero voluptatum voluptatem.
       transactionId:
         type: string
         description: ID of the transaction application wants to validate.
-        example: Quis est repellendus id aliquid ipsum possimus.
+        example: Sapiente qui labore incidunt.
       username:
         type: string
         description: Africa’s Talking application username.
-        example: Nisi corrupti non aliquam iure quia.
+        example: Ad sint.
     example:
-      otp: Explicabo voluptas sint ex.
-      transactionId: Consequatur quidem vel soluta.
-      username: Illum iste non provident quasi.
+      otp: Sit praesentium sit voluptas quia at.
+      transactionId: Dolorem dolorum eaque quia quidem.
+      username: Quia nam voluptates iure harum laborum.
     required:
     - username
     - transactionId
@@ -1109,64 +1099,6 @@ definitions:
     required:
     - status
     - description
-  AfricastalkingDequeueRequestBody:
-    title: AfricastalkingDequeueRequestBody
-    type: object
-    properties:
-      name:
-        type: string
-        example: Nihil quasi.
-      phoneNumber:
-        type: string
-        example: Excepturi ut aspernatur adipisci rerum molestiae.
-    example:
-      name: Non quia sit sit voluptas assumenda.
-      phoneNumber: Ipsa dolores dolorum voluptatem officiis et.
-  AfricastalkingDialRequestBody:
-    title: AfricastalkingDialRequestBody
-    type: object
-    properties:
-      callerId:
-        type: string
-        example: Animi a et voluptatem iste aspernatur.
-      maxDuration:
-        type: string
-        description: This contains the maximum amount of time in seconds a call should take.
-        example: Officia qui excepturi delectus quia totam corrupti.
-      phoneNumbers:
-        type: string
-        example: Non officia aliquid tempore.
-      record:
-        type: string
-        example: Ipsa sunt quo.
-      ringBackTone:
-        type: string
-        example: Numquam aut incidunt quibusdam non et et.
-      sequential:
-        type: string
-        example: Quae provident beatae repellat rem et.
-    example:
-      callerId: Harum facilis delectus dolores non ratione harum.
-      maxDuration: Vel at eaque voluptate.
-      phoneNumbers: Deserunt rerum non voluptatem ratione aut dignissimos.
-      record: Dolores sed mollitia.
-      ringBackTone: Quos consequatur fugit aut repellat ipsam.
-      sequential: Quod autem et et tenetur ipsum vel.
-    required:
-    - phoneNumbers
-  AfricastalkingEnqueueRequestBody:
-    title: AfricastalkingEnqueueRequestBody
-    type: object
-    properties:
-      holdMusic:
-        type: string
-        example: Quod recusandae id doloremque perspiciatis.
-      name:
-        type: string
-        example: Voluptatem quos reprehenderit voluptatem est.
-    example:
-      holdMusic: Beatae quidem omnis sint.
-      name: Eligendi iste amet rerum.
   AfricastalkingFetchPremiumSubscriptionRequestBody:
     title: AfricastalkingFetchPremiumSubscriptionRequestBody
     type: object
@@ -1179,7 +1111,7 @@ definitions:
         type: string
         description: ID of the subscription you believe to be your last.
         default: "0"
-        example: Eius ipsa.
+        example: Aut neque.
       shortCode:
         type: string
         description: Premium short code mapped to your account
@@ -1188,12 +1120,12 @@ definitions:
         type: string
         description: Africa’s Talking application username.
         default: sandbox
-        example: Accusamus quod possimus.
+        example: Quo assumenda et aut molestiae quos laboriosam.
     example:
       keyword: ""
-      lastReceivedId: Doloribus harum rerum qui.
+      lastReceivedId: Possimus atque consequuntur ex enim.
       shortCode: ""
-      username: Quasi ducimus necessitatibus.
+      username: Aut impedit ut in aut.
     required:
     - username
     - shortCode
@@ -1208,9 +1140,6 @@ definitions:
           $ref: '#/definitions/SubscriptionsResponseBody'
         description: A list of subscriptions made to the product.
         example:
-        - Date: Timestamp
-          id: 100
-          number: +254711XXXYYY
         - Date: Timestamp
           id: 100
           number: +254711XXXYYY
@@ -1234,7 +1163,7 @@ definitions:
       category:
         type: string
         description: Transaction category you would like to consider.
-        example: BankCheckout
+        example: BankTransfer
         enum:
         - BankCheckout
         - CardCheckout
@@ -1248,7 +1177,7 @@ definitions:
       count:
         type: integer
         description: Number of transaction results you would like for this query.
-        example: 439
+        example: 831
         minimum: 1
         maximum: 1000
       destination:
@@ -1263,12 +1192,12 @@ definitions:
       endDate:
         type: string
         description: Transaction end date; in the format YYYY-MM-DD
-        example: "1980-12-21"
+        example: "2014-06-26"
         format: date
       pageNumber:
         type: integer
         description: Number of the page you’d like to read results from.
-        example: 5747173906844293515
+        example: 6134962218507510911
         minimum: 1
       productName:
         type: string
@@ -1287,7 +1216,7 @@ definitions:
       providerChannel:
         type: string
         description: Transaction provider channel you would like to consider.
-        example: Praesentium et.
+        example: Suscipit rerum.
       source:
         type: string
         description: Transaction source you would like to consider.
@@ -1300,7 +1229,7 @@ definitions:
       startDate:
         type: string
         description: Transaction start date; in the format YYYY-MM-DD
-        example: "1984-04-07"
+        example: "2000-10-19"
         format: date
       status:
         type: string
@@ -1314,16 +1243,16 @@ definitions:
         description: Africa’s Talking application username.
         example: MyAppUserName
     example:
-      category: BankCheckout
-      count: 23
+      category: CardCheckout
+      count: 804
       destination: BankAccount
-      endDate: "1984-07-07"
-      pageNumber: 3240073105779302277
+      endDate: "1983-06-11"
+      pageNumber: 6909607705565140576
       productName: MyProductName
       provider: Athena
-      providerChannel: Ex illum voluptatum rerum.
+      providerChannel: Rerum non.
       source: phoneNumber
-      startDate: "1994-04-13"
+      startDate: "1996-08-17"
       status: Success
       username: MyAppUserName
     required:
@@ -1380,30 +1309,10 @@ definitions:
           transactionFee: KES 1.0000
           transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
           value: KES 2900.0000
-        - category: MobileB2C
-          creationTime: "2018-05-12 18:46:12"
-          description: The service request is processed successfully.
-          destination: "+254708663158"
-          destinationType: PhoneNumber
-          productName: testing
-          provider: Mpesa
-          providerChannel: "824879"
-          providerMetadata:
-            Foo: Bar
-          providerRefId: SAMPLE_MPESA_CODE
-          requestMetadata:
-            Foo: Bar
-          source: PaymentWallet
-          sourceType: Wallet
-          status: Success
-          transactionDate: 12.05.2018 21:46:13
-          transactionFee: KES 1.0000
-          transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
-          value: KES 2900.0000
       status:
         type: string
         description: The status of the request.
-        example: Failed
+        example: Success
         enum:
         - Success
         - Failed
@@ -1470,7 +1379,27 @@ definitions:
         transactionFee: KES 1.0000
         transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
         value: KES 2900.0000
-      status: Failed
+      - category: MobileB2C
+        creationTime: "2018-05-12 18:46:12"
+        description: The service request is processed successfully.
+        destination: "+254708663158"
+        destinationType: PhoneNumber
+        productName: testing
+        provider: Mpesa
+        providerChannel: "824879"
+        providerMetadata:
+          Foo: Bar
+        providerRefId: SAMPLE_MPESA_CODE
+        requestMetadata:
+          Foo: Bar
+        source: PaymentWallet
+        sourceType: Wallet
+        status: Success
+        transactionDate: 12.05.2018 21:46:13
+        transactionFee: KES 1.0000
+        transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
+        value: KES 2900.0000
+      status: Success
   AfricastalkingFetchSMSRequestBody:
     title: AfricastalkingFetchSMSRequestBody
     type: object
@@ -1479,15 +1408,15 @@ definitions:
         type: string
         description: This is the id of the message that you last processed.
         default: "0"
-        example: Explicabo similique et fuga pariatur voluptates mollitia.
+        example: Voluptatibus blanditiis.
       username:
         type: string
         description: Africa’s Talking application username.
         default: sandbox
-        example: Iste qui quia.
+        example: Qui voluptatem dolor ullam nobis libero.
     example:
-      lastReceivedId: Est minima molestiae molestiae.
-      username: Eos quisquam quis nisi neque eos dolorem.
+      lastReceivedId: Neque quasi praesentium voluptas voluptas.
+      username: Numquam doloribus.
     required:
     - username
   AfricastalkingFetchSMSResponseBody:
@@ -1535,7 +1464,7 @@ definitions:
       errorMessage:
         type: string
         description: A message detailing what happened with a failed request.
-        example: Suscipit reprehenderit rerum molestias.
+        example: Qui a asperiores placeat vel.
       status:
         type: string
         description: The status of the request.
@@ -1546,7 +1475,7 @@ definitions:
     description: FetchWalletBalanceResponseBody result type (default view)
     example:
       balance: KES 47.7191
-      errorMessage: Tenetur voluptate commodi qui magni.
+      errorMessage: Ipsam velit dolorem odio ut in.
       status: Success
   AfricastalkingFetchWalletTransactionsRequestBody:
     title: AfricastalkingFetchWalletTransactionsRequestBody
@@ -1555,7 +1484,7 @@ definitions:
       categories:
         type: string
         description: List of transaction categories you would like to consider.
-        example: MobileCheckout
+        example: UserStashTopup
         enum:
         - BankCheckout
         - CardCheckout
@@ -1569,34 +1498,34 @@ definitions:
       count:
         type: integer
         description: Number of transaction results you would like for this query.
-        example: 44
+        example: 42
         minimum: 1
         maximum: 1000
       endDate:
         type: string
         description: Transaction end date; in the format YYYY-MM-DD
-        example: "1996-05-25"
+        example: "1989-05-30"
         format: date
       pageNumber:
         type: integer
         description: Number of the page you’d like to read results from.
-        example: 8109017080281066971
+        example: 5066038564719905990
         minimum: 1
       startDate:
         type: string
         description: Transaction start date; in the format YYYY-MM-DD
-        example: "1977-03-17"
+        example: "1991-12-16"
         format: date
       username:
         type: string
         description: Africa’s Talking application username.
         example: MyAppUserName
     example:
-      categories: MobileB2C
-      count: 179
-      endDate: "2009-04-25"
-      pageNumber: 5368150092986106529
-      startDate: "1998-07-16"
+      categories: BankCheckout
+      count: 703
+      endDate: "1983-07-15"
+      pageNumber: 6055305583022048510
+      startDate: "1993-10-17"
       username: MyAppUserName
     required:
     - username
@@ -1609,7 +1538,7 @@ definitions:
       errorMessage:
         type: string
         description: A message detailing what happened with a failed request.
-        example: Velit assumenda.
+        example: Dolores sed mollitia.
       responses:
         type: array
         items:
@@ -1617,7 +1546,7 @@ definitions:
         description: List of response Entry corresponding to a transaction result.
         example:
         - balance: KES 47.7191
-          category: BankCheckout
+          category: MobileC2B
           description: MobileB2C Payment Request to +254708663158
           transactionData:
           - data:
@@ -1715,7 +1644,7 @@ definitions:
           transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
           value: KES 2900.0000
         - balance: KES 47.7191
-          category: BankCheckout
+          category: MobileC2B
           description: MobileB2C Payment Request to +254708663158
           transactionData:
           - data:
@@ -1813,7 +1742,105 @@ definitions:
           transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
           value: KES 2900.0000
         - balance: KES 47.7191
-          category: BankCheckout
+          category: MobileC2B
+          description: MobileB2C Payment Request to +254708663158
+          transactionData:
+          - data:
+              category: MobileB2C
+              creationTime: "2018-05-12 18:46:12"
+              description: The service request is processed successfully.
+              destination: "+254708663158"
+              destinationType: PhoneNumber
+              productName: testing
+              provider: Mpesa
+              providerChannel: "824879"
+              providerMetadata:
+                Foo: Bar
+              providerRefId: SAMPLE_MPESA_CODE
+              requestMetadata:
+                Foo: Bar
+              source: PaymentWallet
+              sourceType: Wallet
+              status: Success
+              transactionDate: 12.05.2018 21:46:13
+              transactionFee: KES 1.0000
+              transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
+              value: KES 2900.0000
+            errorMessage: Error
+            status: Success
+          - data:
+              category: MobileB2C
+              creationTime: "2018-05-12 18:46:12"
+              description: The service request is processed successfully.
+              destination: "+254708663158"
+              destinationType: PhoneNumber
+              productName: testing
+              provider: Mpesa
+              providerChannel: "824879"
+              providerMetadata:
+                Foo: Bar
+              providerRefId: SAMPLE_MPESA_CODE
+              requestMetadata:
+                Foo: Bar
+              source: PaymentWallet
+              sourceType: Wallet
+              status: Success
+              transactionDate: 12.05.2018 21:46:13
+              transactionFee: KES 1.0000
+              transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
+              value: KES 2900.0000
+            errorMessage: Error
+            status: Success
+          - data:
+              category: MobileB2C
+              creationTime: "2018-05-12 18:46:12"
+              description: The service request is processed successfully.
+              destination: "+254708663158"
+              destinationType: PhoneNumber
+              productName: testing
+              provider: Mpesa
+              providerChannel: "824879"
+              providerMetadata:
+                Foo: Bar
+              providerRefId: SAMPLE_MPESA_CODE
+              requestMetadata:
+                Foo: Bar
+              source: PaymentWallet
+              sourceType: Wallet
+              status: Success
+              transactionDate: 12.05.2018 21:46:13
+              transactionFee: KES 1.0000
+              transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
+              value: KES 2900.0000
+            errorMessage: Error
+            status: Success
+          - data:
+              category: MobileB2C
+              creationTime: "2018-05-12 18:46:12"
+              description: The service request is processed successfully.
+              destination: "+254708663158"
+              destinationType: PhoneNumber
+              productName: testing
+              provider: Mpesa
+              providerChannel: "824879"
+              providerMetadata:
+                Foo: Bar
+              providerRefId: SAMPLE_MPESA_CODE
+              requestMetadata:
+                Foo: Bar
+              source: PaymentWallet
+              sourceType: Wallet
+              status: Success
+              transactionDate: 12.05.2018 21:46:13
+              transactionFee: KES 1.0000
+              transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
+              value: KES 2900.0000
+            errorMessage: Error
+            status: Success
+          transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
+          value: KES 2900.0000
+        - balance: KES 47.7191
+          category: MobileC2B
           description: MobileB2C Payment Request to +254708663158
           transactionData:
           - data:
@@ -1919,10 +1946,10 @@ definitions:
         - Failed
     description: FetchWalletTransactionsResponseBody result type (default view)
     example:
-      errorMessage: Delectus repellendus.
+      errorMessage: Autem et et tenetur ipsum vel.
       responses:
       - balance: KES 47.7191
-        category: BankCheckout
+        category: MobileC2B
         description: MobileB2C Payment Request to +254708663158
         transactionData:
         - data:
@@ -2020,7 +2047,7 @@ definitions:
         transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
         value: KES 2900.0000
       - balance: KES 47.7191
-        category: BankCheckout
+        category: MobileC2B
         description: MobileB2C Payment Request to +254708663158
         transactionData:
         - data:
@@ -2118,105 +2145,7 @@ definitions:
         transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
         value: KES 2900.0000
       - balance: KES 47.7191
-        category: BankCheckout
-        description: MobileB2C Payment Request to +254708663158
-        transactionData:
-        - data:
-            category: MobileB2C
-            creationTime: "2018-05-12 18:46:12"
-            description: The service request is processed successfully.
-            destination: "+254708663158"
-            destinationType: PhoneNumber
-            productName: testing
-            provider: Mpesa
-            providerChannel: "824879"
-            providerMetadata:
-              Foo: Bar
-            providerRefId: SAMPLE_MPESA_CODE
-            requestMetadata:
-              Foo: Bar
-            source: PaymentWallet
-            sourceType: Wallet
-            status: Success
-            transactionDate: 12.05.2018 21:46:13
-            transactionFee: KES 1.0000
-            transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
-            value: KES 2900.0000
-          errorMessage: Error
-          status: Success
-        - data:
-            category: MobileB2C
-            creationTime: "2018-05-12 18:46:12"
-            description: The service request is processed successfully.
-            destination: "+254708663158"
-            destinationType: PhoneNumber
-            productName: testing
-            provider: Mpesa
-            providerChannel: "824879"
-            providerMetadata:
-              Foo: Bar
-            providerRefId: SAMPLE_MPESA_CODE
-            requestMetadata:
-              Foo: Bar
-            source: PaymentWallet
-            sourceType: Wallet
-            status: Success
-            transactionDate: 12.05.2018 21:46:13
-            transactionFee: KES 1.0000
-            transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
-            value: KES 2900.0000
-          errorMessage: Error
-          status: Success
-        - data:
-            category: MobileB2C
-            creationTime: "2018-05-12 18:46:12"
-            description: The service request is processed successfully.
-            destination: "+254708663158"
-            destinationType: PhoneNumber
-            productName: testing
-            provider: Mpesa
-            providerChannel: "824879"
-            providerMetadata:
-              Foo: Bar
-            providerRefId: SAMPLE_MPESA_CODE
-            requestMetadata:
-              Foo: Bar
-            source: PaymentWallet
-            sourceType: Wallet
-            status: Success
-            transactionDate: 12.05.2018 21:46:13
-            transactionFee: KES 1.0000
-            transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
-            value: KES 2900.0000
-          errorMessage: Error
-          status: Success
-        - data:
-            category: MobileB2C
-            creationTime: "2018-05-12 18:46:12"
-            description: The service request is processed successfully.
-            destination: "+254708663158"
-            destinationType: PhoneNumber
-            productName: testing
-            provider: Mpesa
-            providerChannel: "824879"
-            providerMetadata:
-              Foo: Bar
-            providerRefId: SAMPLE_MPESA_CODE
-            requestMetadata:
-              Foo: Bar
-            source: PaymentWallet
-            sourceType: Wallet
-            status: Success
-            transactionDate: 12.05.2018 21:46:13
-            transactionFee: KES 1.0000
-            transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
-            value: KES 2900.0000
-          errorMessage: Error
-          status: Success
-        transactionId: ATPid_b9379b671fee8ccf24b2c74f94da0ceb
-        value: KES 2900.0000
-      - balance: KES 47.7191
-        category: BankCheckout
+        category: MobileC2B
         description: MobileB2C Payment Request to +254708663158
         transactionData:
         - data:
@@ -2381,14 +2310,14 @@ definitions:
       apiKey:
         type: string
         description: Africa's Talking API Key.
-        example: Quo molestiae iure labore totam incidunt.
+        example: Sed porro aut non accusamus id.
       username:
         type: string
         description: Africa's Talking Username.
         default: sandbox
         example: sandbox
     example:
-      apiKey: Voluptatibus omnis vero omnis consequuntur facilis voluptas.
+      apiKey: Praesentium quo architecto reiciendis expedita aut at.
       username: sandbox
     required:
     - username
@@ -2413,31 +2342,6 @@ definitions:
     required:
     - token
     - lifetimeInSeconds
-  AfricastalkingGetDigitsRequestBody:
-    title: AfricastalkingGetDigitsRequestBody
-    type: object
-    properties:
-      callbackUrl:
-        type: string
-        description: 'Instructs AT to forward results of the GetDigits action to the URL value passed in. '
-        example: Quos non amet.
-      finishOnKey:
-        type: string
-        description: The key which will terminate the action of getting digits.
-        example: Quia recusandae recusandae aliquid ut eligendi.
-      numDigits:
-        type: string
-        description: This shows the number of digits you would like to grab from the user input.
-        example: Asperiores et et.
-      timeout:
-        type: string
-        description: Timeout (in seconds) for getting the digits, after which the system moves on to the next element.
-        example: Corrupti aliquid saepe autem.
-    example:
-      callbackUrl: Id quas.
-      finishOnKey: Vero sed nisi veritatis consequatur non nemo.
-      numDigits: Sint inventore dolorem tempora et quis sit.
-      timeout: Voluptas tenetur vero dolores minus atque.
   AfricastalkingInitiateAppDataResponseBody:
     title: 'Mediatype identifier: userresponse; view=default'
     type: object
@@ -2455,24 +2359,24 @@ definitions:
       clientRequestId:
         type: string
         description: Variable sent to Events Callback URL used to tag the call
-        example: Enim laborum.
+        example: Non necessitatibus.
       from:
         type: string
         description: Africa’s Talking phone number
-        example: Rerum est.
+        example: Minus dolorem itaque sunt.
       to:
         type: string
         description: A comma separated string of recipients’ phone numbers.
-        example: Ut fuga consequatur nesciunt explicabo.
+        example: Quisquam voluptatem et fuga occaecati exercitationem quis.
       username:
         type: string
         description: Africa’s Talking Username
-        example: Aut tempora quisquam voluptas sunt.
+        example: Nihil doloremque repellendus.
     example:
-      clientRequestId: Sunt aut et cupiditate totam voluptatibus velit.
-      from: Odit dolores deleniti adipisci.
-      to: Aperiam nulla labore.
-      username: Sunt et rem voluptate.
+      clientRequestId: Delectus voluptatem est in voluptas.
+      from: Sit blanditiis aut.
+      to: Impedit rerum reiciendis.
+      username: Omnis quia provident aliquam perspiciatis corrupti dolor.
     required:
     - username
     - from
@@ -2486,32 +2390,35 @@ definitions:
         items:
           $ref: '#/definitions/VoiceEntryResponseBody'
         example:
-        - phoneNumber: Vel fugit maiores minus aut dolores nisi.
-          sessionId: Quibusdam corporis quia adipisci laudantium similique.
-          status: DestinationNotSupported
-        - phoneNumber: Vel fugit maiores minus aut dolores nisi.
-          sessionId: Quibusdam corporis quia adipisci laudantium similique.
-          status: DestinationNotSupported
-        - phoneNumber: Vel fugit maiores minus aut dolores nisi.
-          sessionId: Quibusdam corporis quia adipisci laudantium similique.
-          status: DestinationNotSupported
-        - phoneNumber: Vel fugit maiores minus aut dolores nisi.
-          sessionId: Quibusdam corporis quia adipisci laudantium similique.
-          status: DestinationNotSupported
+        - phoneNumber: Pariatur et iste qui itaque.
+          sessionId: Illum id.
+          status: InvalidPhoneNumber
+        - phoneNumber: Pariatur et iste qui itaque.
+          sessionId: Illum id.
+          status: InvalidPhoneNumber
+        - phoneNumber: Pariatur et iste qui itaque.
+          sessionId: Illum id.
+          status: InvalidPhoneNumber
+        - phoneNumber: Pariatur et iste qui itaque.
+          sessionId: Illum id.
+          status: InvalidPhoneNumber
       errorMessage:
         type: string
         description: Error message if ENTIRE request was rejected by the API.
-        example: Eius expedita.
+        example: Ut asperiores et perspiciatis.
     description: MakeCallResponseBody result type (default view)
     example:
       entries:
-      - phoneNumber: Vel fugit maiores minus aut dolores nisi.
-        sessionId: Quibusdam corporis quia adipisci laudantium similique.
-        status: DestinationNotSupported
-      - phoneNumber: Vel fugit maiores minus aut dolores nisi.
-        sessionId: Quibusdam corporis quia adipisci laudantium similique.
-        status: DestinationNotSupported
-      errorMessage: Perspiciatis accusantium non quisquam officia.
+      - phoneNumber: Pariatur et iste qui itaque.
+        sessionId: Illum id.
+        status: InvalidPhoneNumber
+      - phoneNumber: Pariatur et iste qui itaque.
+        sessionId: Illum id.
+        status: InvalidPhoneNumber
+      - phoneNumber: Pariatur et iste qui itaque.
+        sessionId: Illum id.
+        status: InvalidPhoneNumber
+      errorMessage: Modi eum rerum nihil itaque.
   AfricastalkingMobileB2BRequestBody:
     title: AfricastalkingMobileB2BRequestBody
     type: object
@@ -2537,9 +2444,7 @@ definitions:
         type: object
         description: A map of any metadata associated with the request.
         example:
-          M: ZfCjbd
-          tbJe: PuoN
-          ws: EangZ
+          LxLMa: F
         additionalProperties: true
       productName:
         type: string
@@ -2572,8 +2477,9 @@ definitions:
       destinationAccount: Account Name
       destinationChannel: Buy Goods Number
       metadata:
-        EduSsr: bdkLyl
-        LxLMa: F
+        EPsD: iJMQIJ
+        UyGrtd: YNMed
+        r: Czj
       productName: myProductName
       provider: Mpesa
       transferType: BusinessBuyGoods
@@ -2633,15 +2539,8 @@ definitions:
         - amount: 100.5
           currencyCode: KES
           metadata:
-            OwCW: OutQ
-          name: name
-          phoneNumber: +254711XXXYYY
-          providerChannel: myProviderChannel
-          reason: SalaryPayment
-        - amount: 100.5
-          currencyCode: KES
-          metadata:
-            OwCW: OutQ
+            OqkdMh: RwMfHN
+            QawIGK: mr
           name: name
           phoneNumber: +254711XXXYYY
           providerChannel: myProviderChannel
@@ -2658,7 +2557,8 @@ definitions:
       - amount: 100.5
         currencyCode: KES
         metadata:
-          OwCW: OutQ
+          OqkdMh: RwMfHN
+          QawIGK: mr
         name: name
         phoneNumber: +254711XXXYYY
         providerChannel: myProviderChannel
@@ -2666,7 +2566,8 @@ definitions:
       - amount: 100.5
         currencyCode: KES
         metadata:
-          OwCW: OutQ
+          OqkdMh: RwMfHN
+          QawIGK: mr
         name: name
         phoneNumber: +254711XXXYYY
         providerChannel: myProviderChannel
@@ -2688,7 +2589,7 @@ definitions:
         example:
         - errorMessage: Insufficient Credit
           phoneNumber: +254711XXXYYY
-          provider: Mpesa
+          provider: Athena
           providerChannel: "525900"
           status: Queued
           transactionFee: KES 1.00
@@ -2696,7 +2597,7 @@ definitions:
           value: KES 100000
         - errorMessage: Insufficient Credit
           phoneNumber: +254711XXXYYY
-          provider: Mpesa
+          provider: Athena
           providerChannel: "525900"
           status: Queued
           transactionFee: KES 1.00
@@ -2704,15 +2605,7 @@ definitions:
           value: KES 100000
         - errorMessage: Insufficient Credit
           phoneNumber: +254711XXXYYY
-          provider: Mpesa
-          providerChannel: "525900"
-          status: Queued
-          transactionFee: KES 1.00
-          transactionId: ATPid_SampleTxnId123
-          value: KES 100000
-        - errorMessage: Insufficient Credit
-          phoneNumber: +254711XXXYYY
-          provider: Mpesa
+          provider: Athena
           providerChannel: "525900"
           status: Queued
           transactionFee: KES 1.00
@@ -2721,7 +2614,7 @@ definitions:
       errorMessage:
         type: string
         description: Error message if the ENTIRE request was rejected by the API
-        example: Aliquam aut blanditiis.
+        example: Ex nihil impedit atque.
       numQueued:
         type: integer
         description: Number of B2C transactions that were successfully queued.
@@ -2740,7 +2633,7 @@ definitions:
       entries:
       - errorMessage: Insufficient Credit
         phoneNumber: +254711XXXYYY
-        provider: Mpesa
+        provider: Athena
         providerChannel: "525900"
         status: Queued
         transactionFee: KES 1.00
@@ -2748,7 +2641,7 @@ definitions:
         value: KES 100000
       - errorMessage: Insufficient Credit
         phoneNumber: +254711XXXYYY
-        provider: Mpesa
+        provider: Athena
         providerChannel: "525900"
         status: Queued
         transactionFee: KES 1.00
@@ -2756,21 +2649,13 @@ definitions:
         value: KES 100000
       - errorMessage: Insufficient Credit
         phoneNumber: +254711XXXYYY
-        provider: Mpesa
+        provider: Athena
         providerChannel: "525900"
         status: Queued
         transactionFee: KES 1.00
         transactionId: ATPid_SampleTxnId123
         value: KES 100000
-      - errorMessage: Insufficient Credit
-        phoneNumber: +254711XXXYYY
-        provider: Mpesa
-        providerChannel: "525900"
-        status: Queued
-        transactionFee: KES 1.00
-        transactionId: ATPid_SampleTxnId123
-        value: KES 100000
-      errorMessage: Quasi placeat.
+      errorMessage: Quis laborum iste aut molestiae.
       numQueued: 1
       totalTransactionFee: KES 2.00
       totalValue: KES 100000
@@ -2791,7 +2676,8 @@ definitions:
         type: object
         description: Map of any metadata associates with the request
         example:
-          Porro aut non accusamus id qui praesentium.: Architecto reiciendis.
+          Dolore doloribus vel enim.: Explicabo in at omnis.
+          Non quo sit laudantium voluptas.: Minus et saepe iure.
         additionalProperties: true
       phoneNumber:
         type: string
@@ -2813,8 +2699,8 @@ definitions:
       amount: 3000
       currencyCode: KES
       metadata:
-        Animi enim.: Rem quis provident.
-        At dicta reprehenderit in et.: Vero modi placeat accusamus ad.
+        Laboriosam minus velit.: Tenetur est.
+        Qui perspiciatis.: Provident maxime ut aut.
       phoneNumber: +254711XXXYYY
       productName: myProductName
       providerChannel: myProviderChannel
@@ -2863,9 +2749,9 @@ definitions:
       phoneNumber:
         type: string
         description: Mobile phone number you want to create a subscription for.
-        example: Deserunt ad est ut voluptatem.
+        example: Distinctio fugit cum.
     example:
-      phoneNumber: Quia omnis sed.
+      phoneNumber: Rerum est esse veniam quod sunt facere.
     required:
     - phoneNumber
   AfricastalkingNewCheckoutTokenResponseBody:
@@ -2911,13 +2797,13 @@ definitions:
         type: string
         description: Africa’s Talking application username.
         default: sandbox
-        example: Id enim ut a aut.
+        example: Sed quibusdam molestiae ea.
     example:
       checkoutToken: ""
       keyword: ""
       phoneNumber: ""
       shortCode: ""
-      username: Sed placeat omnis.
+      username: Sint possimus vel.
     required:
     - username
     - shortCode
@@ -2943,18 +2829,6 @@ definitions:
     example:
       description: Waiting for user input
       status: Success
-  AfricastalkingPlayRequestBody:
-    title: AfricastalkingPlayRequestBody
-    type: object
-    properties:
-      url:
-        type: string
-        description: A valid URL that contains a link to the file to be played.
-        example: Ducimus eius suscipit rerum nemo.
-    example:
-      url: Distinctio fugit autem.
-    required:
-    - url
   AfricastalkingPublishIoTRequestBody:
     title: AfricastalkingPublishIoTRequestBody
     type: object
@@ -2962,11 +2836,11 @@ definitions:
       deviceGroup:
         type: string
         description: Device group to which the message is to be sent
-        example: Hic rem mollitia architecto aut magnam.
+        example: Nihil dicta officia atque soluta aspernatur autem.
       payload:
         type: string
         description: Message packet to be sent to the subscribed devices
-        example: Itaque autem facilis.
+        example: Ipsum esse ad.
       topic:
         type: string
         description: Messaging channel to which the message is to be sent.
@@ -2974,12 +2848,12 @@ definitions:
       username:
         type: string
         description: Africa’s Talking application username
-        example: Sit consequatur distinctio omnis temporibus.
+        example: Esse eum omnis.
     example:
-      deviceGroup: Rerum et.
-      payload: Facere sed doloribus.
+      deviceGroup: Odio non et quasi beatae.
+      payload: Voluptas qui ab quam voluptas.
       topic: <username>/<device-group>/<the-topic>
-      username: Aut suscipit suscipit provident consequuntur quia.
+      username: Similique maiores.
     required:
     - username
     - deviceGroup
@@ -2992,7 +2866,7 @@ definitions:
       description:
         type: string
         description: Verbose response message detailing the status of the HTTP response
-        example: Publishing not allowed
+        example: The provided topic does not belong to the user
         enum:
         - Message processed successfully
         - Publishing not allowed
@@ -3006,7 +2880,7 @@ definitions:
         - "false"
     description: PublishIoTResponseBody result type (default view)
     example:
-      description: Publishing not allowed
+      description: The provided topic does not belong to the user
       status: "true"
   AfricastalkingPurgePremiumSubscriptionRequestBody:
     title: AfricastalkingPurgePremiumSubscriptionRequestBody
@@ -3028,12 +2902,12 @@ definitions:
         type: string
         description: Africa’s Talking application username.
         default: sandbox
-        example: At voluptatem porro veritatis ad.
+        example: Sunt in.
     example:
       keyword: ""
       phoneNumber: ""
       shortCode: ""
-      username: Numquam sapiente qui labore incidunt.
+      username: Cum eum omnis assumenda.
     required:
     - username
     - shortCode
@@ -3058,125 +2932,6 @@ definitions:
     example:
       description: Succeeded
       status: Success
-  AfricastalkingQueueRequestBody:
-    title: AfricastalkingQueueRequestBody
-    type: object
-    properties:
-      phoneNumbers:
-        type: string
-        description: List of one or more numbers mapped to your Africa’s Talking account.
-        example: Voluptatem nesciunt odit voluptatem quasi.
-      username:
-        type: string
-        description: Your Africa’s Talking application username.
-        example: Dolorum cum ut exercitationem nisi fugiat placeat.
-    example:
-      phoneNumbers: Omnis quas nihil dicta officia atque soluta.
-      username: Laborum suscipit et rerum esse.
-    required:
-    - username
-    - phoneNumbers
-  AfricastalkingQueueResponseBody:
-    title: 'Mediatype identifier: queuedstatusresult; view=default'
-    type: object
-    properties:
-      Entries:
-        type: array
-        items:
-          $ref: '#/definitions/QueuedStatusEntryResponseBody'
-        example:
-        - numCalls: Ducimus eligendi.
-          phoneNumber: Eaque nostrum cum.
-          queueName: Nisi amet et at.
-        - numCalls: Ducimus eligendi.
-          phoneNumber: Eaque nostrum cum.
-          queueName: Nisi amet et at.
-        - numCalls: Ducimus eligendi.
-          phoneNumber: Eaque nostrum cum.
-          queueName: Nisi amet et at.
-      errorMessage:
-        type: string
-        description: Error Message
-        example: Ipsam velit dolorem odio ut in.
-    description: QueueResponseBody result type (default view)
-    example:
-      Entries:
-      - numCalls: Ducimus eligendi.
-        phoneNumber: Eaque nostrum cum.
-        queueName: Nisi amet et at.
-      - numCalls: Ducimus eligendi.
-        phoneNumber: Eaque nostrum cum.
-        queueName: Nisi amet et at.
-      errorMessage: Dolores deserunt quae dolore.
-  AfricastalkingRecordRequestBody:
-    title: AfricastalkingRecordRequestBody
-    type: object
-    properties:
-      callbackUrl:
-        type: string
-        example: Beatae tempora molestiae.
-      finishOnKey:
-        type: string
-        example: Corporis et magnam iure illo autem est.
-      maxLength:
-        type: string
-        example: Pariatur sunt cumque.
-      playBeep:
-        type: string
-        example: Occaecati et ut doloribus porro est et.
-      timeout:
-        type: string
-        example: Omnis commodi.
-      trimSilence:
-        type: string
-        example: Eius voluptatem quo.
-    example:
-      callbackUrl: Quisquam sit quia debitis omnis quia.
-      finishOnKey: In error corporis ipsa.
-      maxLength: Deleniti repellendus et veritatis reprehenderit ea.
-      playBeep: Quis vel.
-      timeout: Ullam laborum repellendus numquam minus.
-      trimSilence: Nobis magni omnis.
-  AfricastalkingRedirectRequestBody:
-    title: AfricastalkingRedirectRequestBody
-    type: object
-    properties:
-      Reject:
-        type: string
-        description: Reject
-        example: Est voluptates ut ea.
-    example:
-      Reject: Voluptatem et.
-  AfricastalkingRejectRequestBody:
-    title: AfricastalkingRejectRequestBody
-    type: object
-    properties:
-      Redirect:
-        type: string
-        description: Redirect
-        example: Tenetur in quia molestias voluptatem ullam.
-    example:
-      Redirect: Ut ut temporibus aliquam facilis magni nemo.
-  AfricastalkingSayRequestBody:
-    title: AfricastalkingSayRequestBody
-    type: object
-    properties:
-      playBeep:
-        type: boolean
-        description: Instructs AT to play a beep after reading the text contained in the request
-        default: false
-        example: false
-      voice:
-        type: string
-        description: This parameter specifies the voice to use
-        default: woman
-        example: woman
-        enum:
-        - man
-        - woman
-    example:
-      playBeep: true
-      voice: woman
   AfricastalkingSendAirtimeRequestBody:
     title: AfricastalkingSendAirtimeRequestBody
     type: object
@@ -3197,14 +2952,18 @@ definitions:
       username:
         type: string
         description: Africa’s Talking application username.
-        example: Consequuntur omnis sequi sint.
+        example: Dolore qui dolorum cum ut exercitationem nisi.
     example:
       recipients:
       - 'amount ': KES 100.50
         phoneNumber: "+234811222333"
       - 'amount ': KES 100.50
         phoneNumber: "+234811222333"
-      username: Reiciendis dolorem dolorum sapiente eligendi rerum.
+      - 'amount ': KES 100.50
+        phoneNumber: "+234811222333"
+      - 'amount ': KES 100.50
+        phoneNumber: "+234811222333"
+      username: Sint voluptatem nesciunt odit voluptatem.
     required:
     - username
     - recipients
@@ -3219,7 +2978,7 @@ definitions:
       numSent:
         type: integer
         description: Number of requests sent to the provider
-        example: 438140140993407729
+        example: 815849018969379249
         format: int64
       responses:
         type: array
@@ -3249,7 +3008,7 @@ definitions:
     description: SendAirtimeResponseBody result type (default view)
     example:
       errorMessage: None
-      numSent: 8301955932334086852
+      numSent: 9077943107637909493
       responses:
       - amount: KES 1000.0000
         discount: KES 40.0000
@@ -3279,7 +3038,7 @@ definitions:
         type: integer
         description: Used by MSP to determine who gets billed for a message
         default: 1
-        example: 170627980147723019
+        example: 4131188399238730094
         format: int64
       enqueue:
         type: integer
@@ -3292,41 +3051,41 @@ definitions:
       from:
         type: string
         description: Registered Short Code or Alphanumeric
-        example: Inventore enim ipsam hic.
+        example: Omnis ratione quod ut magni.
       keyword:
         type: string
         description: The keyword to be used for a premium service
-        example: Quo et sint.
+        example: Quia iure sit.
       linkId:
         type: string
         description: Used for premium services to send OnDemand messages
-        example: Accusantium voluptate doloribus eaque sint consequatur quis.
+        example: Nihil placeat fugiat unde perferendis libero sed.
       message:
         type: string
         description: Message to be sent
-        example: Ducimus pariatur nisi sint eum et id.
+        example: Facilis similique labore quo dolorem mollitia.
       retryDurationInHours:
         type: string
         description: No. of hours subscription message should be retried
-        example: Sapiente placeat dolorum magnam quod.
+        example: Ea et quaerat nobis doloribus repudiandae.
       to:
         type: string
         description: Recipients’ phone numbers
-        example: Eaque debitis nam voluptas.
+        example: Tenetur temporibus qui magnam id.
       username:
         type: string
         description: Africa’s Talking application username
-        example: Vel voluptates quos et veniam ut sed.
+        example: Et repellendus atque consectetur quis pariatur.
     example:
-      bulkSMSMode: 4239715413431544934
-      enqueue: 1
-      from: Tempore non iste error aut.
-      keyword: Porro quo.
-      linkId: Deleniti repellat quia quas dolorum.
-      message: Et debitis numquam.
-      retryDurationInHours: Qui voluptatem atque modi.
-      to: Nam ad adipisci voluptates ut.
-      username: Doloribus fugiat eos distinctio.
+      bulkSMSMode: 4641846068601143510
+      enqueue: 0
+      from: Ducimus reiciendis.
+      keyword: Est beatae fugiat.
+      linkId: Saepe numquam dolorum aperiam.
+      message: Tenetur rerum.
+      retryDurationInHours: Voluptatem earum quo.
+      to: Architecto itaque beatae soluta numquam.
+      username: Inventore quam est error beatae omnis voluptatum.
     required:
     - username
     - to
@@ -3355,7 +3114,7 @@ definitions:
         type: integer
         description: Used by MSP to determine who gets billed for a message
         default: 1
-        example: 7075836968673326746
+        example: 1766951752251341279
         format: int64
       enqueue:
         type: integer
@@ -3368,41 +3127,41 @@ definitions:
       from:
         type: string
         description: Registered Short Code or Alphanumeric
-        example: Numquam vitae nam sed.
+        example: Accusantium illo natus consequuntur fugiat.
       keyword:
         type: string
         description: The keyword to be used for a premium service
-        example: Vel est consequatur hic.
+        example: Quia qui eaque.
       linkId:
         type: string
         description: Used for premium services to send OnDemand messages
-        example: Impedit sunt omnis.
+        example: Sed modi consequatur architecto et.
       message:
         type: string
         description: Message to be sent
-        example: Et quis voluptas enim consequatur placeat.
+        example: Odit dignissimos saepe.
       retryDurationInHours:
         type: string
         description: No. of hours subscription message should be retried
-        example: Autem suscipit non aut modi aut.
+        example: Quae voluptatem dolor ut iure et.
       to:
         type: string
         description: Recipients’ phone numbers
-        example: Qui necessitatibus nihil repellat.
+        example: Sunt quas.
       username:
         type: string
         description: Africa’s Talking application username
-        example: Doloribus qui fugiat natus.
+        example: Ut quis est.
     example:
-      bulkSMSMode: 4712237269569902429
+      bulkSMSMode: 4671644599186582433
       enqueue: 0
-      from: Corrupti esse quo non esse quia enim.
-      keyword: Nihil minima et labore voluptatem perspiciatis.
-      linkId: Exercitationem ratione.
-      message: Provident sint rerum eum sed eius aut.
-      retryDurationInHours: Eum laudantium odit praesentium voluptas dignissimos eius.
-      to: Magnam tenetur sed similique qui facere minima.
-      username: Deserunt accusamus consequuntur rem quisquam laudantium.
+      from: Repudiandae blanditiis et architecto ut.
+      keyword: Consequatur unde aut similique eveniet occaecati.
+      linkId: Corporis dignissimos dolores similique.
+      message: Repellat ut.
+      retryDurationInHours: Voluptatem dolore non sequi odio.
+      to: Vel reiciendis.
+      username: Voluptatum dicta saepe voluptatibus.
     required:
     - username
     - to
@@ -3515,20 +3274,20 @@ definitions:
       holdMusicUrl:
         type: string
         description: The url of the media file to be played when the user is on hold.
-        example: Et cumque error soluta.
+        example: Vel est quam consequatur.
       phoneNumber:
         type: string
         description: Phone Number to transfer the call to
-        example: Dolore similique qui.
+        example: Et nihil earum sequi accusantium.
       sessionId:
         type: string
         description: Session Id of the ongoing call, it must have two legs
-        example: Nam qui sed.
+        example: Ducimus odio placeat placeat ipsa.
     example:
-      callLeg: callee
-      holdMusicUrl: Dolore non sit in.
-      phoneNumber: Fugiat dolor omnis ut.
-      sessionId: Quis fuga nemo necessitatibus repudiandae.
+      callLeg: caller
+      holdMusicUrl: Consequuntur dolor corporis.
+      phoneNumber: Est hic dolorum quia harum debitis amet.
+      sessionId: Quam nostrum ut.
     required:
     - sessionId
     - phoneNumber
@@ -3539,17 +3298,17 @@ definitions:
       errorMessage:
         type: string
         description: Why the transfer ws aborted None is successful
-        example: Minus ex ipsa nisi est maiores.
+        example: Atque alias.
       status:
         type: string
         description: can be either Success or Aborted
-        example: Aborted
+        example: Success
         enum:
         - Success
         - Aborted
     description: TransferCallResponseBody result type (default view)
     example:
-      errorMessage: Qui voluptates et vitae et dolorem.
+      errorMessage: Excepturi ullam libero.
       status: Aborted
   AfricastalkingUploadMediaRequestBody:
     title: AfricastalkingUploadMediaRequestBody
@@ -3558,14 +3317,14 @@ definitions:
       url:
         type: string
         description: The url of the file to upload.
-        example: Similique maiores.
+        example: Sequi temporibus.
       username:
         type: string
         description: Your Africa’s Talking application username.
-        example: Autem facilis ipsum esse ad.
+        example: Illo harum quo voluptas magni iste.
     example:
-      url: Voluptas qui ab quam voluptas.
-      username: Odio non et quasi beatae.
+      url: Aut provident qui nisi.
+      username: Eum quibusdam maxime dolorum ad sit.
   AfricastalkingWalletTransferRequestBody:
     title: AfricastalkingWalletTransferRequestBody
     type: object
@@ -3742,7 +3501,7 @@ definitions:
     example:
       errorMessage: Insufficient Credit
       phoneNumber: +254711XXXYYY
-      provider: Mpesa
+      provider: Athena
       providerChannel: "525900"
       status: Queued
       transactionFee: KES 1.00
@@ -3771,13 +3530,13 @@ definitions:
       dateOfBirth:
         type: string
         description: Date of birth of the account owner.
-        example: "1989-04-02"
+        example: "1972-04-05"
         format: date
     example:
       accountName: Test Bank Account
       accountNumber: "1234567890"
       bankCode: 234001
-      dateOfBirth: "2003-02-09"
+      dateOfBirth: "2005-12-24"
     required:
     - accountName
     - accountNumber
@@ -3833,15 +3592,21 @@ definitions:
           linkId: SampleLinkId123
           text: Hello
           to: "28901"
+        - date: "2018-03-19T08:34:18.445Z"
+          from: +254711XXXYYY
+          id: 15071
+          linkId: SampleLinkId123
+          text: Hello
+          to: "28901"
+        - date: "2018-03-19T08:34:18.445Z"
+          from: +254711XXXYYY
+          id: 15071
+          linkId: SampleLinkId123
+          text: Hello
+          to: "28901"
         minItems: 1
     example:
       Messages:
-      - date: "2018-03-19T08:34:18.445Z"
-        from: +254711XXXYYY
-        id: 15071
-        linkId: SampleLinkId123
-        text: Hello
-        to: "28901"
       - date: "2018-03-19T08:34:18.445Z"
         from: +254711XXXYYY
         id: 15071
@@ -4020,9 +3785,8 @@ definitions:
         type: object
         description: Map of metadata associated with the request.
         example:
-          FwAJcs: jdnf
-          m: i
-          mvMJ: O
+          cr: XbH
+          ws: EangZ
         additionalProperties: true
       name:
         type: string
@@ -4051,7 +3815,9 @@ definitions:
       amount: 100.5
       currencyCode: KES
       metadata:
-        cr: XbH
+        EduSsr: bdkLyl
+        M: ZfCjbd
+        tbJe: PuoN
       name: name
       phoneNumber: +254711XXXYYY
       providerChannel: myProviderChannel
@@ -4129,6 +3895,11 @@ definitions:
           number: +254711XXXYYY
           status: Success
           statusCode: 101
+        - cost: KES 0.8000
+          messageId: ATPid_SampleTxnId123
+          number: +254711XXXYYY
+          status: Success
+          statusCode: 101
         minItems: 1
     description: A Map detailing the eventual result of the sms request
     example:
@@ -4144,28 +3915,6 @@ definitions:
         number: +254711XXXYYY
         status: Success
         statusCode: 101
-      - cost: KES 0.8000
-        messageId: ATPid_SampleTxnId123
-        number: +254711XXXYYY
-        status: Success
-        statusCode: 101
-  QueuedStatusEntryResponseBody:
-    title: QueuedStatusEntryResponseBody
-    type: object
-    properties:
-      numCalls:
-        type: string
-        example: Harum eaque.
-      phoneNumber:
-        type: string
-        example: Eius cumque sed porro eos.
-      queueName:
-        type: string
-        example: Cumque quidem vitae iste qui fuga.
-    example:
-      numCalls: A asperiores placeat.
-      phoneNumber: Commodi voluptas nihil non deserunt laudantium.
-      queueName: Consequuntur voluptas natus magni aperiam delectus.
   RecipientsResponseBody:
     title: RecipientsResponseBody
     type: object
@@ -4407,55 +4156,56 @@ definitions:
       accountName:
         type: string
         description: ' Bank account name.'
-        example: Perferendis sit.
+        example: Alias ullam doloribus qui fugiat natus dolor.
       accountNumber:
         type: string
         description: Bank account number.
-        example: Atque quia.
+        example: Necessitatibus nihil repellat.
       amount:
         type: string
         description: Amount client is expected to receive.
-        example: Qui quaerat dolor iste vitae ipsa.
+        example: Harum impedit sunt omnis rerum autem suscipit.
       bankAccount:
         type: string
         description: Details of a bank account to receive the bank transfer payment.
-        example: Atque aperiam.
+        example: Qui voluptatem atque modi.
       bankCode:
         type: string
         description: 6-Digit Integer code for the bank that we allocate.
-        example: Voluptates mollitia.
+        example: Et quis voluptas enim consequatur placeat.
       currencyCode:
         type: string
         description: ' 3-digit ISO format currency code'
-        example: Hic quas nemo est.
+        example: Inventore ea vel est consequatur.
       dateOfBirth:
         type: string
         description: Date of birth of the account owner.
-        example: Quo amet ad est eum enim.
+        example: Numquam vitae nam sed.
       metadata:
         type: object
         description: A map of any metadata associated with the request.
         example:
-          Et qui quisquam aut.: Non tempora asperiores.
-          Tenetur et quaerat.: Culpa optio.
+          Provident sint rerum eum sed eius aut.: Corrupti esse quo non esse quia enim.
+          Quisquam laudantium aut magnam tenetur.: Similique qui facere minima.
         additionalProperties: true
       narration:
         type: string
         description: Short description of the transaction displayed on the clients statement.
-        example: Mollitia consequatur quae quo quia aspernatur commodi.
+        example: Aut modi aut enim deserunt accusamus.
     description: 'A list of Recipient elements each corresponding to a bank transfer transaction request. '
     example:
-      accountName: Et dolorum velit amet a quisquam fugiat.
-      accountNumber: Sint enim qui aliquid.
-      amount: Eos sint dolor cumque facere.
-      bankAccount: Reprehenderit similique non.
-      bankCode: Autem rem.
-      currencyCode: Id et.
-      dateOfBirth: Illum dolor animi et doloribus sequi illo.
+      accountName: Perspiciatis eius exercitationem ratione tempore eum laudantium.
+      accountNumber: Praesentium voluptas dignissimos eius doloremque modi ut.
+      amount: Dolorem ut est.
+      bankAccount: Consequatur quaerat nihil minima et labore.
+      bankCode: Qui quia repellat explicabo similique.
+      currencyCode: Maiores eos quisquam quis nisi neque.
+      dateOfBirth: Fuga pariatur voluptates.
       metadata:
-        Consequuntur quod est sit quasi dolore consequatur.: Neque quia quasi debitis alias.
-        Dolores magni est natus quis fugit vitae.: Tempora dolores quod iure.
-      narration: Sapiente blanditiis vitae.
+        Ad est ut voluptatem est.: Omnis sed.
+        Excepturi soluta accusamus quod.: Ducimus eius ipsa sunt.
+        Id enim ut a aut.: Sed placeat omnis.
+      narration: Molestiae molestiae.
     required:
     - bankAccount
     - accountNumber
@@ -4479,12 +4229,12 @@ definitions:
       phoneNumber:
         type: string
         description: The phone number queued.
-        example: Vero voluptatum voluptatem.
+        example: Ullam sint dignissimos enim quod hic fugit.
       sessionId:
         type: string
         description: A unique id for the request associated to this phone number
         default: None
-        example: Nam voluptates iure.
+        example: Quod et numquam soluta odit eum.
       status:
         type: string
         example: DestinationNotSupported
@@ -4494,9 +4244,9 @@ definitions:
         - DestinationNotSupported
         - InsufficientCredit
     example:
-      phoneNumber: Laborum veritatis dolorem dolorum eaque quia.
-      sessionId: Sit praesentium sit voluptas quia at.
-      status: DestinationNotSupported
+      phoneNumber: Voluptatum voluptas illo accusamus earum.
+      sessionId: Eos nulla eius atque.
+      status: Queued
   WalletEntryResponseBody:
     title: WalletEntryResponseBody
     type: object
@@ -4508,7 +4258,7 @@ definitions:
       category:
         type: string
         description: Category of the payment
-        example: BankCheckout
+        example: CardCheckout
         enum:
         - BankCheckout
         - CardCheckout
@@ -4535,7 +4285,7 @@ definitions:
         example: KES 2900.0000
     example:
       balance: KES 47.7191
-      category: WalletTransfer
+      category: BankCheckout
       description: MobileB2C Payment Request to +254708663158
       transactionData:
       - data:

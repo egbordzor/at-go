@@ -86,15 +86,6 @@ type CallTransferResponse struct {
 	View string
 }
 
-// QueuedStatusResult is the viewed result type that is projected based on a
-// view.
-type QueuedStatusResult struct {
-	// Type to project
-	Projected *QueuedStatusResultView
-	// View to render
-	View string
-}
-
 // MobileCheckoutResponse is the viewed result type that is projected based on
 // a view.
 type MobileCheckoutResponse struct {
@@ -387,20 +378,6 @@ type CallTransferResponseView struct {
 	Status *string
 	// Why the transfer ws aborted None is successful
 	ErrorMessage *string
-}
-
-// QueuedStatusResultView is a type that runs validations on a projected type.
-type QueuedStatusResultView struct {
-	Entries []*QueuedStatusEntryView
-	// Error Message
-	ErrorMessage *string
-}
-
-// QueuedStatusEntryView is a type that runs validations on a projected type.
-type QueuedStatusEntryView struct {
-	PhoneNumber *string
-	QueueName   *string
-	NumCalls    *string
 }
 
 // MobileCheckoutResponseView is a type that runs validations on a projected
@@ -776,14 +753,6 @@ var (
 			"errorMessage",
 		},
 	}
-	// QueuedStatusResultMap is a map of attribute names in result type
-	// QueuedStatusResult indexed by view name.
-	QueuedStatusResultMap = map[string][]string{
-		"default": []string{
-			"Entries",
-			"errorMessage",
-		},
-	}
 	// MobileCheckoutResponseMap is a map of attribute names in result type
 	// MobileCheckoutResponse indexed by view name.
 	MobileCheckoutResponseMap = map[string][]string{
@@ -1059,18 +1028,6 @@ func ValidateCallTransferResponse(result *CallTransferResponse) (err error) {
 	switch result.View {
 	case "default", "":
 		err = ValidateCallTransferResponseView(result.Projected)
-	default:
-		err = goa.InvalidEnumValueError("view", result.View, []interface{}{"default"})
-	}
-	return
-}
-
-// ValidateQueuedStatusResult runs the validations defined on the viewed result
-// type QueuedStatusResult.
-func ValidateQueuedStatusResult(result *QueuedStatusResult) (err error) {
-	switch result.View {
-	case "default", "":
-		err = ValidateQueuedStatusResultView(result.Projected)
 	default:
 		err = goa.InvalidEnumValueError("view", result.View, []interface{}{"default"})
 	}
@@ -1477,20 +1434,6 @@ func ValidateCallTransferResponseView(result *CallTransferResponseView) (err err
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError("result.status", *result.Status, []interface{}{"Success", "Aborted"}))
 		}
 	}
-	return
-}
-
-// ValidateQueuedStatusResultView runs the validations defined on
-// QueuedStatusResultView using the "default" view.
-func ValidateQueuedStatusResultView(result *QueuedStatusResultView) (err error) {
-
-	return
-}
-
-// ValidateQueuedStatusEntryView runs the validations defined on
-// QueuedStatusEntryView.
-func ValidateQueuedStatusEntryView(result *QueuedStatusEntryView) (err error) {
-
 	return
 }
 
