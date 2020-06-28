@@ -8,6 +8,7 @@ import (
 
 type (
 	Airtime interface {
+
 		// Send Airtime.
 		sendAirtime(ctx context.Context, p *at.AirtimePayload) (res *at.AirtimeResponse, err error)
 	}

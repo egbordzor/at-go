@@ -8,8 +8,9 @@ import (
 
 type (
 	Card interface {
-		// Collect money into your Payment Wallet by initiating transactions that deduct money from a customers Debit or Credit Card.
-		// These APIs are currently only available in Nigeria on MasterCard and Verve cards.
+
+		// Collect money into your Payment Wallet by initiating transactions that deduct
+		// money from a customers Debit or Credit Card.
 		cardCheckout(ctx context.Context, p *at.CardCheckoutPayload) (res *at.CardCheckoutResponse, err error)
 
 		// Allows your application to validate card checkout charge requests.

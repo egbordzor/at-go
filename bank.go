@@ -8,8 +8,10 @@ import (
 
 type (
 	Bank interface {
+
 		// Collect money into your payment wallet.
 		bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error)
+
 		// Validate a bank checkout charge request
 		bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error)
 

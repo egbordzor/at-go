@@ -8,6 +8,7 @@ import (
 
 type (
 	Mobile interface {
+
 		// Initiate C2B payments on a mobile subscriber’s device.
 		mobileCheckout(ctx context.Context, p *at.MobileCheckoutPayload) (res *at.MobileCheckoutResponse, err error)
 

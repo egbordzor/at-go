@@ -8,6 +8,7 @@ import (
 
 type (
 	Wallet interface {
+
 		// Transfer money from one Payment Product to another Payment Product hosted on Africa’s Talking.
 		walletTransfer(ctx context.Context, p *at.WalletTransferPayload) (res *at.WalletTransferResponse, err error)
 	}

@@ -8,6 +8,7 @@ import (
 
 type (
 	User interface {
+
 		// Initiate an application data request.
 		initiateAppData(ctx context.Context, p string) (res *at.UserResponse, err error)
 	}

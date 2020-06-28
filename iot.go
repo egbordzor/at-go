@@ -8,6 +8,7 @@ import (
 
 type (
 	IoT interface {
+
 		// Publishes messages to remote devices.
 		publishIoT(ctx context.Context, p *at.IoTPayload) (res *at.IoTResponse, err error)
 	}
