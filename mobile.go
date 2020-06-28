@@ -23,7 +23,7 @@ type (
 // on a mobile subscriber’s device.
 // This allows for a smoother checkout experience, since the client will no longer
 // need to remember the amount or an account number to complete the transaction.
-func (c *Client) mobileCheckout(ctx context.Context, p *at.MobileCheckoutPayload) (res *at.MobileCheckoutResponse, err error) {
+func (c *ATClient) mobileCheckout(ctx context.Context, p *at.MobileCheckoutPayload) (res *at.MobileCheckoutResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/checkout/request"), p)
 	if err != nil {
@@ -45,7 +45,7 @@ func (c *Client) mobileCheckout(ctx context.Context, p *at.MobileCheckoutPayload
 
 // Mobile Business To Consumer (B2C) APIs allow you to send payments to mobile
 // subscribers from your Payment Wallet.
-func (c *Client) mobileB2C(ctx context.Context, p *at.MobileB2CPayload) (res *at.MobileB2CResponse, err error) {
+func (c *ATClient) mobileB2C(ctx context.Context, p *at.MobileB2CPayload) (res *at.MobileB2CResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/b2c/request"), p)
 	if err != nil {
@@ -67,7 +67,7 @@ func (c *Client) mobileB2C(ctx context.Context, p *at.MobileB2CPayload) (res *at
 
 // Mobile Business To Business (B2B) APIs allow you to send payments to businesses
 // e.g banks from your Payment Wallet.
-func (c *Client) mobileB2B(ctx context.Context, p *at.MobileB2BPayload) (res *at.MobileB2BResponse, err error) {
+func (c *ATClient) mobileB2B(ctx context.Context, p *at.MobileB2BPayload) (res *at.MobileB2BResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/b2b/request"), p)
 	if err != nil {

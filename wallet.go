@@ -14,7 +14,7 @@ type (
 )
 
 // Transfer money from one Payment Product to another Payment Product hosted on Africa’s Talking.
-func (c *Client) walletTransfer(ctx context.Context, p *at.WalletTransferPayload) (res *at.WalletTransferResponse, err error) {
+func (c *ATClient) walletTransfer(ctx context.Context, p *at.WalletTransferPayload) (res *at.WalletTransferResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/transfer/wallet"), p)
 	if err != nil {

@@ -17,7 +17,7 @@ type (
 
 // Move money from a Payment Product to an application stash.
 // An application stash is the wallet that funds your service usage expenses.
-func (c *Client) topupStash(ctx context.Context, p *at.TopupStashPayload) (res *at.TopupStashResponse, err error) {
+func (c *ATClient) topupStash(ctx context.Context, p *at.TopupStashPayload) (res *at.TopupStashResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/topup/stash"), p)
 	if err != nil {

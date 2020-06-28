@@ -24,7 +24,7 @@ type (
 )
 
 // Fetch transactions of a particular payment product.
-func (c *Client) findTransaction(ctx context.Context, p *at.FindTransactionPayload) (res *at.FindTransactionResponse, err error) {
+func (c *ATClient) findTransaction(ctx context.Context, p *at.FindTransactionPayload) (res *at.FindTransactionResponse, err error) {
 
 	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/transaction/find"), p)
 	if err != nil {
@@ -45,7 +45,7 @@ func (c *Client) findTransaction(ctx context.Context, p *at.FindTransactionPaylo
 }
 
 // Fetch transactions of a particular payment product.
-func (c *Client) fetchProductTransactions(ctx context.Context, p *at.ProductTransactionsPayload) (res *at.ProductTransactionsResponse, err error) {
+func (c *ATClient) fetchProductTransactions(ctx context.Context, p *at.ProductTransactionsPayload) (res *at.ProductTransactionsResponse, err error) {
 
 	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/transaction/fetch"), p)
 	if err != nil {
@@ -66,7 +66,7 @@ func (c *Client) fetchProductTransactions(ctx context.Context, p *at.ProductTran
 }
 
 // Fetch your wallet transactions
-func (c *Client) fetchWalletTransactions(ctx context.Context, p *at.WalletTransactionsPayload) (res *at.WalletTransactionsResponse, err error) {
+func (c *ATClient) fetchWalletTransactions(ctx context.Context, p *at.WalletTransactionsPayload) (res *at.WalletTransactionsResponse, err error) {
 
 	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/wallet/fetch"), p)
 	if err != nil {
@@ -87,7 +87,7 @@ func (c *Client) fetchWalletTransactions(ctx context.Context, p *at.WalletTransa
 }
 
 // Fetch your wallet balance
-func (c *Client) fetchWalletBalance(ctx context.Context, p *at.WalletBalancePayload) (res *at.WalletBalanceResponse, err error) {
+func (c *ATClient) fetchWalletBalance(ctx context.Context, p *at.WalletBalancePayload) (res *at.WalletBalanceResponse, err error) {
 
 	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/wallet/balance"), p)
 	if err != nil {

@@ -14,7 +14,7 @@ type (
 )
 
 // Publishes messages to remote devices.
-func (c *Client) publishIoT(ctx context.Context, p *at.IoTPayload) (res *at.IoTResponse, err error) {
+func (c *ATClient) publishIoT(ctx context.Context, p *at.IoTPayload) (res *at.IoTResponse, err error) {
 
 	// Set Header Parameters
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.IoTEndpoint, "/data/publish"), p)

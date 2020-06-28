@@ -14,7 +14,7 @@ type (
 )
 
 // Initiate an application data request.
-func (c *Client) initiateAppData(ctx context.Context, p string) (res *at.UserResponse, err error) {
+func (c *ATClient) initiateAppData(ctx context.Context, p string) (res *at.UserResponse, err error) {
 
 	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.UserEndpoint, "/version1/user"), p)
 	if err != nil {

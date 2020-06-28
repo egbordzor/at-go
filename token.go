@@ -15,7 +15,7 @@ type (
 )
 
 // Generates a valid auth token
-func (c *Client) generateToken(ctx context.Context, p *at.GeneratePayload) (res *at.AccessTokenResponse, err error) {
+func (c *ATClient) generateToken(ctx context.Context, p *at.GeneratePayload) (res *at.AccessTokenResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.AuthEndpoint, "/tlsauth-token/generate"), p)
 	if err != nil {

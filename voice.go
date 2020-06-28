@@ -55,7 +55,7 @@ type (
 )
 
 // Makes outbound calls.
-func (c *Client) makeCall(ctx context.Context, p *at.MakeCallPayload) (res *at.MakeCallResponse, err error) {
+func (c *ATClient) makeCall(ctx context.Context, p *at.MakeCallPayload) (res *at.MakeCallResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/call"), p)
 	if err != nil {
@@ -76,7 +76,7 @@ func (c *Client) makeCall(ctx context.Context, p *at.MakeCallPayload) (res *at.M
 }
 
 // Transfers call to another number.
-func (c *Client) transferCall(ctx context.Context, p *at.CallTransferPayload) (res *at.CallTransferResponse, err error) {
+func (c *ATClient) transferCall(ctx context.Context, p *at.CallTransferPayload) (res *at.CallTransferResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -97,7 +97,7 @@ func (c *Client) transferCall(ctx context.Context, p *at.CallTransferPayload) (r
 }
 
 // Used when you have more calls than you can handle at one time
-func (c *Client) queuedCall(ctx context.Context, p *at.QueuedCallsPayload) (res *at.QueuedStatusResult, err error) {
+func (c *ATClient) queuedCall(ctx context.Context, p *at.QueuedCallsPayload) (res *at.QueuedStatusResult, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/queueStatus"), p)
 	if err != nil {
@@ -119,7 +119,7 @@ func (c *Client) queuedCall(ctx context.Context, p *at.QueuedCallsPayload) (res 
 
 // Uploads media or audio files to Africa'sTalking servers with the extension
 // .mp3 or .wav
-func (c *Client) uploadMedia(ctx context.Context, p *at.UploadMediaFile) (res string, err error) {
+func (c *ATClient) uploadMedia(ctx context.Context, p *at.UploadMediaFile) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/mediaUpload"), p)
 	if err != nil {
@@ -138,7 +138,7 @@ func (c *Client) uploadMedia(ctx context.Context, p *at.UploadMediaFile) (res st
 }
 
 // Set a text to be read out to the caller.
-func (c *Client) say(ctx context.Context, p *at.SayPayload) (res string, err error) {
+func (c *ATClient) say(ctx context.Context, p *at.SayPayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -157,7 +157,7 @@ func (c *Client) say(ctx context.Context, p *at.SayPayload) (res string, err err
 }
 
 // Play back an audio file located anywhere on the web.
-func (c *Client) play(ctx context.Context, p *at.PlayPayload) (res string, err error) {
+func (c *ATClient) play(ctx context.Context, p *at.PlayPayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -177,7 +177,7 @@ func (c *Client) play(ctx context.Context, p *at.PlayPayload) (res string, err e
 
 // Get digits a user enters on their phone in response to a prompt from
 // application
-func (c *Client) getDigits(ctx context.Context, p *at.GetDigitsPayload) (res string, err error) {
+func (c *ATClient) getDigits(ctx context.Context, p *at.GetDigitsPayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -196,7 +196,7 @@ func (c *Client) getDigits(ctx context.Context, p *at.GetDigitsPayload) (res str
 }
 
 // Connect the user who called your phone number to an external phone number.
-func (c *Client) dial(ctx context.Context, p *at.DialPayload) (res string, err error) {
+func (c *ATClient) dial(ctx context.Context, p *at.DialPayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -215,7 +215,7 @@ func (c *Client) dial(ctx context.Context, p *at.DialPayload) (res string, err e
 }
 
 // Record a call session into an mp3 file.
-func (c *Client) record(ctx context.Context, p *at.RecordPayload) (res string, err error) {
+func (c *ATClient) record(ctx context.Context, p *at.RecordPayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -234,7 +234,7 @@ func (c *Client) record(ctx context.Context, p *at.RecordPayload) (res string, e
 }
 
 // Pass an incoming call to a queue to be handled later.
-func (c *Client) enqueue(ctx context.Context, p *at.EnqueuePayload) (res string, err error) {
+func (c *ATClient) enqueue(ctx context.Context, p *at.EnqueuePayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -253,7 +253,7 @@ func (c *Client) enqueue(ctx context.Context, p *at.EnqueuePayload) (res string,
 }
 
 // Pass the calls enqueued to a separate number to be handled.
-func (c *Client) dequeue(ctx context.Context, p *at.DequeuePayload) (res string, err error) {
+func (c *ATClient) dequeue(ctx context.Context, p *at.DequeuePayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -272,7 +272,7 @@ func (c *Client) dequeue(ctx context.Context, p *at.DequeuePayload) (res string,
 }
 
 // Transfer control of the call to the script whose URL is passed in.
-func (c *Client) redirect(ctx context.Context, p *at.RedirectPayload) (res string, err error) {
+func (c *ATClient) redirect(ctx context.Context, p *at.RedirectPayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {
@@ -291,7 +291,7 @@ func (c *Client) redirect(ctx context.Context, p *at.RedirectPayload) (res strin
 }
 
 // Reject an incoming call without incurring any usage charges.
-func (c *Client) reject(ctx context.Context, p *at.RejectPayload) (res string, err error) {
+func (c *ATClient) reject(ctx context.Context, p *at.RejectPayload) (res string, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), p)
 	if err != nil {

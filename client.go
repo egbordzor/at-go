@@ -33,7 +33,7 @@ const (
 )
 
 type (
-	Client struct {
+	ATClient struct {
 		Username        string
 		SMSEndpoint     string
 		VoiceEndpoint   string
@@ -48,14 +48,14 @@ type (
 	}
 )
 
-// NewClient returns new Production Client struct
+// NewAfricasTalkingClient returns new ATClient struct
 // Use "test" for Sandbox Environment and "prod" for Production Environment
-func NewClient(username string, apiKey string, Sandbox bool) (*Client, error) {
+func NewAfricasTalkingClient(username, apiKey string) (*ATClient, error) {
 
 	if username == "" || apiKey == "" {
-		return nil, errors.New("username, apiKey are required to create a Client")
+		return nil, errors.New("username, apiKey are required to create a ATClient")
 	} else if username == "sandbox" {
-		return &Client{
+		return &ATClient{
 			Username:        "sandbox",
 			SMSEndpoint:     SMSTestURL,
 			VoiceEndpoint:   VoiceTestURL,
@@ -69,7 +69,7 @@ func NewClient(username string, apiKey string, Sandbox bool) (*Client, error) {
 			logger:          nil,
 		}, nil
 	} else {
-		return &Client{
+		return &ATClient{
 			Username:        username,
 			SMSEndpoint:     SMSBaseURL,
 			VoiceEndpoint:   VoiceBaseURL,
@@ -87,7 +87,7 @@ func NewClient(username string, apiKey string, Sandbox bool) (*Client, error) {
 
 // NewRequest constructs a request
 // Convert payload to a JSON
-func (c *Client) newRequest(method, url string, payload interface{}) (*http.Request, error) {
+func (c *ATClient) newRequest(method, url string, payload interface{}) (*http.Request, error) {
 
 	var buf io.Reader
 
@@ -109,7 +109,7 @@ func (c *Client) newRequest(method, url string, payload interface{}) (*http.Requ
 	return http.NewRequest(method, url, buf)
 }
 
-func (c *Client) sendRequest(ctx context.Context, req *http.Request, v interface{}) (err error) {
+func (c *ATClient) sendRequest(ctx context.Context, req *http.Request, v interface{}) (err error) {
 
 	var resp *http.Response
 

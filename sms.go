@@ -33,7 +33,7 @@ type (
 )
 
 // Send Bulk SMS
-func (c *Client) sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.BulkResponse, err error) {
+func (c *ATClient) sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.BulkResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/messaging"), p)
 	if err != nil {
@@ -54,7 +54,7 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.Bu
 }
 
 // Incrementally fetch messages from application inbox.
-func (c *Client) fetchSMS(ctx context.Context, p *at.FetchMsgPayload) (res *at.FetchMsgResponse, err error) {
+func (c *ATClient) fetchSMS(ctx context.Context, p *at.FetchMsgPayload) (res *at.FetchMsgResponse, err error) {
 
 	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/messaging"), p)
 	if err != nil {
@@ -74,7 +74,7 @@ func (c *Client) fetchSMS(ctx context.Context, p *at.FetchMsgPayload) (res *at.F
 }
 
 // Send Premium SMS
-func (c *Client) sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res *at.PremiumSMSResponse, err error) {
+func (c *ATClient) sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res *at.PremiumSMSResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/messaging"), p)
 	if err != nil {
@@ -95,7 +95,7 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res 
 }
 
 // Generate a checkout token
-func (c *Client) newCheckoutToken(ctx context.Context, p *at.CheckoutTokenPayload) (res *at.CheckoutTokenResponse, err error) {
+func (c *ATClient) newCheckoutToken(ctx context.Context, p *at.CheckoutTokenPayload) (res *at.CheckoutTokenResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/checkout/token/create"), p)
 	if err != nil {
@@ -115,7 +115,7 @@ func (c *Client) newCheckoutToken(ctx context.Context, p *at.CheckoutTokenPayloa
 }
 
 // Subscribe a phone number
-func (c *Client) newPremiumSubscription(ctx context.Context, p *at.NewSubPayload) (res *at.NewSubResponse, err error) {
+func (c *ATClient) newPremiumSubscription(ctx context.Context, p *at.NewSubPayload) (res *at.NewSubResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/subscription/create"), p)
 	if err != nil {
@@ -136,7 +136,7 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *at.NewSubPayload
 }
 
 // Incrementally fetch your premium sms subscriptions.
-func (c *Client) fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPayload) (res *at.FetchSubResponse, err error) {
+func (c *ATClient) fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPayload) (res *at.FetchSubResponse, err error) {
 
 	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/subscription"), p)
 	if err != nil {
@@ -156,7 +156,7 @@ func (c *Client) fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPay
 }
 
 // Delete a Premium SMS Subscription
-func (c *Client) purgePremiumSubscription(ctx context.Context, p *at.PurgeSubPayload) (res *at.PurgeSubResponse, err error) {
+func (c *ATClient) purgePremiumSubscription(ctx context.Context, p *at.PurgeSubPayload) (res *at.PurgeSubResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/subscription/delete"), p)
 	if err != nil {

@@ -14,7 +14,7 @@ type (
 )
 
 // Send Airtime.
-func (c *Client) sendAirtime(ctx context.Context, p *at.AirtimePayload) (res *at.AirtimeResponse, err error) {
+func (c *ATClient) sendAirtime(ctx context.Context, p *at.AirtimePayload) (res *at.AirtimeResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.AirtimeEndpoint, "/version1/airtime/send"), p)
 	if err != nil {

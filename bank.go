@@ -19,7 +19,7 @@ type (
 )
 
 // Collect money into your payment wallet.
-func (c *Client) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error) {
+func (c *ATClient) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/charge"), p)
 	if err != nil {
@@ -40,7 +40,7 @@ func (c *Client) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (r
 }
 
 // Validate a bank checkout charge request
-func (c *Client) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error) {
+func (c *ATClient) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/validate"), p)
 	if err != nil {
@@ -61,7 +61,7 @@ func (c *Client) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutVal
 }
 
 // Initiate a bank transfer request.
-func (c *Client) bankTransfer(ctx context.Context, p *at.BankTransferPayload) (res *at.BankTransferResponse, err error) {
+func (c *ATClient) bankTransfer(ctx context.Context, p *at.BankTransferPayload) (res *at.BankTransferResponse, err error) {
 
 	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/transfer"), p)
 	if err != nil {
