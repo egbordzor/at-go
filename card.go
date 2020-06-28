@@ -6,14 +6,6 @@ import (
 	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
-const (
-	CardCheckoutLiveURL    = "https://payments.africastalking.com/card/checkout/charge"
-	CardCheckoutSandboxURL = "https://payments.sandbox.africastalking.com/card/checkout/charge"
-
-	CardCheckoutValidateLiveURL    = "https://payments.africastalking.com/card/checkout/validate"
-	CardCheckoutValidateSandboxURL = "https://payments.sandbox.africastalking.com/card/checkout/validate"
-)
-
 type (
 	Card interface {
 		// Collect money into your Payment Wallet by initiating transactions that deduct money from a customers Debit or Credit Card.
@@ -30,7 +22,7 @@ type (
 // These APIs are currently only available in Nigeria on MasterCard and Verve cards.
 func (c *Client) cardCheckout(ctx context.Context, p *at.CardCheckoutPayload) (res *at.CardCheckoutResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/card/checkout/charge", p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/charge"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -38,7 +30,7 @@ func (c *Client) cardCheckout(ctx context.Context, p *at.CardCheckoutPayload) (r
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Apikey", "MyAppAPIKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.CardCheckoutResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
@@ -51,7 +43,7 @@ func (c *Client) cardCheckout(ctx context.Context, p *at.CardCheckoutPayload) (r
 // Allows your application to validate card checkout charge requests.
 func (c *Client) cardCheckoutValidate(ctx context.Context, p *at.CardCheckoutValidatePayload) (res *at.CardCheckoutValidateResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/card/checkout/validate", p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/validate"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -59,7 +51,7 @@ func (c *Client) cardCheckoutValidate(ctx context.Context, p *at.CardCheckoutVal
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Apikey", "MyAppAPIKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.CardCheckoutValidateResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {

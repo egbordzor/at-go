@@ -6,15 +6,6 @@ import (
 	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
-//	SMSLiveURL    = "https://api.africastalking.com/version1/messaging"
-//	SMSSandboxURL = "https://api.sandbox.africastalking.com/version1/messaging"
-
-// Sandbox Endpoints
-const SMSLiveURL = "https://api.africastalking.com"
-
-// Production Endpoints
-const SMSSandboxURL = "https://api.sandbox.africastalking.com"
-
 type (
 	SMS interface {
 
@@ -35,6 +26,7 @@ type (
 
 		// Incrementally fetch your premium sms subscriptions.
 		fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPayload) (res *at.FetchSubResponse, err error)
+
 		// Delete a Premium SMS Subscription
 		purgePremiumSubscription(ctx context.Context, p *at.PurgeSubPayload) (res *at.PurgeSubResponse, err error)
 	}
@@ -43,7 +35,7 @@ type (
 // Send Bulk SMS
 func (c *Client) sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.BulkResponse, err error) {
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/messaging"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -51,7 +43,7 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.Bu
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.BulkResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
@@ -64,14 +56,14 @@ func (c *Client) sendBulkSMS(ctx context.Context, p *at.BulkPayload) (res *at.Bu
 // Incrementally fetch messages from application inbox.
 func (c *Client) fetchSMS(ctx context.Context, p *at.FetchMsgPayload) (res *at.FetchMsgResponse, err error) {
 
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
+	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/messaging"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.FetchMsgResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
@@ -84,7 +76,7 @@ func (c *Client) fetchSMS(ctx context.Context, p *at.FetchMsgPayload) (res *at.F
 // Send Premium SMS
 func (c *Client) sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res *at.PremiumSMSResponse, err error) {
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/messaging"), p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/messaging"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -92,7 +84,7 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res 
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.PremiumSMSResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
@@ -105,7 +97,7 @@ func (c *Client) sendPremiumSMS(ctx context.Context, p *at.PremiumPayload) (res 
 // Generate a checkout token
 func (c *Client) newCheckoutToken(ctx context.Context, p *at.CheckoutTokenPayload) (res *at.CheckoutTokenResponse, err error) {
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/checkout/token/create"), p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/checkout/token/create"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -125,7 +117,7 @@ func (c *Client) newCheckoutToken(ctx context.Context, p *at.CheckoutTokenPayloa
 // Subscribe a phone number
 func (c *Client) newPremiumSubscription(ctx context.Context, p *at.NewSubPayload) (res *at.NewSubResponse, err error) {
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription/create"), p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/subscription/create"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -133,7 +125,7 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *at.NewSubPayload
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.NewSubResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
@@ -146,14 +138,14 @@ func (c *Client) newPremiumSubscription(ctx context.Context, p *at.NewSubPayload
 // Incrementally fetch your premium sms subscriptions.
 func (c *Client) fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPayload) (res *at.FetchSubResponse, err error) {
 
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription"), p)
+	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/subscription"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.FetchSubResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
@@ -166,7 +158,7 @@ func (c *Client) fetchPremiumSubscription(ctx context.Context, p *at.FetchSubPay
 // Delete a Premium SMS Subscription
 func (c *Client) purgePremiumSubscription(ctx context.Context, p *at.PurgeSubPayload) (res *at.PurgeSubResponse, err error) {
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.smsEndpoint, "/version1/subscription/delete"), p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.SMSEndpoint, "/version1/subscription/delete"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -174,7 +166,7 @@ func (c *Client) purgePremiumSubscription(ctx context.Context, p *at.PurgeSubPay
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.PurgeSubResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {

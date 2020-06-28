@@ -6,11 +6,6 @@ import (
 	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
-const (
-	UserLiveURL    = "https://api.africastalking.com/version1/user"
-	UserSandboxURL = "https://api.sandbox.africastalking.com/version1/user"
-)
-
 type (
 	User interface {
 		// Initiate an application data request.
@@ -21,7 +16,7 @@ type (
 // Initiate an application data request.
 func (c *Client) initiateAppData(ctx context.Context, p string) (res *at.UserResponse, err error) {
 
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", "", ""), p)
+	req, err := c.newRequest("GET", fmt.Sprintf("%s%s", c.UserEndpoint, "/version1/user"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -29,7 +24,7 @@ func (c *Client) initiateAppData(ctx context.Context, p string) (res *at.UserRes
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.UserResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {

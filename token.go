@@ -3,25 +3,21 @@ package atgo
 import (
 	"context"
 	"fmt"
-	"github.com/wondenge/at-go/internal/pkg/gen/africastalking"
+	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
 type (
-	Africastalking struct {
-		Username string
-		APIKey   string
-	}
+	ATAuth interface {
 
-	AccessTokenResponse struct {
-		Token             string
-		LifeTimeInSeconds int64
+		// Generates a valid auth token
+		generateToken(ctx context.Context, p *at.GeneratePayload) (res *at.AccessTokenResponse, err error)
 	}
 )
 
 // Generates a valid auth token
-func (c *Client) generateToken(ctx context.Context, p *africastalking.GeneratePayload) (res *africastalking.AccessTokenResponse, err error) {
+func (c *Client) generateToken(ctx context.Context, p *at.GeneratePayload) (res *at.AccessTokenResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://api.africastalking.com/tlsauth-token/generate", p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.AuthEndpoint, "/tlsauth-token/generate"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not create generate tlsauth token request: %v", err)
 	}
@@ -29,9 +25,9 @@ func (c *Client) generateToken(ctx context.Context, p *africastalking.GeneratePa
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Apikey", "MyAppApiKey")
+	req.Header.Set("Apikey", c.APIKey)
 
-	res = &africastalking.AccessTokenResponse{}
+	res = &at.AccessTokenResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
 	}

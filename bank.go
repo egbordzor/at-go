@@ -6,43 +6,6 @@ import (
 	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
 )
 
-const (
-
-	// Base URLs:
-	BankCheckoutLiveURL    = "https://payments.africastalking.com/bank/checkout/charge"
-	BankCheckoutSandboxURL = "https://payments.sandbox.africastalking.com/bank/checkout/charge"
-
-	BankCheckoutValidateLiveURL    = "https://payments.africastalking.com/bank/checkout/validate"
-	BankCheckoutValidateSandboxURL = "https://payments.sandbox.africastalking.com/bank/checkout/validate"
-
-	BankTransferLiveURL    = "https://payments.africastalking.com/bank/transfer"
-	BankTransferSandboxURL = "https://payments.sandbox.africastalking.com/bank/transfer"
-
-	// Supported Banks:
-	FCMBNigeria       = 234001
-	ZenithNigeria     = 234002
-	AccessNigeria     = 234003
-	GTBankNigeria     = 234004
-	EcobankNigeria    = 234005
-	DiamondNigeria    = 234006
-	ProvidusNigeria   = 234007
-	UnityNigeria      = 234008
-	StanbicNigeria    = 234009
-	SterlingNigeria   = 234010
-	ParkwayNigeria    = 234011
-	AfribankNigeria   = 234012
-	EnterpriseNigeria = 234013
-	FidelityNigeria   = 234014
-	HeritageNigeria   = 234015
-	KeystoneNigeria   = 234016
-	SkyeNigeria       = 234017
-	StanchartNigeria  = 234018
-	UnionNigeria      = 234019
-	UBANigeria        = 234020
-	WemaNigeria       = 234021
-	FirstNigeria      = 234022
-)
-
 type (
 	Bank interface {
 		// Collect money into your payment wallet.
@@ -58,7 +21,7 @@ type (
 // Collect money into your payment wallet.
 func (c *Client) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/bank/checkout/charge", p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/charge"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -66,7 +29,8 @@ func (c *Client) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (r
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Apikey", "MyAppAPIKey")
+	req.Header.Set("Apikey", c.APIKey)
+
 	res = &at.BankCheckoutResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
 		return nil, err
@@ -78,7 +42,7 @@ func (c *Client) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (r
 // Validate a bank checkout charge request
 func (c *Client) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/bank/checkout/validate", p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/validate"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -86,7 +50,7 @@ func (c *Client) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutVal
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Apikey", "MyAppAPIKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.BankCheckoutValidateResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {
@@ -99,7 +63,7 @@ func (c *Client) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutVal
 // Initiate a bank transfer request.
 func (c *Client) bankTransfer(ctx context.Context, p *at.BankTransferPayload) (res *at.BankTransferResponse, err error) {
 
-	req, err := c.NewRequest("POST", "https://payments.sandbox.africastalking.com/bank/transfer", p)
+	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/transfer"), p)
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -107,7 +71,7 @@ func (c *Client) bankTransfer(ctx context.Context, p *at.BankTransferPayload) (r
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Apikey", "MyAppAPIKey")
+	req.Header.Set("Apikey", c.APIKey)
 
 	res = &at.BankTransferResponse{}
 	if err := c.sendRequest(ctx, req, res); err != nil {

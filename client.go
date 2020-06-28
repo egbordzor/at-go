@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/go-kit/kit/log"
 	"io"
@@ -11,56 +12,82 @@ import (
 	"net/http"
 )
 
+// Sandbox Endpoints
+const (
+	SMSTestURL     = "https://api.sandbox.africastalking.com"
+	VoiceTestURL   = "https://voice.sandbox.africastalking.com"
+	PaymentTestURL = "https://payments.sandbox.africastalking.com"
+	AirtimeTestURL = "https://api.sandbox.africastalking.com"
+	UserTestURL    = "https://api.sandbox.africastalking.com"
+)
+
+// Production Endpoints
+const (
+	SMSBaseURL     = "https://api.africastalking.com"
+	VoiceBaseURL   = "https://voice.africastalking.com"
+	PaymentBaseURL = "https://payments.africastalking.com"
+	AirtimeBaseURL = "https://api.africastalking.com"
+	IoTBaseURL     = "https://iot.africastalking.com"
+	UserBaseURL    = "https://api.africastalking.com"
+	AuthBaseURL    = "https://api.africastalking.com"
+)
+
 type (
 	Client struct {
-		username         string
-		smsEndpoint      string
-		voiceEndpoint    string
-		paymentsEndpoint string
-		airtimeEndpoint  string
-		iotEndpoint      string
-		userEndpoint     string
-		apiKey           string
-		HTTPClient       *http.Client
-		logger           log.Logger // log the requests.
+		Username        string
+		SMSEndpoint     string
+		VoiceEndpoint   string
+		PaymentEndpoint string
+		AirtimeEndpoint string
+		IoTEndpoint     string
+		UserEndpoint    string
+		AuthEndpoint    string
+		APIKey          string
+		HTTPClient      *http.Client
+		logger          log.Logger // log the requests.
 	}
 )
 
 // NewClient returns new Production Client struct
-func NewClient(Username, APIKey string) (*Client, error) {
-	return &Client{
-		username:         Username,
-		smsEndpoint:      "",
-		voiceEndpoint:    "",
-		paymentsEndpoint: "",
-		airtimeEndpoint:  "",
-		iotEndpoint:      "",
-		userEndpoint:     "",
-		apiKey:           "",
-		HTTPClient:       &http.Client{},
-		logger:           nil,
-	}, nil
-}
+// Use "test" for Sandbox Environment and "prod" for Production Environment
+func NewClient(username string, apiKey string, Sandbox bool) (*Client, error) {
 
-// NewSandboxClient returns new Sandbox Client struct
-func NewSandboxClient(APIKey string) (*Client, error) {
-	return &Client{
-		username:         "sandbox",
-		smsEndpoint:      "",
-		voiceEndpoint:    "",
-		paymentsEndpoint: "",
-		airtimeEndpoint:  "",
-		iotEndpoint:      "",
-		userEndpoint:     "",
-		apiKey:           APIKey,
-		HTTPClient:       &http.Client{},
-		logger:           nil,
-	}, nil
+	if username == "" || apiKey == "" {
+		return nil, errors.New("username, apiKey are required to create a Client")
+	} else if username == "sandbox" {
+		return &Client{
+			Username:        "sandbox",
+			SMSEndpoint:     SMSTestURL,
+			VoiceEndpoint:   VoiceTestURL,
+			PaymentEndpoint: PaymentTestURL,
+			AirtimeEndpoint: AirtimeTestURL,
+			IoTEndpoint:     "", // No Testing Environment for IoT
+			UserEndpoint:    UserTestURL,
+			AuthEndpoint:    "", // No Testing Environment for Auth
+			APIKey:          apiKey,
+			HTTPClient:      &http.Client{},
+			logger:          nil,
+		}, nil
+	} else {
+		return &Client{
+			Username:        username,
+			SMSEndpoint:     SMSBaseURL,
+			VoiceEndpoint:   VoiceBaseURL,
+			PaymentEndpoint: PaymentBaseURL,
+			AirtimeEndpoint: AirtimeBaseURL,
+			IoTEndpoint:     IoTBaseURL,
+			UserEndpoint:    UserBaseURL,
+			AuthEndpoint:    AuthBaseURL,
+			APIKey:          apiKey,
+			HTTPClient:      &http.Client{},
+			logger:          nil,
+		}, nil
+	}
 }
 
 // NewRequest constructs a request
 // Convert payload to a JSON
-func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Request, error) {
+func (c *Client) newRequest(method, url string, payload interface{}) (*http.Request, error) {
 
 	var buf io.Reader
 
