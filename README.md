@@ -4,6 +4,10 @@
 </p>
 <h1 align="center">AfricasTalking Golang SDK</h1>
 
+[![Godoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/wondenge/at-go?tab=doc)
+[![Go Report Card](https://goreportcard.com/badge/wondenge/coop-go)](https://goreportcard.com/report/wondenge/at-go)
+[![License](https://img.shields.io/badge/license-Apache-blue.svg)]
+
 - This [SDK](https://github.com/wondenge/at-go) helps you intergrate your [Golang](https://golang.org/) application with [Africa's Talking](https://africastalking.com/) APIs to powering your communications solutions across africa.
 
 - With simplified access to telco infrastructure, developers use Africa's Talking powerful SMS, USSD, Voice, Airtime and Payments APIs to bring their ideas to life, as they build and sustain scalable businesses.
