@@ -1,32 +1,32 @@
 package atgo
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
-	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
-)
+	"github.com/hashicorp/errwrap"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 
-type (
-	Mobile interface {
-
-		// Initiate C2B payments on a mobile subscriber’s device.
-		mobileCheckout(ctx context.Context, p *at.MobileCheckoutPayload) (res *at.MobileCheckoutResponse, err error)
-
-		// Send payments to mobile subscribers from your Payment Wallet.
-		mobileB2C(ctx context.Context, p *at.MobileB2CPayload) (res *at.MobileB2CResponse, err error)
-
-		// Send payments to businesses e.g banks from your Payment Wallet.
-		mobileB2B(ctx context.Context, p *at.MobileB2BPayload) (res at.MobileB2BResponse, err error)
-	}
+	pay "github.com/wondenge/at-go/payments"
 )
 
 // Mobile Checkout APIs allow you to initiate Customer to Business (C2B) payments
 // on a mobile subscriber’s device.
 // This allows for a smoother checkout experience, since the client will no longer
 // need to remember the amount or an account number to complete the transaction.
-func (c *ATClient) mobileCheckout(ctx context.Context, p *at.MobileCheckoutPayload) (res *at.MobileCheckoutResponse, err error) {
+func (c *Client) MobileCheckout(ctx context.Context, p *pay.MobileCheckoutPayload) (res *pay.MobileCheckoutResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/checkout/request"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/checkout/request"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -36,9 +36,46 @@ func (c *ATClient) mobileCheckout(ctx context.Context, p *at.MobileCheckoutPaylo
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.MobileCheckoutResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil
@@ -46,9 +83,15 @@ func (c *ATClient) mobileCheckout(ctx context.Context, p *at.MobileCheckoutPaylo
 
 // Mobile Business To Consumer (B2C) APIs allow you to send payments to mobile
 // subscribers from your Payment Wallet.
-func (c *ATClient) mobileB2C(ctx context.Context, p *at.MobileB2CPayload) (res *at.MobileB2CResponse, err error) {
+func (c *Client) MobileB2C(ctx context.Context, p *pay.MobileB2CPayload) (res *pay.MobileB2CResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/b2c/request"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/b2c/request"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -58,9 +101,46 @@ func (c *ATClient) mobileB2C(ctx context.Context, p *at.MobileB2CPayload) (res *
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.MobileB2CResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil
@@ -68,9 +148,15 @@ func (c *ATClient) mobileB2C(ctx context.Context, p *at.MobileB2CPayload) (res *
 
 // Mobile Business To Business (B2B) APIs allow you to send payments to businesses
 // e.g banks from your Payment Wallet.
-func (c *ATClient) mobileB2B(ctx context.Context, p *at.MobileB2BPayload) (res *at.MobileB2BResponse, err error) {
+func (c *Client) MobileB2B(ctx context.Context, p *pay.MobileB2BPayload) (res *pay.MobileB2BResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/b2b/request"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/mobile/b2b/request"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -80,9 +166,46 @@ func (c *ATClient) mobileB2B(ctx context.Context, p *at.MobileB2BPayload) (res *
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.MobileB2BResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil

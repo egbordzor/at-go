@@ -1,35 +1,36 @@
 package atgo
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/wondenge/at-go/voice"
+	"github.com/hashicorp/errwrap"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
-	"strings"
+
+	pay "github.com/wondenge/at-go/payments"
 )
 
-// Makes outbound calls.
-// Payload attributes `p *MakeCallPayload` passed as key value args.
-func (c *Client) MakeCall(ctx context.Context, args map[string]string) (res *voice.MakeCallResponse, err error) {
+// Fetch transactions of a particular payment product.
+func (c *Client) FindTransaction(ctx context.Context, p *pay.FindTransactionPayload) (res *pay.FindTransactionResponse, err error) {
 
-	form := url.Values{}
-	for k, v := range args {
-		form.Set(k, v)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/calls"), strings.NewReader(form.Encode()))
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/transaction/find"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
 	req = req.WithContext(ctx)
@@ -77,23 +78,23 @@ func (c *Client) MakeCall(ctx context.Context, args map[string]string) (res *voi
 	return res, nil
 }
 
-// Transfers calls to another number.
-// Payload attributes `p *CallTransferPayload` passed as key value args.
-func (c *Client) TransferCall(ctx context.Context, args map[string]string) (res *voice.CallTransferResponse, err error) {
+// Fetch transactions of a particular payment product.
+func (c *Client) FetchProductTransactions(ctx context.Context, p *pay.ProductTransactionsPayload) (res *pay.ProductTransactionsResponse, err error) {
 
-	form := url.Values{}
-	for k, v := range args {
-		form.Set(k, v)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/callTransfer"), strings.NewReader(form.Encode()))
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/transaction/fetch"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
 	req = req.WithContext(ctx)
@@ -141,23 +142,23 @@ func (c *Client) TransferCall(ctx context.Context, args map[string]string) (res 
 	return res, nil
 }
 
-// Used when you have more calls than you can handle africastalking one time.
-// Payload attributes `p *QueuedCallsPayload` passed as key value args.
-func (c *Client) QueuedCall(ctx context.Context, args map[string]string) (res *voice.QueuedStatusResult, err error) {
+// Fetch your wallet transactions
+func (c *Client) FetchWalletTransactions(ctx context.Context, p *pay.WalletTransactionsPayload) (res *pay.WalletTransactionsResponse, err error) {
 
-	form := url.Values{}
-	for k, v := range args {
-		form.Set(k, v)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/queueStatus"), strings.NewReader(form.Encode()))
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/wallet/fetch"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
 	req = req.WithContext(ctx)
@@ -205,24 +206,23 @@ func (c *Client) QueuedCall(ctx context.Context, args map[string]string) (res *v
 	return res, nil
 }
 
-// Uploads media or audio files to Africa'sTalking servers with the extension
-// .mp3 or .wav
-// Payload attributes `p *UploadMediaFile` passed as key value args.
-func (c *Client) UploadMedia(ctx context.Context, args map[string]string) (res string, err error) {
+// Fetch your wallet balance
+func (c *Client) FetchWalletBalance(ctx context.Context, p *pay.WalletBalancePayload) (res *pay.WalletBalanceResponse, err error) {
 
-	form := url.Values{}
-	for k, v := range args {
-		form.Set(k, v)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.VoiceEndpoint, "/mediaUpload"), strings.NewReader(form.Encode()))
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/query/wallet/balance"), bytes.NewReader(b))
 	if err != nil {
-		return "", fmt.Errorf("could not make new http request: %w", err)
+		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
 
 	// Set Header Parameters.
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
 	req = req.WithContext(ctx)
@@ -255,9 +255,9 @@ func (c *Client) UploadMedia(ctx context.Context, args map[string]string) (res s
 		}
 		if err := json.Unmarshal(body, apiErr); err != nil {
 			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
-			return "", fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
 		}
-		return "", apiErr
+		return nil, apiErr
 	}
 
 	// Parse the JSON-encoded data from response body.

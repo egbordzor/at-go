@@ -1,29 +1,30 @@
 package atgo
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
-	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
-)
-
-type (
-	Card interface {
-
-		// Collect money into your Payment Wallet by initiating transactions that deduct
-		// money from a customers Debit or Credit Card.
-		cardCheckout(ctx context.Context, p *at.CardCheckoutPayload) (res *at.CardCheckoutResponse, err error)
-
-		// Allows your application to validate card checkout charge requests.
-		cardCheckoutValidate(ctx context.Context, p *at.CardCheckoutValidatePayload) (res *at.CardCheckoutValidateResponse, err error)
-	}
+	"github.com/hashicorp/errwrap"
+	pay "github.com/wondenge/at-go/payments"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 )
 
 // Collect money into your Payment Wallet by initiating transactions that deduct
 // money from a customers Debit or Credit Card.
 // These APIs are currently only available in Nigeria on MasterCard and Verve cards.
-func (c *ATClient) cardCheckout(ctx context.Context, p *at.CardCheckoutPayload) (res *at.CardCheckoutResponse, err error) {
+func (c *Client) CardCheckout(ctx context.Context, p *pay.CardCheckoutPayload) (res *pay.CardCheckoutResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/charge"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/charge"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -33,18 +34,61 @@ func (c *ATClient) cardCheckout(ctx context.Context, p *at.CardCheckoutPayload) 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.CardCheckoutResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil
 }
 
 // Allows your application to validate card checkout charge requests.
-func (c *ATClient) cardCheckoutValidate(ctx context.Context, p *at.CardCheckoutValidatePayload) (res *at.CardCheckoutValidateResponse, err error) {
+func (c *Client) CardCheckoutValidate(ctx context.Context, p *pay.CardCheckoutValidatePayload) (res *pay.CardCheckoutValidateResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/validate"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/validate"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -54,9 +98,46 @@ func (c *ATClient) cardCheckoutValidate(ctx context.Context, p *at.CardCheckoutV
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.CardCheckoutValidateResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil

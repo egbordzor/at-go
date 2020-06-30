@@ -1,29 +1,29 @@
 package atgo
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
-	at "github.com/wondenge/at-go/internal/pkg/gen/africastalking"
-)
+	"github.com/hashicorp/errwrap"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 
-type (
-	Bank interface {
-
-		// Collect money into your payment wallet.
-		bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error)
-
-		// Validate a bank checkout charge request
-		bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error)
-
-		// Initiate a bank transfer request.
-		bankTransfer(ctx context.Context, p *at.BankTransferPayload) (res *at.BankTransferResponse, err error)
-	}
+	pay "github.com/wondenge/at-go/payments"
 )
 
 // Collect money into your payment wallet.
-func (c *ATClient) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) (res *at.BankCheckoutResponse, err error) {
+func (c *Client) BankCheckout(ctx context.Context, p *pay.BankCheckoutPayload) (res *pay.BankCheckoutResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/charge"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/charge"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -33,18 +33,61 @@ func (c *ATClient) bankCheckout(ctx context.Context, p *at.BankCheckoutPayload) 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.BankCheckoutResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil
 }
 
 // Validate a bank checkout charge request
-func (c *ATClient) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutValidatePayload) (res *at.BankCheckoutValidateResponse, err error) {
+func (c *Client) BankCheckoutValidate(ctx context.Context, p *pay.BankCheckoutValidatePayload) (res *pay.BankCheckoutValidateResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/validate"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/checkout/validate"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -54,18 +97,61 @@ func (c *ATClient) bankCheckoutValidate(ctx context.Context, p *at.BankCheckoutV
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.BankCheckoutValidateResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil
 }
 
 // Initiate a bank transfer request.
-func (c *ATClient) bankTransfer(ctx context.Context, p *at.BankTransferPayload) (res *at.BankTransferResponse, err error) {
+func (c *Client) BankTransfer(ctx context.Context, p *pay.BankTransferPayload) (res *pay.BankTransferResponse, err error) {
 
-	req, err := c.newRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/transfer"), p)
+	// Encode JSON from our payload instance, using marshall.
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/bank/transfer"), bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("could not make new http request: %w", err)
 	}
@@ -75,9 +161,46 @@ func (c *ATClient) bankTransfer(ctx context.Context, p *at.BankTransferPayload) 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Apikey", c.APIKey)
 
-	res = &at.BankTransferResponse{}
-	if err := c.sendRequest(ctx, req, res); err != nil {
-		return nil, err
+	req = req.WithContext(ctx)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		fmt.Errorf("could not load HTTP client: %w", err)
+	}
+
+	//  We're done reading from response body, lets close it.
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Errorf("could not close response body: %w", err)
+		}
+	}()
+
+	// Buffer the body
+	// Read data from response body.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("bodyErr ", err.Error())
+		fmt.Errorf("could not close response body: %w", err)
+
+	}
+
+	if resp.StatusCode != 200 {
+		apiErr := &APIError{
+			StatusCode: resp.StatusCode,
+		}
+		if err := json.Unmarshal(body, apiErr); err != nil {
+			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
+		}
+		return nil, apiErr
+	}
+
+	// Parse the JSON-encoded data from response body.
+	// The data is stored in the value pointed by response.
+	if err := json.Unmarshal(body, &res); err != nil {
+		fmt.Errorf("could not unmarshal response body: %w", err)
+
 	}
 
 	return res, nil
