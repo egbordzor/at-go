@@ -3,8 +3,10 @@ package atgo
 import (
 	"errors"
 	"fmt"
-	"github.com/go-kit/kit/log"
+	"github.com/hashicorp/errwrap"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 // Sandbox Endpoints
@@ -51,7 +53,7 @@ type (
 		AuthEndpoint    string
 		APIKey          string
 		HTTPClient      *http.Client
-		logger          log.Logger // log the requests.
+		Log             *zap.Logger // *zap.Logger // log the requests.
 	}
 
 	ErrorResponseDetail struct {
@@ -78,6 +80,13 @@ func (r *ErrorResponse) Error() string {
 // Use "test" for Sandbox Environment and "prod" for Production Environment
 func NewAfricasTalkingClient(username, apiKey string) (*Client, error) {
 
+	logger, err := zap.NewProduction()
+	if err != nil {
+		err := errwrap.Wrapf("could not initiate zap logger on client: {{err}}", err)
+		logger.Info("error", zap.Error(err))
+	}
+	defer logger.Sync() // flushes buffer, if any
+
 	if username == "" || apiKey == "" {
 		return nil, errors.New("username, apiKey are required to create a Client")
 	} else if username == "sandbox" {
@@ -92,7 +101,7 @@ func NewAfricasTalkingClient(username, apiKey string) (*Client, error) {
 			AuthEndpoint:    "", // No Testing Environment for Auth
 			APIKey:          apiKey,
 			HTTPClient:      &http.Client{},
-			logger:          nil,
+			Log:             logger,
 		}, nil
 	} else {
 		return &Client{
@@ -106,7 +115,7 @@ func NewAfricasTalkingClient(username, apiKey string) (*Client, error) {
 			AuthEndpoint:    AuthBaseURL,
 			APIKey:          apiKey,
 			HTTPClient:      &http.Client{},
-			logger:          nil,
+			Log:             logger,
 		}, nil
 	}
 }

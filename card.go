@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/errwrap"
 	pay "github.com/wondenge/at-go/payments"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,12 +22,14 @@ func (c *Client) CardCheckout(ctx context.Context, p *pay.CardCheckoutPayload) (
 	// Encode JSON from our payload instance, using marshall.
 	b, err := json.Marshal(p)
 	if err != nil {
-		return nil, errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+		err := errwrap.Wrapf("could not marshall JSON: {{err}}", err)
+		log.Println(err)
 	}
 
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/charge"), bytes.NewReader(b))
 	if err != nil {
-		return nil, fmt.Errorf("could not make new http request: %w", err)
+		err := errwrap.Wrapf("could not make new http request: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	// Set Header Parameters.
@@ -38,14 +41,16 @@ func (c *Client) CardCheckout(ctx context.Context, p *pay.CardCheckoutPayload) (
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		fmt.Errorf("could not load HTTP client: %w", err)
+		err := errwrap.Wrapf("could not load HTTP client: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	//  We're done reading from response body, lets close it.
 	defer func() {
 		err := resp.Body.Close()
 		if err != nil {
-			fmt.Errorf("could not close response body: %w", err)
+			err := errwrap.Wrapf("could not close response body: {{err}}", err)
+			c.Log.Info("error", zap.Error(err))
 		}
 	}()
 
@@ -53,8 +58,8 @@ func (c *Client) CardCheckout(ctx context.Context, p *pay.CardCheckoutPayload) (
 	// Read data from response body.
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Print("bodyErr ", err.Error())
-		fmt.Errorf("could not close response body: %w", err)
+		err := errwrap.Wrapf("could not close response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 
 	}
 
@@ -63,7 +68,8 @@ func (c *Client) CardCheckout(ctx context.Context, p *pay.CardCheckoutPayload) (
 			StatusCode: resp.StatusCode,
 		}
 		if err := json.Unmarshal(body, apiErr); err != nil {
-			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+
+			_, err := fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
 			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
 		}
 		return nil, apiErr
@@ -72,8 +78,8 @@ func (c *Client) CardCheckout(ctx context.Context, p *pay.CardCheckoutPayload) (
 	// Parse the JSON-encoded data from response body.
 	// The data is stored in the value pointed by response.
 	if err := json.Unmarshal(body, &res); err != nil {
-		fmt.Errorf("could not unmarshal response body: %w", err)
-
+		err := errwrap.Wrapf("could not unmarshal response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	return res, nil
@@ -90,7 +96,8 @@ func (c *Client) CardCheckoutValidate(ctx context.Context, p *pay.CardCheckoutVa
 
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.PaymentEndpoint, "/card/checkout/validate"), bytes.NewReader(b))
 	if err != nil {
-		return nil, fmt.Errorf("could not make new http request: %w", err)
+		err := errwrap.Wrapf("could not make new http request: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	// Set Header Parameters.
@@ -102,14 +109,16 @@ func (c *Client) CardCheckoutValidate(ctx context.Context, p *pay.CardCheckoutVa
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		fmt.Errorf("could not load HTTP client: %w", err)
+		err := errwrap.Wrapf("could not load HTTP client: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	//  We're done reading from response body, lets close it.
 	defer func() {
 		err := resp.Body.Close()
 		if err != nil {
-			fmt.Errorf("could not close response body: %w", err)
+			err := errwrap.Wrapf("could not close response body: {{err}}", err)
+			c.Log.Info("error", zap.Error(err))
 		}
 	}()
 
@@ -117,8 +126,8 @@ func (c *Client) CardCheckoutValidate(ctx context.Context, p *pay.CardCheckoutVa
 	// Read data from response body.
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Print("bodyErr ", err.Error())
-		fmt.Errorf("could not close response body: %w", err)
+		err := errwrap.Wrapf("could not close response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 
 	}
 
@@ -127,7 +136,8 @@ func (c *Client) CardCheckoutValidate(ctx context.Context, p *pay.CardCheckoutVa
 			StatusCode: resp.StatusCode,
 		}
 		if err := json.Unmarshal(body, apiErr); err != nil {
-			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+
+			_, err := fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
 			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
 		}
 		return nil, apiErr
@@ -136,8 +146,8 @@ func (c *Client) CardCheckoutValidate(ctx context.Context, p *pay.CardCheckoutVa
 	// Parse the JSON-encoded data from response body.
 	// The data is stored in the value pointed by response.
 	if err := json.Unmarshal(body, &res); err != nil {
-		fmt.Errorf("could not unmarshal response body: %w", err)
-
+		err := errwrap.Wrapf("could not unmarshal response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	return res, nil

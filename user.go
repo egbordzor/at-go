@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/errwrap"
+	"go.uber.org/zap"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 
@@ -25,7 +25,8 @@ func (c *Client) GenerateToken(ctx context.Context, p *user.GeneratePayload) (re
 
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.AuthEndpoint, "/tlsauth-token/generate"), bytes.NewReader(b))
 	if err != nil {
-		return nil, fmt.Errorf("could not create generate tlsauth token request: %v", err)
+		err := errwrap.Wrapf("could not make new http request: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	// Set Header Parameters.
@@ -37,14 +38,16 @@ func (c *Client) GenerateToken(ctx context.Context, p *user.GeneratePayload) (re
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		fmt.Errorf("could not load HTTP client: %w", err)
+		err := errwrap.Wrapf("could not load HTTP client: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	//  We're done reading from response body, lets close it.
 	defer func() {
 		err := resp.Body.Close()
 		if err != nil {
-			fmt.Errorf("could not close response body: %w", err)
+			err := errwrap.Wrapf("could not close response body: {{err}}", err)
+			c.Log.Info("error", zap.Error(err))
 		}
 	}()
 
@@ -52,8 +55,8 @@ func (c *Client) GenerateToken(ctx context.Context, p *user.GeneratePayload) (re
 	// Read data from response body.
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Print("bodyErr ", err.Error())
-		fmt.Errorf("could not close response body: %w", err)
+		err := errwrap.Wrapf("could not close response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 
 	}
 
@@ -62,7 +65,8 @@ func (c *Client) GenerateToken(ctx context.Context, p *user.GeneratePayload) (re
 			StatusCode: resp.StatusCode,
 		}
 		if err := json.Unmarshal(body, apiErr); err != nil {
-			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+
+			_, err := fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
 			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
 		}
 		return nil, apiErr
@@ -71,8 +75,8 @@ func (c *Client) GenerateToken(ctx context.Context, p *user.GeneratePayload) (re
 	// Parse the JSON-encoded data from response body.
 	// The data is stored in the value pointed by response.
 	if err := json.Unmarshal(body, &res); err != nil {
-		fmt.Errorf("could not unmarshal response body: %w", err)
-
+		err := errwrap.Wrapf("could not unmarshal response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	return res, nil
@@ -89,7 +93,8 @@ func (c *Client) InitiateAppData(ctx context.Context, p string) (res *user.UserR
 
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.UserEndpoint, "/version1/user"), bytes.NewReader(b))
 	if err != nil {
-		return nil, fmt.Errorf("could not make new http request: %w", err)
+		err := errwrap.Wrapf("could not make new http request: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	// Set Header Parameters.
@@ -101,14 +106,16 @@ func (c *Client) InitiateAppData(ctx context.Context, p string) (res *user.UserR
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		fmt.Errorf("could not load HTTP client: %w", err)
+		err := errwrap.Wrapf("could not load HTTP client: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	//  We're done reading from response body, lets close it.
 	defer func() {
 		err := resp.Body.Close()
 		if err != nil {
-			fmt.Errorf("could not close response body: %w", err)
+			err := errwrap.Wrapf("could not close response body: {{err}}", err)
+			c.Log.Info("error", zap.Error(err))
 		}
 	}()
 
@@ -116,8 +123,8 @@ func (c *Client) InitiateAppData(ctx context.Context, p string) (res *user.UserR
 	// Read data from response body.
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Print("bodyErr ", err.Error())
-		fmt.Errorf("could not close response body: %w", err)
+		err := errwrap.Wrapf("could not close response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 
 	}
 
@@ -126,7 +133,8 @@ func (c *Client) InitiateAppData(ctx context.Context, p string) (res *user.UserR
 			StatusCode: resp.StatusCode,
 		}
 		if err := json.Unmarshal(body, apiErr); err != nil {
-			fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
+
+			_, err := fmt.Fprintln(os.Stderr, "Invalid API response: "+string(body))
 			return nil, fmt.Errorf("error unmarshaling %d error: %v", resp.StatusCode, err)
 		}
 		return nil, apiErr
@@ -135,8 +143,8 @@ func (c *Client) InitiateAppData(ctx context.Context, p string) (res *user.UserR
 	// Parse the JSON-encoded data from response body.
 	// The data is stored in the value pointed by response.
 	if err := json.Unmarshal(body, &res); err != nil {
-		fmt.Errorf("could not unmarshal response body: %w", err)
-
+		err := errwrap.Wrapf("could not unmarshal response body: {{err}}", err)
+		c.Log.Info("error", zap.Error(err))
 	}
 
 	return res, nil
