@@ -4,9 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hashicorp/errwrap"
-	"net/http"
-
 	"go.uber.org/zap"
+	"net/http"
 )
 
 // Sandbox Endpoints
